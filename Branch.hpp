@@ -13,7 +13,7 @@
 #include <vector>
 
 #include "Vertex.hpp"
-#include "Vec.hpp"
+#include "Vect.hpp"
 #include "Data.hpp"
 
 class Branch {
@@ -23,7 +23,7 @@ class Branch {
 
     Vertex* m_anchor;
 
-    vec m_vecDirection;
+    Vect m_vecDirection;
 
     t_data m_data;
 
