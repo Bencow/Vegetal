@@ -1,13 +1,13 @@
 //
-//  Plante.hpp
+//  Plant.hpp
 //  code generer
 //
 //  Created by Quentin Mulliez c3316168 on 13/09/2018.
 //
 //
 
-#ifndef Plante_hpp
-#define Plante_hpp
+#ifndef Plant_hpp
+#define Plant_hpp
 
 #include <stdio.h>
 #include "Vertex.hpp"
@@ -15,7 +15,7 @@
 
 #include <vector>
 
-class Plante {
+class Plant {
   private:
 
     Vertex m_anchor;
@@ -24,11 +24,11 @@ class Plante {
 
 
   public:
-    Plante();
-    ~Plante();
+    Plant();
+    ~Plant();
 
 
 };
 
 
-#endif /* Plante_hpp */
+#endif /* Plant_hpp */

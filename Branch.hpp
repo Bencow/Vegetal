@@ -29,6 +29,7 @@ class Branch {
 
   public:
     Branch();
+    Branch(Vertex* anchor);
     ~Branch();
 
 

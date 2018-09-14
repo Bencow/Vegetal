@@ -8,10 +8,11 @@
 
 #include "Branch.hpp"
 
-Branch::Branch(){
+Branch::Branch()
+{}
 
-}
+Branch::Branch(Vertex* anchor) : m_anchor(anchor)
+{}
 
-Branch::~Branch(){
-  
-}
+Branch::~Branch()
+{}

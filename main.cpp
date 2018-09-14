@@ -23,6 +23,13 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
+//Other files of the project
+#include "Vect.hpp"
+#include "Vertex.hpp"
+#include "Branch.hpp"
+#include "Plant.hpp"
+
+
 
 //Define an error callback
 static void error_callback(int error, const char* description)
@@ -38,7 +45,8 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     glfwSetWindowShouldClose(window, GL_TRUE);
 }
 
-bool getShaderCompileStatus(GLuint shader){
+bool getShaderCompileStatus(GLuint shader)
+{
     //Get status
     GLint status;
     glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
@@ -51,6 +59,11 @@ bool getShaderCompileStatus(GLuint shader){
         std::cout << buffer << std::endl;
         return false;
     }
+}
+
+void firstTree()
+{
+
 }
 
 int main( void )
@@ -84,10 +97,6 @@ int main( void )
         return -1;
     }
 
-
-
-
-
     //TODO: create Vertex array object
     GLuint vao;
     glGenVertexArrays(1, &vao);
@@ -98,6 +107,7 @@ int main( void )
     glGenBuffers(1, &vbo);
 
     //TODO: load vertices
+
     GLfloat vertices[] =
     {
                   //Pos                   normal                  colour               tex
@@ -144,7 +154,7 @@ int main( void )
                   -0.5f,  0.5f, -0.5f,   0.0f, 1.0f, 0.0f,      1.0f, 1.0f, 1.0f,      0.0f, 1.0f
 
     };
-
+    
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER,sizeof(vertices), vertices, GL_STATIC_DRAW);

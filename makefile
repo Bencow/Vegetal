@@ -3,7 +3,7 @@ CFLAGS=-c -Wall
 LDFLAGS=`pkg-config --cflags glfw3`
 OTHERFLAGS=`pkg-config --static --libs glfw3` -lGL -lGLEW -lSOIL
 INCLUDES= soil/src/
-SOURCES= Vect.cpp Vertex.cpp Branch.cpp Plante.cpp main.cpp
+SOURCES= Vect.cpp Vertex.cpp Branch.cpp Plant.cpp main.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=exe
 
