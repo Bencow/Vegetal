@@ -11,7 +11,8 @@
 Vect::Vect()
 {}
 
-Vect::Vect(float _x, float _y, float _z): m_x(_x), m_y(_y), m_z(_z)
+Vect::Vect(float _x, float _y, float _z):
+m_x(_x), m_y(_y), m_z(_z)
 {}
 
 Vect::~Vect()

@@ -13,19 +13,19 @@
 
 class Vertex {
   private:
-
+    //coordonates
     float m_x;
     float m_y;
     float m_z;
-
+    //Color
     float m_r;
     float m_g;
     float m_b;
-
+    //Normal
     float m_nx;
     float m_ny;
     float m_nz;
-
+    //Texture
     float m_tx;
     float m_ty;
 
@@ -34,6 +34,7 @@ class Vertex {
   public:
     //Constructor
     Vertex();
+    Vertex(float x, float y, float z);
     //Destructor
     ~Vertex();
 

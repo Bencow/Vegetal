@@ -61,9 +61,53 @@ bool getShaderCompileStatus(GLuint shader)
     }
 }
 
-void firstTree()
-{
 
+GLfloat* generateVerices(Branch& b)
+{
+  std::vector<GLfloat> tab;
+  GLfloat* data;
+
+  for(unsigned int i = 0 ; i < b.getSize() ; i++)
+  {
+    //Local copy of the current vertex
+    Vertex trans(b.getVertex(i));
+    //Then push back all the data of the current vertex
+    tab.push_back(trans.getX());
+    tab.push_back(trans.getY());
+    tab.push_back(trans.getZ());
+
+    tab.push_back(trans.getR());
+    tab.push_back(trans.getG());
+    tab.push_back(trans.getB());
+
+    tab.push_back(trans.getNX());
+    tab.push_back(trans.getNY());
+    tab.push_back(trans.getNZ());
+
+    tab.push_back(trans.getTX());
+    tab.push_back(trans.getTY());
+  }
+  //test
+  for(unsigned int i = 0 ; i < 22 ; i++)
+  {
+    if(i % 11 == 0){
+      std::cout << std::endl;
+    }
+    std::cout << tab[i] << " ";
+  }
+  std::cout << std::endl;
+
+  data = tab.data();
+  for(unsigned int i = 0 ; i < 22 ; i++)
+  {
+    if(i % 11 == 0){
+      std::cout << std::endl;
+    }
+    std::cout << data[i] << " ";
+  }
+  std::cout << std::endl;
+
+  return tab.data();
 }
 
 int main( void )
@@ -97,7 +141,7 @@ int main( void )
         return -1;
     }
 
-    //TODO: create Vertex array object
+    //create Vertex array object
     GLuint vao;
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
@@ -106,8 +150,32 @@ int main( void )
     GLuint vbo;
     glGenBuffers(1, &vbo);
 
-    //TODO: load vertices
+    //==================================
+    //       TODO: creat tree and load vertices
+    //==================================
+    Vertex origin(0.0f, 0.0f, 0.0f);
+    Vertex second(0.0f, 0.0f, 1.0f);
+    Branch trunk(origin);
+    trunk.addVertex(second);
 
+    GLfloat* vertices;
+    vertices = generateVerices(trunk);
+
+    //test
+    //I don't know why the two first element of the array are fucked up here ??
+    //even though all the previous test in generateVertives() are good !
+    //...
+    for(unsigned int i = 0 ; i < 22 ; i++)
+    {
+      if(i % 11 == 0){
+        std::cout << std::endl;
+      }
+      std::cout << vertices[i] << " ";
+    }
+    std::cout << std::endl;
+
+
+    /*
     GLfloat vertices[] =
     {
                   //Pos                   normal                  colour               tex
@@ -154,7 +222,7 @@ int main( void )
                   -0.5f,  0.5f, -0.5f,   0.0f, 1.0f, 0.0f,      1.0f, 1.0f, 1.0f,      0.0f, 1.0f
 
     };
-    
+    */
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER,sizeof(vertices), vertices, GL_STATIC_DRAW);
@@ -302,9 +370,9 @@ int main( void )
         //Clear color buffer
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glDrawArrays(GL_LINES, 0, 2);
+        //glDrawArrays(GL_TRIANGLES, 0, 36);
+        //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         //Swap buffers
         glfwSwapBuffers(window);
@@ -313,6 +381,7 @@ int main( void )
 
     } //Check if the ESC key had been pressed or if the window had been closed
     while (!glfwWindowShouldClose(window));
+
 
     glDeleteTextures(1, &tex);
     glDeleteProgram(shaderProgram);

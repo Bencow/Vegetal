@@ -19,8 +19,9 @@
 class Branch {
   private:
 
-    std::vector<Vertex*> v_vertex;
+    std::vector<Vertex> v_vertices;
 
+    //Do we really need an anchor ? the first element of vertices is enough ?
     Vertex* m_anchor;
 
     Vect m_vecDirection;
@@ -29,8 +30,14 @@ class Branch {
 
   public:
     Branch();
-    Branch(Vertex* anchor);
+    Branch(Vertex anchor);
     ~Branch();
+
+    Vertex getVertex(int i)const{ return v_vertices[i]; }
+    unsigned int getSize()const { return v_vertices.size(); }
+
+    void addVertex(const Vertex& newOne);
+    void displayVerticesCoordonate()const;
 
 
 };
