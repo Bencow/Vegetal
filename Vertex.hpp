@@ -10,6 +10,8 @@
 #define Vertex_hpp
 
 #include <stdio.h>
+#include<iostream>
+
 
 class Vertex {
   private:
@@ -80,6 +82,9 @@ class Vertex {
     double getAge();
 
 };
+
+
+std::ostream& operator <<(std::ostream& out, Vertex& myVertex);
 
 
 #endif /* Vertex_hpp */

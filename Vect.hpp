@@ -10,6 +10,7 @@
 #define Vect_hpp
 
 #include <stdio.h>
+#include<iostream>
 
 class Vect {
   private:
@@ -40,6 +41,9 @@ class Vect {
 
 
 };
+
+std::ostream& operator <<(std::ostream& out, Vect& myVect);
+
 
 
 #endif /* Vect_hpp */

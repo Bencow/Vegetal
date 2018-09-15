@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 #include <vector>
-#include<iostream> 
+#include<iostream>
 
 
 #include "Vertex.hpp"
@@ -43,7 +43,6 @@ class Branch {
 
 
     void addVertex(const Vertex& newOne);
-    //void displayVerticesCoordonate()const;
 
 
 };

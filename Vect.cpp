@@ -41,3 +41,10 @@ bool Vect::putNormalInside(Vect& vectNormal){
 
   return true;
 }
+
+std::ostream& operator <<(std::ostream& out, Vect& myVect){
+
+  out << " x: " << myVect.getX() << " y: " << myVect.getY() << " z: " << myVect.getZ() << "\n";
+
+  return out;
+}

@@ -27,12 +27,10 @@ void Branch::addVertex(const Vertex& newOne)
 }
 
 std::ostream& operator <<(std::ostream& out, Branch& myBranch){
+
   for(unsigned int i = 0 ; i < myBranch.getSize() ; i++)
   {
-    out << "vertice : " << i << " ->"
-              << " x=" << myBranch.getVertices()[i].getX()
-              << " y=" << myBranch.getVertices()[i].getY()
-              << " z=" << myBranch.getVertices()[i].getZ() << std::endl;
+    out << "vertix : " << i << "\t-> " << myBranch.getVertices()[i];
   }
 
   return out;

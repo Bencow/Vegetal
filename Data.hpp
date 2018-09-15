@@ -4,12 +4,18 @@
 
 
 #include <stdio.h>
-
+#include "Vect.hpp"
 
 struct t_data{
 
-  int variable;
+  Vect directionNewVertices;
+
+  int sizeNewVertices;
 };
+
+
+std::ostream& operator <<(std::ostream& out, t_data& myData);
+
 
 
 #endif
