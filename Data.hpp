@@ -13,6 +13,8 @@ struct t_data{
   float varX;
   float varY;
   float varZ;
+
+  int sizeMaxBranch;
 };
 
 
