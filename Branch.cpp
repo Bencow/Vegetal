@@ -39,6 +39,10 @@ std::ostream& operator <<(std::ostream& out, Branch& myBranch){
 
 Branch* Branch::update(){
 
+  if((int)v_vertices.size() > m_data.sizeMaxBranch){
+    return NULL;
+  }
+
   Vertex& lastVertexBranch = v_vertices[v_vertices.size() - 1];
 
   //Creation new vertex

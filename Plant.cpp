@@ -35,7 +35,7 @@ void Plant::update(){
 
   Branch* newBranch;
 
-  for(int i = 0; i < v_branch.size(); i++){
+  for(int i = 0; i < (int)v_branch.size(); i++){
     newBranch = v_branch[i]->update();
     if(newBranch != NULL){
       v_branch.push_back(newBranch);
