@@ -20,6 +20,8 @@ struct t_data{
 
 std::ostream& operator <<(std::ostream& out, t_data& myData);
 
+void dataStructToCop(t_data& dataCop, t_data& dataToCop);
+
 
 
 #endif

@@ -48,3 +48,9 @@ std::ostream& operator <<(std::ostream& out, Vect& myVect){
 
   return out;
 }
+
+void Vect::operator =(const Vect vectToCop){
+  m_x = vectToCop.getX();
+  m_y = vectToCop.getY();
+  m_z = vectToCop.getZ();
+}

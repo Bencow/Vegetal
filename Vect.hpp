@@ -39,6 +39,8 @@ class Vect {
 
     bool putNormalInside(Vect& vectNormal);
 
+    void operator =(const Vect vectToCop);
+
 
 };
 

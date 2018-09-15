@@ -50,6 +50,7 @@ Branch* Branch::update(){
     lastVertexBranch.getY() + (m_vecDirection.getY() * m_data.sizeNewVertices),
     lastVertexBranch.getZ() + (m_vecDirection.getZ() * m_data.sizeNewVertices));
 
+
   //To put real time
   newVertex.setBorn(0.0);
 
@@ -59,10 +60,13 @@ Branch* Branch::update(){
   //Variation of next vec direction
 
   //////////////////////////////////////HEre variation turn into int : to upgrade
+  /*
   m_vecDirection.setX(m_vecDirection.getX() + (rand() % (int)m_data.varX) - (m_data.varX/2));
   m_vecDirection.setY(m_vecDirection.getY() + (rand() % (int)m_data.varY) - (m_data.varY/2));
   m_vecDirection.setZ(m_vecDirection.getZ() + (rand() % (int)m_data.varZ) - (m_data.varZ/2));
+*/
 
+  std::cout << "Yolo...\n";
   /*
   if(decide to create a new branch){
     return ptr of new branche

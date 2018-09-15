@@ -40,6 +40,10 @@ class Branch {
     Vertex getVertex(int i)const{ return v_vertices[i]; }
     unsigned int getSize()const { return v_vertices.size(); }
 
+    void setVecDirection(Vect value){ m_vecDirection = value;}
+
+    t_data& getData(){return m_data;}
+
     std::vector<Vertex>& getVertices(){return v_vertices;}
 
 

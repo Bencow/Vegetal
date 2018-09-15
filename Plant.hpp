@@ -27,6 +27,9 @@ class Plant {
 
   public:
     Plant();
+
+    Plant(Vertex* anchor, t_data dataDepart, Vect vecDepart);
+
     ~Plant();
 
     Vertex* getAnchor()const {return m_anchor;}
