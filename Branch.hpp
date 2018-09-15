@@ -11,7 +11,8 @@
 
 #include <stdio.h>
 #include <vector>
-#include<iostream> 
+#include <iostream>
+#include <stdlib.h>
 
 
 #include "Vertex.hpp"
@@ -39,12 +40,16 @@ class Branch {
     Vertex getVertex(int i)const{ return v_vertices[i]; }
     unsigned int getSize()const { return v_vertices.size(); }
 
+    void setVecDirection(Vect value){ m_vecDirection = value;}
+
+    t_data& getData(){return m_data;}
+
     std::vector<Vertex>& getVertices(){return v_vertices;}
 
 
     void addVertex(const Vertex& newOne);
-    //void displayVerticesCoordonate()const;
 
+    Branch* update();
 
 };
 

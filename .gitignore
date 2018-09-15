@@ -38,3 +38,7 @@
 *.XML
 
 *.vcxproj*
+
+makefile
+
+main.cpp

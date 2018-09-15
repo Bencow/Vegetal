@@ -10,6 +10,7 @@
 #define Vect_hpp
 
 #include <stdio.h>
+#include<iostream>
 
 class Vect {
   private:
@@ -38,8 +39,13 @@ class Vect {
 
     bool putNormalInside(Vect& vectNormal);
 
+    void operator =(const Vect vectToCop);
+
 
 };
+
+std::ostream& operator <<(std::ostream& out, Vect& myVect);
+
 
 
 #endif /* Vect_hpp */
