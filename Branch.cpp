@@ -37,16 +37,3 @@ std::ostream& operator <<(std::ostream& out, Branch& myBranch){
 
   return out;
 }
-
-/*
-void Branch::displayVerticesCoordonate()const
-{
-  for(unsigned int i = 0 ; i < v_vertices.size() ; i++)
-  {
-    std::cout << "vx: " << i
-              << " x=" << v_vertices[i].getX()
-              << " y=" << v_vertices[i].getY()
-              << " z=" << v_vertices[i].getZ() << std::endl;
-  }
-}
-*/
