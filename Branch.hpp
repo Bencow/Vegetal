@@ -11,6 +11,8 @@
 
 #include <stdio.h>
 #include <vector>
+#include<iostream> 
+
 
 #include "Vertex.hpp"
 #include "Vect.hpp"
@@ -22,6 +24,7 @@ class Branch {
     std::vector<Vertex> v_vertices;
 
     //Do we really need an anchor ? the first element of vertices is enough ?
+    ///By security, if the anchor move, we have something coherant
     Vertex* m_anchor;
 
     Vect m_vecDirection;
@@ -30,17 +33,22 @@ class Branch {
 
   public:
     Branch();
-    Branch(Vertex anchor);
+    Branch(Vertex* anchor);
     ~Branch();
 
     Vertex getVertex(int i)const{ return v_vertices[i]; }
     unsigned int getSize()const { return v_vertices.size(); }
 
+    std::vector<Vertex>& getVertices(){return v_vertices;}
+
+
     void addVertex(const Vertex& newOne);
-    void displayVerticesCoordonate()const;
+    //void displayVerticesCoordonate()const;
 
 
 };
+
+std::ostream& operator <<(std::ostream& out, Branch& myBranch);
 
 
 #endif /* Branch_hpp */
