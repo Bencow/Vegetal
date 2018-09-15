@@ -3,8 +3,8 @@
 
 std::ostream& operator <<(std::ostream& out, t_data& myData){
 
-  out << "Direction New vertices : " << myData.directionNewVertices;
   out << "Size New vertices : " << myData.sizeNewVertices << "\n";
+  out << "Variation : x: " << myData.varX << " y: " << myData.varY << " z: " << myData.varZ << "\n";
 
   return out;
 }

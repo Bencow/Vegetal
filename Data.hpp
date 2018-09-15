@@ -8,9 +8,11 @@
 
 struct t_data{
 
-  Vect directionNewVertices;
+  float sizeNewVertices;
 
-  int sizeNewVertices;
+  float varX;
+  float varY;
+  float varZ;
 };
 
 
