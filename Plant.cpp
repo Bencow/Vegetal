@@ -30,3 +30,18 @@ std::ostream& operator <<(std::ostream& out, Plant& myPlant){
 
   return out;
 }
+
+void Plant::update(){
+
+  Branch* newBranch;
+
+  for(int i = 0; i < v_branch.size(); i++){
+    newBranch = v_branch[i]->update();
+    if(newBranch != NULL){
+      v_branch.push_back(newBranch);
+    }
+  }
+
+  std::cout << "Update Plant Done\n\n";
+
+}

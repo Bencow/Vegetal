@@ -34,6 +34,8 @@ class Plant {
 
     std::vector<Branch*>& getBranchs(){return v_branch;}
 
+    void update();
+
 
 };
 
