@@ -82,8 +82,7 @@ int Plant::getNumberUniqueVertexPlant(){
   return somme;
 }
 
-/////////////////////////////here
-void Plant::fillGfloatArray(float* arrayGfloat){
+void Plant::fillGfloatArray(GLfloat* arrayGfloat){
   int offset = 0;
 
   for(int i = 0; i < (int)v_branch.size(); i++){

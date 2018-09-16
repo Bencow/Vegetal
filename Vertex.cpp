@@ -34,8 +34,7 @@ std::ostream& operator <<(std::ostream& out, Vertex& myVertex){
   return out;
 }
 
-/////////////////////here
-int Vertex::fillGfloatArray(float* arrayGfloat, int offset){
+int Vertex::fillGfloatArray(GLfloat* arrayGfloat, int offset){
 
     arrayGfloat[offset] = m_x;
     offset++;

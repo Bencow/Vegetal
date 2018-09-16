@@ -9,6 +9,9 @@
 #ifndef Vertex_hpp
 #define Vertex_hpp
 
+#include <GL/glew.h>
+
+
 #include <stdio.h>
 #include<iostream>
 
@@ -81,8 +84,7 @@ class Vertex {
     ///Members
     double getAge();
 
-    /////////////////////////////////////////HERE
-    int fillGfloatArray(float* arrayGfloat, int offset);
+    int fillGfloatArray(GLfloat* arrayGfloat, int offset);
 
 };
 

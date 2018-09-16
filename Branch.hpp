@@ -56,7 +56,7 @@ class Branch {
     int getNumberVertexBranch();
 
     ///////////////////////////////////////Here
-    int fillGfloatArray(float* arrayGfloat, int offset);
+    int fillGfloatArray(GLfloat* arrayGfloat, int offset);
 
 };
 
