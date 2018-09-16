@@ -54,3 +54,30 @@ void Plant::update(){
   std::cout << "Update Plant Done\n\n";
 
 }
+
+int Plant::getNumberElementPlant(){
+  int somme = 0;
+
+  for(int i = 0; i < (int)v_branch.size(); i++){
+    somme += v_branch[i]->getNumberElementBranch();
+  }
+
+  return somme;
+}
+
+int Plant::getNumberFloatPlant(){
+
+  return getNumberElementPlant() * NUMBER_VERTEX_ELEMENT * NUMBER_FLOAT_VERTEX;
+
+}
+
+int Plant::getNumberUniqueVertexPlant(){
+  //to count anchor of main branch
+  int somme = 1;
+
+  for(int i = 0; i < (int)v_branch.size(); i++){
+    somme += v_branch[i]->getNumberVertexBranch();
+  }
+
+  return somme;
+}
