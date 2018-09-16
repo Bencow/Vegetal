@@ -35,12 +35,21 @@ int main( void )
 
   dataDepart.sizeMaxBranch = 4;
 
-
   Plant newPlant(&pointDepart, dataDepart, vDepart);
 
   std::cout << newPlant;
   newPlant.update();
-  std::cout << newPlant << "\n\nNumber unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n"; 
+  std::cout << newPlant << "\n\nNumber unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
+
+  float* arrayFloat  = new float[newPlant.getNumberFloatPlant()];
+
+  newPlant.fillGfloatArray(arrayFloat);
+
+  for(int i = 0; i < (int)newPlant.getNumberFloatPlant(); i++){
+    std::cout << " " << arrayFloat[i];
+  }
+
+  delete arrayFloat;
 
   return 0;
 }

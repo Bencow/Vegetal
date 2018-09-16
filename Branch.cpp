@@ -85,3 +85,14 @@ int Branch::getNumberVertexBranch(){
   //anchor count in the previous branch
   return v_vertices.size() - 1;
 }
+
+////////////////////////////////Here
+int Branch::fillGfloatArray(float* arrayGfloat, int offset){
+
+  for(int i = 0; i < (int)v_vertices.size() - 1; i++){
+    offset = v_vertices[i].fillGfloatArray(arrayGfloat, offset);
+    offset = v_vertices[i + 1].fillGfloatArray(arrayGfloat, offset);
+  }
+
+  return offset;
+}

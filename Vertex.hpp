@@ -81,6 +81,9 @@ class Vertex {
     ///Members
     double getAge();
 
+    /////////////////////////////////////////HERE
+    int fillGfloatArray(float* arrayGfloat, int offset);
+
 };
 
 

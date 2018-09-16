@@ -48,6 +48,10 @@ class Plant {
 
     int getNumberUniqueVertexPlant();
 
+    //////////////////////////////////here
+    void fillGfloatArray(float* arrayGfloat);
+
+
 
 
 };
