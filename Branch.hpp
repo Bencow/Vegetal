@@ -55,6 +55,9 @@ class Branch {
 
     int getNumberVertexBranch();
 
+    ///////////////////////////////////////Here
+    int fillGfloatArray(float* arrayGfloat, int offset);
+
 };
 
 std::ostream& operator <<(std::ostream& out, Branch& myBranch);

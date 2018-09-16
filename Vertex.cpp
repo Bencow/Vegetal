@@ -33,3 +33,36 @@ std::ostream& operator <<(std::ostream& out, Vertex& myVertex){
 
   return out;
 }
+
+/////////////////////here
+int Vertex::fillGfloatArray(float* arrayGfloat, int offset){
+
+    arrayGfloat[offset] = m_x;
+    offset++;
+    arrayGfloat[offset] = m_y;
+    offset++;
+    arrayGfloat[offset] = m_z;
+    offset++;
+
+    arrayGfloat[offset] = m_r;
+    offset++;
+    arrayGfloat[offset] = m_g;
+    offset++;
+    arrayGfloat[offset] = m_b;
+    offset++;
+
+    arrayGfloat[offset] = m_nx;
+    offset++;
+    arrayGfloat[offset] = m_ny;
+    offset++;
+    arrayGfloat[offset] = m_nz;
+    offset++;
+
+    arrayGfloat[offset] = m_tx;
+    offset++;
+    arrayGfloat[offset] = m_ty;
+    offset++;
+
+    return offset;
+
+}
