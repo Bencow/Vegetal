@@ -66,7 +66,6 @@ Branch* Branch::update(){
   m_vecDirection.setZ(m_vecDirection.getZ() + (rand() % (int)m_data.varZ) - (m_data.varZ/2));
 */
 
-  std::cout << "Yolo...\n";
   /*
   if(decide to create a new branch){
     return ptr of new branche
@@ -76,4 +75,13 @@ Branch* Branch::update(){
 
     return NULL;
 
+}
+
+int Branch::getNumberElementBranch(){
+  return v_vertices.size() - 1;
+}
+
+int Branch::getNumberVertexBranch(){
+  //anchor count in the previous branch
+  return v_vertices.size() - 1;
 }

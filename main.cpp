@@ -26,7 +26,7 @@ int main( void )
   std::cout << "Hello world\n\n";
 
   Vect vDepart(1.0f, 0.0f, 0.0f);
-  Vertex pointDepart(0.0f, 0.0f, 0.0f);
+  Vertex pointDepart(1.0f, 1.0f, 1.0f);
   t_data dataDepart;
   dataDepart.sizeNewVertices = 1.0f;
   dataDepart.varX = 0.0f;
@@ -40,7 +40,7 @@ int main( void )
 
   std::cout << newPlant;
   newPlant.update();
-  std::cout << newPlant;
+  std::cout << newPlant << "\n\nNumber unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n"; 
 
   return 0;
 }

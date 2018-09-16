@@ -51,6 +51,10 @@ class Branch {
 
     Branch* update();
 
+    int getNumberElementBranch();
+
+    int getNumberVertexBranch();
+
 };
 
 std::ostream& operator <<(std::ostream& out, Branch& myBranch);

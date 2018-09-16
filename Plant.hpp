@@ -16,6 +16,9 @@
 #include <vector>
 #include<iostream>
 
+#define NUMBER_FLOAT_VERTEX 11
+#define NUMBER_VERTEX_ELEMENT 2
+
 
 class Plant {
   private:
@@ -38,6 +41,13 @@ class Plant {
     std::vector<Branch*>& getBranchs(){return v_branch;}
 
     void update();
+
+    int getNumberElementPlant();
+
+    int getNumberFloatPlant();
+
+    int getNumberUniqueVertexPlant();
+
 
 
 };
