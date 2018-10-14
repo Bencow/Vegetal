@@ -53,12 +53,14 @@ void main()
 	vec4 ambient = vec4(0.3,0.3,0.3,1.0);
 
     //Final total colour including diffuse, specular, ambient, falloff (with 1/d^2), texture and colour
-    outColor =  ((diffuse + specular) * (1/(d*d)) + ambient) * texture(tex, Texcoord) * vec4(Colour, 1.0);
+    //outColor =  ((diffuse + specular) * (1/(d*d)) + ambient) * texture(tex, Texcoord) * vec4(Colour, 1.0);
 
     //TODO8: Try these outColours to see just the single components of the light!
     //outColor = diffuse * texture(tex, Texcoord);
     //outColor = ambient * texture(tex, Texcoord);
     //outColor = specular;
-    // outColor = specular + diffuse;
     // outColor = (diffuse + specular) * (1/(d*d));
+
+		//for this project, we will only use for the moment, we don't need texture
+    outColor = diffuse + specular + ambient;
 }
