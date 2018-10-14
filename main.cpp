@@ -8,6 +8,7 @@
 
 #include<iostream> //cout
 #include <fstream> //fstream
+#include <vector>
 #include <ctime>
 #include <chrono>
 
@@ -52,8 +53,8 @@ bool getShaderCompileStatus(GLuint shader){
         return false;
     }
 }
-/*
-void generateVertives(GLfloat *vertices)
+
+void addVertexToArray(GLfloat *vertices)
 {
   //Let's draw a rectangle
   vertices = (GLfloat*) malloc(sizeof(GLfloat) * 6);
@@ -61,7 +62,7 @@ void generateVertives(GLfloat *vertices)
 
 
   //vertices = new GLfloat[]
-}*/
+}
 
 int main( void )
 {
@@ -152,8 +153,8 @@ int main( void )
 
     };
 */
-
-    GLfloat vertices[] =
+    std::vector<GLfloat> vertices =
+    //GLfloat vertices[] =
     {
       //Pos                   normal                  colour               tex
       0.0f, 0.0f, 0.0f,      0.0f, 0.0f, 0.0f,        1.0f, 1.0f, 1.0f,      0.0f, 0.0f,
@@ -163,7 +164,22 @@ int main( void )
     //generateVertives(vertices);
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER,sizeof(vertices), vertices, GL_STATIC_DRAW);
+    //Note : the size total of the array is the size of a GLfloat * number of element in the vector (i.e. vertices.size() )
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
+
+    /*
+    GLfloat tableau[] =
+    {
+      //Pos                   normal                  colour               tex
+      0.0f, 0.0f, 0.0f,      0.0f, 0.0f, 0.0f,        1.0f, 1.0f, 1.0f,      0.0f, 0.0f,
+      0.0f, 0.1f, 0.5f,      0.0f, 0.0f, 0.0f,        1.0f, 1.0f, 1.0f,      1.0f, 0.0f,
+    }
+    std::cout << "GLfloat         " << sizeof(GLfloat) << "\n";
+    std::cout << "vertices        " << sizeof(vertices) << "\n";
+    std::cout << "vertices.data() " << sizeof(vertices.data()) << '\n';
+    std::cout << "GLfloat * size  " << sizeof(GLfloat) * vertices.size() << '\n';
+    std::cout << "tableau         " << sizeof(tableau) << '\n';
+    */
 
     //TODO: element buffer (make sure GLuint!!!!)
 
