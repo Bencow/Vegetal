@@ -6,8 +6,6 @@
 	#include <Windows.h>
 
 	#include <GL/glew.h> // Include the GLEW header file  
-	//#include <GL/glut.h> // Include the GLUT header file
-
 
 	#include<iostream> //cout
     #include <fstream> //fstream
@@ -31,6 +29,8 @@
 	#include "Vertex.hpp"
 	#include "Branch.hpp"
 	#include "Plant.hpp"
+
+	#define speedCamera 0.1f
 
 float tomaman;
 
@@ -62,17 +62,6 @@ float tomaman;
             return false;
         }
     }
-
-	void keyPressed(unsigned char key, int x, int y) {
-		switch (key) {
-		case 'a':
-			std::cout << "A\n";
-			break;
-		default:
-			break;
-		}
-	}
-
 
       
     int main( void )  
@@ -260,23 +249,53 @@ float tomaman;
       
         //Main Loop  
         clock_t start = std::clock();
-		clock_t beginPeriode = std::clock();
 
 		newPlant.update();
 		newPlant.fillGfloatArray(vertices);
 
-		float camera_x;
-		float camera_y;
-		float camera_z;
-		float camera_target_x;
-		float camera_target_y;
-		float camera_target_z;
+		float camera_x = 0.5f;
+		float camera_y = 0.5f;
+		float camera_z = 0.5f;
+		float camera_target_x = 0.0f;
+		float camera_target_y = 0.0f;
+		float camera_target_z = 0.0f;
 
 
         do  
         {  
+			char inputGive;
 
-			clock_t actual = std::clock();
+			inputGive = getchar();
+
+			switch (inputGive) {
+				/////////////////////////////Update plant
+			case 'u':
+				newPlant.update();
+				std::cout << newPlant << "\n\n Number element : " << newPlant.getNumberElementPlant() << "\n";
+				newPlant.fillGfloatArray(vertices);
+				break;
+			case 'a':
+				camera_x += speedCamera;
+				break;
+			case 'q':
+				camera_x - +speedCamera;
+				break;
+			case 'z':
+				camera_y += speedCamera;
+				break;
+			case 's':
+				camera_y - +speedCamera;
+				break;
+			case 'e':
+				camera_z += speedCamera;
+				break;
+			case 'd':
+				camera_z - +speedCamera;
+				break;
+			default :
+				break;
+			}
+		
 			
 
 			/*
@@ -300,8 +319,7 @@ float tomaman;
 			}
 			*/
 
-
-			//////////////glutKeyboardFunc(keyPressed); // Tell GLUT to use the method "keyPressed" for key presses  
+		
 
 			//Set a background color  
 			glClearColor(0.0f, 0.0f, 1.0f, 0.0f);
@@ -331,8 +349,8 @@ float tomaman;
 
             //TODO: create and load view matrix
             glm::mat4 view = glm::lookAt(
-                glm::vec3(5.0f, 5.0f, 0.0f), //Camera position
-                glm::vec3(0.0f, 0.0f, 0.0f), //Camera view target
+                glm::vec3(camera_x, camera_y, camera_z), //Camera position
+                glm::vec3(camera_target_x, camera_target_y, camera_target_z), //Camera view target
                 glm::vec3(0.0f, 0.0f, 1.0f)  //Camera up vector which is usually z
             );
             GLint uniView = glGetUniformLocation(shaderProgram, "view");
