@@ -54,14 +54,32 @@ bool getShaderCompileStatus(GLuint shader){
     }
 }
 
-void addVertexToArray(GLfloat *vertices)
+void addVertexToArray(std::vector<GLfloat> &vertices)
 {
-  //Let's draw a rectangle
-  vertices = (GLfloat*) malloc(sizeof(GLfloat) * 6);
-
-
-
-  //vertices = new GLfloat[]
+  //first vertex (same as the previous one)
+  vertices.push_back(0.0f);//coord
+  vertices.push_back(0.1f);
+  vertices.push_back(0.5f);
+  vertices.push_back(0.0f);//normal
+  vertices.push_back(0.0f);
+  vertices.push_back(0.0f);
+  vertices.push_back(1.0f);//colour
+  vertices.push_back(1.0f);
+  vertices.push_back(1.0f);
+  vertices.push_back(0.0f);//text
+  vertices.push_back(0.0f);
+  //new vertex
+  vertices.push_back(0.0f);//coord
+  vertices.push_back(0.2f);
+  vertices.push_back(0.7f);
+  vertices.push_back(0.0f);//normal
+  vertices.push_back(0.0f);
+  vertices.push_back(0.0f);
+  vertices.push_back(1.0f);//colour
+  vertices.push_back(1.0f);
+  vertices.push_back(1.0f);
+  vertices.push_back(0.0f);//text
+  vertices.push_back(0.0f);
 }
 
 int main( void )
@@ -153,15 +171,13 @@ int main( void )
 
     };
 */
+
     std::vector<GLfloat> vertices =
-    //GLfloat vertices[] =
     {
       //Pos                   normal                  colour               tex
       0.0f, 0.0f, 0.0f,      0.0f, 0.0f, 0.0f,        1.0f, 1.0f, 1.0f,      0.0f, 0.0f,
       0.0f, 0.1f, 0.5f,      0.0f, 0.0f, 0.0f,        1.0f, 1.0f, 1.0f,      1.0f, 0.0f,
     };
-
-    //generateVertives(vertices);
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     //Note : the size total of the array is the size of a GLfloat * number of element in the vector (i.e. vertices.size() )
@@ -281,9 +297,12 @@ int main( void )
     //Main Loop
     //clock_t start = std::clock();
     clock_t start = std::clock();
+    bool secondVertexLoaded = false;
 
     do
     {
+        clock_t now = std::clock();
+
         double frame_time = (double) (clock()-start) / double(CLOCKS_PER_SEC);
         float period = 5; //seconds
 
@@ -316,7 +335,24 @@ int main( void )
         // glDrawArrays(GL_TRIANGLES, 0, 36);
         // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-        glDrawArrays(GL_LINES, 0, 2);
+        if((now - start)/ double(CLOCKS_PER_SEC) < 0.1)
+        {
+          glDrawArrays(GL_LINES, 0, 2);
+
+        }
+
+        else
+        {
+          if(!secondVertexLoaded)
+          {
+            std::cout << "turfu";
+            //load again the buffer
+            addVertexToArray(vertices);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
+            secondVertexLoaded = true;
+          }
+          glDrawArrays(GL_LINES, 0, 4);
+        }
 
         //Swap buffers
         glfwSwapBuffers(window);
