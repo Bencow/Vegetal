@@ -52,6 +52,16 @@ bool getShaderCompileStatus(GLuint shader){
         return false;
     }
 }
+/*
+void generateVertives(GLfloat *vertices)
+{
+  //Let's draw a rectangle
+  vertices = (GLfloat*) malloc(sizeof(GLfloat) * 6);
+
+
+
+  //vertices = new GLfloat[]
+}*/
 
 int main( void )
 {
@@ -84,10 +94,6 @@ int main( void )
         return -1;
     }
 
-
-
-
-
     //TODO: create Vertex array object
     GLuint vao;
     glGenVertexArrays(1, &vao);
@@ -98,6 +104,7 @@ int main( void )
     glGenBuffers(1, &vbo);
 
     //TODO: load vertices
+/*
     GLfloat vertices[] =
     {
                   //Pos                   normal                  colour               tex
@@ -144,24 +151,21 @@ int main( void )
                   -0.5f,  0.5f, -0.5f,   0.0f, 1.0f, 0.0f,      1.0f, 1.0f, 1.0f,      0.0f, 1.0f
 
     };
+*/
 
+    GLfloat vertices[] =
+    {
+      //Pos                   normal                  colour               tex
+      0.0f, 0.0f, 0.0f,      0.0f, 0.0f, 0.0f,        1.0f, 1.0f, 1.0f,      0.0f, 0.0f,
+      0.0f, 0.1f, 0.5f,      0.0f, 0.0f, 0.0f,        1.0f, 1.0f, 1.0f,      1.0f, 0.0f,
+    };
+
+    //generateVertives(vertices);
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER,sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-
     //TODO: element buffer (make sure GLuint!!!!)
-
-    /*
-    GLuint elementBuffer;
-    glGenBuffers(1,&elementBuffer);
-    GLuint elements[] = {
-        0,1,2,
-        2,3,0,
-    };
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements, GL_STATIC_DRAW);
-    */
 
     //Example:load shader source file
     std::ifstream in("shader.vert");
@@ -293,8 +297,10 @@ int main( void )
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        // glDrawArrays(GL_TRIANGLES, 0, 36);
+        // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        glDrawArrays(GL_LINES, 0, 2);
 
         //Swap buffers
         glfwSwapBuffers(window);
