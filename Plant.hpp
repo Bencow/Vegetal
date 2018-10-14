@@ -16,7 +16,7 @@
 #include <vector>
 #include<iostream>
 
-#define NUMBER_FLOAT_VERTEX 11
+#define NUMBER_FLOAT_VERTEX 9
 #define NUMBER_VERTEX_ELEMENT 2
 
 

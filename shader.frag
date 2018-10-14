@@ -59,6 +59,8 @@ void main()
     //outColor = diffuse * texture(tex, Texcoord);
     //outColor = ambient * texture(tex, Texcoord);
     //outColor = specular;
-     outColor = specular + diffuse;
+     
+	 //outColor = specular + diffuse;
+	 outColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
     // outColor = (diffuse + specular) * (1/(d*d));
 }

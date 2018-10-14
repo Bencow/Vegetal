@@ -13,7 +13,7 @@ Vertex::Vertex()
 Vertex::Vertex(float x, float y, float z) :
     m_x(x), m_y(y), m_z(z),
     m_r(1.0f), m_g(1.0f), m_b(1.0f),
-    m_nx(0.0f), m_ny(0.0f), m_nz(0.0f),
+    m_nx(0.0f), m_ny(0.0f), m_nz(1.0f),
     m_tx(0.0f), m_ty(0.0f)
 {}
 
@@ -57,11 +57,12 @@ int Vertex::fillGfloatArray(GLfloat* arrayGfloat, int offset){
     arrayGfloat[offset] = m_nz;
     offset++;
 
+	/*
     arrayGfloat[offset] = m_tx;
     offset++;
     arrayGfloat[offset] = m_ty;
     offset++;
-
+	*/
     return offset;
 
 }

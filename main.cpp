@@ -3,8 +3,11 @@
 	
 	//Library for loading textures (Simple OpenGL Image Library)
 	#include <SOIL.h>
+	#include <Windows.h>
 
-    #include <GL/glew.h>  
+	#include <GL/glew.h> // Include the GLEW header file  
+	//#include <GL/glut.h> // Include the GLUT header file
+
 
 	#include<iostream> //cout
     #include <fstream> //fstream
@@ -29,6 +32,7 @@
 	#include "Branch.hpp"
 	#include "Plant.hpp"
 
+float tomaman;
 
     //Define an error callback  
     static void error_callback(int error, const char* description)  
@@ -58,6 +62,16 @@
             return false;
         }
     }
+
+	void keyPressed(unsigned char key, int x, int y) {
+		switch (key) {
+		case 'a':
+			std::cout << "A\n";
+			break;
+		default:
+			break;
+		}
+	}
 
 
       
@@ -126,7 +140,7 @@
 
 		std::cout << "Hello world\n\n";
 
-		Vect vDepart(0.1f, 0.0f, 0.0f);
+		Vect vDepart(0.5f, 1.0f, 0.5f);
 		Vertex pointDepart(0.0f, 0.0f, 0.0f);
 		t_data dataDepart;
 		dataDepart.sizeNewVertices = 1.0f;
@@ -140,138 +154,154 @@
 
 		std::cout << newPlant << "\n\nNumber unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
 
+		float* vertices = new float[500];
+
+		
+		std::cout << newPlant;
+
+		newPlant.fillGfloatArray(vertices);
 
 
         //load cube model (note this is drawn without using an element buffer)
+		glBindBuffer(GL_ARRAY_BUFFER, buffer);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+
+		//==================================
+		//     Compile and Link Shaders
+		//==================================
+
+		//Example:load shader source file
+		std::ifstream in("shader.vert");
+		std::string contents((std::istreambuf_iterator<char>(in)),
+			std::istreambuf_iterator<char>());
+		const char* vertSource = contents.c_str();
+
+		//Example: compile a shader source file for vertex shading
+		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+		glShaderSource(vertexShader, 1, &vertSource, NULL);
+		glCompileShader(vertexShader);
+
+		getShaderCompileStatus(vertexShader);
+
+		//load and compile fragment shader shader.frag
+		std::ifstream in2("shader.frag");
+		std::string contents2((std::istreambuf_iterator<char>(in2)),
+			std::istreambuf_iterator<char>());
+		const char* fragSource = contents2.c_str();
+
+		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+		glShaderSource(fragmentShader, 1, &fragSource, NULL);
+		glCompileShader(fragmentShader);
+
+		getShaderCompileStatus(fragmentShader);
+
+		//link shaders into a program
+		GLuint shaderProgram = glCreateProgram();
+		glAttachShader(shaderProgram, vertexShader);
+		glAttachShader(shaderProgram, fragmentShader);
+		glBindFragDataLocation(shaderProgram, 0, "outColor");
+		glLinkProgram(shaderProgram);
+		glUseProgram(shaderProgram);
+
+		//==================================
+		//    Link Vertex Data to Shaders
+		//==================================
+
+		//link vertex data to shader
+		GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
+		glVertexAttribPointer(posAttrib,                //buffer identifier
+			3,                        //How many data points to read
+			GL_FLOAT,                 //Data type
+			GL_FALSE,                 //Whether or not to clamp values between -1,1
+			9 * sizeof(float),        //Stride (byte offset between consecutive values)
+			0                         //pointer to first attribute (see below for better examples)
+		);
+		glEnableVertexAttribArray(posAttrib);
+
+		GLint colourAttrib = glGetAttribLocation(shaderProgram, "colour");
+		glVertexAttribPointer(colourAttrib, 3, GL_FLOAT, GL_TRUE, 9 * sizeof(float), (void*)(3 * sizeof(float)));
+		glEnableVertexAttribArray(colourAttrib);
+
+		GLint normalAttrib = glGetAttribLocation(shaderProgram, "normal");
+		glVertexAttribPointer(normalAttrib, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(6 * sizeof(float)));
+		glEnableVertexAttribArray(normalAttrib);
+		/*
+		GLint textureAttrib = glGetAttribLocation(shaderProgram, "texcoord");
+		glVertexAttribPointer(textureAttrib, 2, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(9 * sizeof(float)));
+		glEnableVertexAttribArray(textureAttrib);
+		*/
 		
+
+		//==================================
+		//          Load Texture
+		//==================================
+		/*
+		//Create texture buffer:
+		GLuint tex;
+		glGenTextures(1, &tex);
+		glBindTexture(GL_TEXTURE_2D, tex);
+
+		//Load image
+		int width, height;
+		unsigned char* image =
+			SOIL_load_image("grass.png", &width, &height, 0, SOIL_LOAD_RGB);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB,
+			GL_UNSIGNED_BYTE, image);
+		SOIL_free_image_data(image);
+
+		
+		//Set sampler parameters
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		*/
       
         //Main Loop  
         clock_t start = std::clock();
 		clock_t beginPeriode = std::clock();
 
-		float* vertices = new float[newPlant.getNumberFloatPlant()];
+		newPlant.update();
 		newPlant.fillGfloatArray(vertices);
+
+		float camera_x;
+		float camera_y;
+		float camera_z;
+		float camera_target_x;
+		float camera_target_y;
+		float camera_target_z;
 
 
         do  
         {  
 
 			clock_t actual = std::clock();
+			
 
-			if ((actual - beginPeriode) / double(CLOCKS_PER_SEC) >= 5) {
+			/*
+			if ((actual - beginPeriode) / double(CLOCKS_PER_SEC) >= 2) {
 				
 				beginPeriode = std::clock();
 				newPlant.update();
-
-				std::cout << newPlant;
-				delete vertices;
-
-				float* vertices = new float[newPlant.getNumberFloatPlant()];
-
+				std::cout << newPlant << "\n\n Number element : " << newPlant.getNumberElementPlant() << "\n";
 				newPlant.fillGfloatArray(vertices);
+
+				for (int i = 0; i < (int)newPlant.getNumberFloatPlant(); i++) {
+					if (i % 9 == 0) {
+						std::cout << "\n";
+					}
+					std::cout << " " << vertices[i];
+				}				
+				/*
+				glBindBuffer(GL_ARRAY_BUFFER, buffer);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 				
-
 			}
-			
-
-			
-			
+			*/
 
 
-			glBindBuffer(GL_ARRAY_BUFFER, buffer);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-			//==================================
-			//     Compile and Link Shaders
-			//==================================
-
-			//Example:load shader source file
-			std::ifstream in("shader.vert");
-			std::string contents((std::istreambuf_iterator<char>(in)),
-				std::istreambuf_iterator<char>());
-			const char* vertSource = contents.c_str();
-
-			//Example: compile a shader source file for vertex shading
-			GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-			glShaderSource(vertexShader, 1, &vertSource, NULL);
-			glCompileShader(vertexShader);
-
-			getShaderCompileStatus(vertexShader);
-
-			//load and compile fragment shader shader.frag
-			std::ifstream in2("shader.frag");
-			std::string contents2((std::istreambuf_iterator<char>(in2)),
-				std::istreambuf_iterator<char>());
-			const char* fragSource = contents2.c_str();
-
-			GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-			glShaderSource(fragmentShader, 1, &fragSource, NULL);
-			glCompileShader(fragmentShader);
-
-			getShaderCompileStatus(fragmentShader);
-
-			//link shaders into a program
-			GLuint shaderProgram = glCreateProgram();
-			glAttachShader(shaderProgram, vertexShader);
-			glAttachShader(shaderProgram, fragmentShader);
-			glBindFragDataLocation(shaderProgram, 0, "outColor");
-			glLinkProgram(shaderProgram);
-			glUseProgram(shaderProgram);
-
-			//==================================
-			//    Link Vertex Data to Shaders
-			//==================================
-
-			//link vertex data to shader
-			GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
-			glVertexAttribPointer(posAttrib,                //buffer identifier
-				3,                        //How many data points to read
-				GL_FLOAT,                 //Data type
-				GL_FALSE,                 //Whether or not to clamp values between -1,1
-				11 * sizeof(float),        //Stride (byte offset between consecutive values)
-				0                         //pointer to first attribute (see below for better examples)
-			);
-			glEnableVertexAttribArray(posAttrib);
-
-			GLint colourAttrib = glGetAttribLocation(shaderProgram, "colour");
-			glVertexAttribPointer(colourAttrib, 3, GL_FLOAT, GL_TRUE, 11 * sizeof(float), (void*)(6 * sizeof(float)));
-			glEnableVertexAttribArray(colourAttrib);
-
-			GLint textureAttrib = glGetAttribLocation(shaderProgram, "texcoord");
-			glVertexAttribPointer(textureAttrib, 2, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(9 * sizeof(float)));
-			glEnableVertexAttribArray(textureAttrib);
-
-			GLint normalAttrib = glGetAttribLocation(shaderProgram, "normal");
-			glVertexAttribPointer(normalAttrib, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(3 * sizeof(float)));
-			glEnableVertexAttribArray(normalAttrib);
-
-			//==================================
-			//          Load Texture
-			//==================================
-
-			//Create texture buffer:
-			GLuint tex;
-			glGenTextures(1, &tex);
-			glBindTexture(GL_TEXTURE_2D, tex);
-
-			//Load image
-			int width, height;
-			unsigned char* image =
-				SOIL_load_image("grass.png", &width, &height, 0, SOIL_LOAD_RGB);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB,
-				GL_UNSIGNED_BYTE, image);
-			SOIL_free_image_data(image);
-
-			//Set sampler parameters
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-
-			//==================================
-			//              Main Loop
-			//==================================
+			//////////////glutKeyboardFunc(keyPressed); // Tell GLUT to use the method "keyPressed" for key presses  
 
 			//Set a background color  
 			glClearColor(0.0f, 0.0f, 1.0f, 0.0f);
@@ -290,15 +320,18 @@
 
             //TODO: create model matrix based on time
             glm::mat4 model;
-            // model = glm::rotate(model, 360 * float(frame_time) / period , glm::vec3(0.0f, 0.0f, 1.0f));
+			//model = glm::rotate(model, 360 * float(frame_time) / period, glm::vec3(0.0f, 1.0f, 0.0f));
+
             
     		//TODO: load model matrix into shader      
             GLint uniModel = glGetUniformLocation(shaderProgram, "model");
             glUniformMatrix4fv(uniModel, 1, GL_FALSE, glm::value_ptr(model));
             
+
+
             //TODO: create and load view matrix
             glm::mat4 view = glm::lookAt(
-                glm::vec3(1.2f, 1.2f, 1.2f), //Camera position
+                glm::vec3(5.0f, 5.0f, 0.0f), //Camera position
                 glm::vec3(0.0f, 0.0f, 0.0f), //Camera view target
                 glm::vec3(0.0f, 0.0f, 1.0f)  //Camera up vector which is usually z
             );
@@ -313,6 +346,8 @@
             );
             GLint uniProj = glGetUniformLocation(shaderProgram, "proj");
             glUniformMatrix4fv(uniProj, 1, GL_FALSE, glm::value_ptr(proj));
+
+			
 
             //==================================
             //       TODO: Load a light
@@ -330,14 +365,18 @@
             //==================================
             //          Draw Model
             //==================================
-
 			
+			/*
+			glBindBuffer(GL_ARRAY_BUFFER, buffer);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+			*/
 				 
 
             //Clear color buffer  
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
             
             glDrawArrays(GL_LINES, 0, newPlant.getNumberElementPlant() * 2); 
+
             // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0); 
       
             //Swap buffers  
