@@ -4,12 +4,24 @@
 
 
 #include <stdio.h>
-
+#include "Vect.hpp"
 
 struct t_data{
 
-  int variable;
+  float sizeNewVertices;
+
+  float varX;
+  float varY;
+  float varZ;
+
+  int sizeMaxBranch;
 };
+
+
+std::ostream& operator <<(std::ostream& out, t_data& myData);
+
+void dataStructToCop(t_data& dataCop, t_data& dataToCop);
+
 
 
 #endif

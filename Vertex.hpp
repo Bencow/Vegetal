@@ -9,7 +9,12 @@
 #ifndef Vertex_hpp
 #define Vertex_hpp
 
+#include <GL/glew.h>
+
+
 #include <stdio.h>
+#include<iostream>
+
 
 class Vertex {
   private:
@@ -79,7 +84,12 @@ class Vertex {
     ///Members
     double getAge();
 
+    int fillGfloatArray(GLfloat* arrayGfloat, int offset);
+
 };
+
+
+std::ostream& operator <<(std::ostream& out, Vertex& myVertex);
 
 
 #endif /* Vertex_hpp */

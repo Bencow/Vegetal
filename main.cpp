@@ -59,6 +59,52 @@ bool getShaderCompileStatus(GLuint shader){
     }
 }
 
+void generateVerices(Branch& b, std::vector<GLfloat> &tab)
+{
+  GLfloat* data;
+
+  for(unsigned int i = 0 ; i < b.getSize() ; i++)
+  {
+    //Local copy of the current vertex
+    Vertex trans(b.getVertex(i));
+    //Then push back all the data of the current vertex
+    tab.push_back(trans.getX());
+    tab.push_back(trans.getY());
+    tab.push_back(trans.getZ());
+
+    tab.push_back(trans.getR());
+    tab.push_back(trans.getG());
+    tab.push_back(trans.getB());
+
+    tab.push_back(trans.getNX());
+    tab.push_back(trans.getNY());
+    tab.push_back(trans.getNZ());
+
+    tab.push_back(trans.getTX());
+    tab.push_back(trans.getTY());
+  }
+  //test
+  for(unsigned int i = 0 ; i < 22 ; i++)
+  {
+    if(i % 11 == 0){
+      std::cout << std::endl;
+    }
+    std::cout << tab[i] << " ";
+  }
+  std::cout << std::endl;
+
+  data = tab.data();
+  for(unsigned int i = 0 ; i < 22 ; i++)
+  {
+    if(i % 11 == 0){
+      std::cout << std::endl;
+    }
+    std::cout << data[i] << " ";
+  }
+  std::cout << std::endl;
+}
+
+
 void addVertexToArray(std::vector<GLfloat> &vertices)
 {
   //first vertex (same as the previous one)
@@ -178,6 +224,7 @@ int main( void )
 */
 
     Branch trunk;
+    
 
     std::vector<GLfloat> vertices =
     {
@@ -342,6 +389,7 @@ int main( void )
         // glDrawArrays(GL_TRIANGLES, 0, 36);
         // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
+        //at the beginning, draw a simple line
         if((now - start)/ double(CLOCKS_PER_SEC) < 0.1)
         {
           glDrawArrays(GL_LINES, 0, 2);
