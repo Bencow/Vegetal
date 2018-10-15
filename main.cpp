@@ -213,7 +213,7 @@ int main( void )
     Vect vDepart(0.0f, 0.1f, 0.5f);
     Vertex pointDepart(0.0f, 0.0f, 0.0f);
     t_data dataDepart;
-    dataDepart.sizeNewVertices = 1.0f;
+    dataDepart.sizeNewVertices = 0.5f;
     dataDepart.varX = 0.0f;
     dataDepart.varY = 0.0f;
     dataDepart.varZ = 0.0f;
@@ -344,11 +344,21 @@ int main( void )
         double frame_time = (double) (clock()-start) / double(CLOCKS_PER_SEC);
         float period = 5; //seconds
 
+        //if SPACE is pressed go_update = true
         if(go_update)
         {
           newPlant.update();
           newPlant.fillVectorVertices(vertices);
           glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
+
+          for(uint i = 0 ; i  < vertices.size() ; ++i)
+          {
+            std::cout << vertices[i] << " ";
+            if((i % 10) == 0)
+               std::cout << std::endl;
+          }
+          std::cout << std::endl;
+
           go_update = false;
         }
 
@@ -405,4 +415,65 @@ int main( void )
 
     exit(EXIT_SUCCESS);
     return 0;
+}
+
+int main_test()
+{
+  //TODO: load vertices
+  Vect vDepart(0.5f, 1.0f, 0.5f);
+  Vertex pointDepart(0.0f, 0.0f, 0.0f);
+  t_data dataDepart;
+  dataDepart.sizeNewVertices = 1.0f;
+  dataDepart.varX = 0.0f;
+  dataDepart.varY = 0.0f;
+  dataDepart.varZ = 0.0f;
+  dataDepart.sizeMaxBranch = 100;
+
+  Plant newPlant(&pointDepart, dataDepart, vDepart);
+
+  std::cout << newPlant << "Number unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
+
+  std::vector<GLfloat> vertices;
+
+  //vertices.push_back(1.0f);
+  //std::cout << vertices.at(0) << std::endl;
+  //std::cout << vertices.at(0) << std::endl;
+
+  newPlant.fillVectorVertices(vertices);
+
+  for(uint i = 0 ; i  < vertices.size() ; ++i)
+  {
+    std::cout << vertices[i] << " ";
+    // if((11 % i) == 0)
+    //   std::cout << std::endl;
+  }
+  std::cout << std::endl;
+
+  newPlant.update();
+  std::cout << newPlant << "Number unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
+
+  newPlant.fillVectorVertices(vertices);
+
+  for(uint i = 0 ; i  < vertices.size() ; ++i)
+  {
+    std::cout << vertices[i] << " ";
+    if((i % 10) == 0)
+       std::cout << std::endl;
+  }
+  std::cout << std::endl;
+
+  newPlant.update();
+  std::cout << newPlant << "Number unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
+
+  newPlant.fillVectorVertices(vertices);
+
+  for(uint i = 0 ; i  < vertices.size() ; ++i)
+  {
+    std::cout << vertices[i] << " ";
+    if((i % 10) == 0)
+       std::cout << std::endl;
+  }
+  std::cout << std::endl;
+
+  return 0;
 }

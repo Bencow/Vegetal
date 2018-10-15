@@ -37,9 +37,11 @@ std::ostream& operator <<(std::ostream& out, Branch& myBranch){
   return out;
 }
 
-Branch* Branch::update(){
-
-  if((int)v_vertices.size() > m_data.sizeMaxBranch){
+Branch* Branch::update()
+{
+  if((int)v_vertices.size() > m_data.sizeMaxBranch)
+  {
+    std::cout << "size max of the branch is reached" << std::endl;
     return NULL;
   }
 
@@ -47,9 +49,8 @@ Branch* Branch::update(){
 
   //Creation new vertex
   Vertex newVertex(lastVertexBranch.getX() + (m_vecDirection.getX() * m_data.sizeNewVertices),
-    lastVertexBranch.getY() + (m_vecDirection.getY() * m_data.sizeNewVertices),
-    lastVertexBranch.getZ() + (m_vecDirection.getZ() * m_data.sizeNewVertices));
-
+    			   lastVertexBranch.getY() + (m_vecDirection.getY() * m_data.sizeNewVertices),
+    			   lastVertexBranch.getZ() + (m_vecDirection.getZ() * m_data.sizeNewVertices));
 
   //To put real time
   newVertex.setBorn(0.0);
