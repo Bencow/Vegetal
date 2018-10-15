@@ -58,6 +58,8 @@ class Branch {
     ///////////////////////////////////////Here
     int fillGfloatArray(GLfloat* arrayGfloat, int offset);
 
+    void fillVectorVertices(std::vector<GLfloat>& vertices);
+
 };
 
 std::ostream& operator <<(std::ostream& out, Branch& myBranch);

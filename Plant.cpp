@@ -88,3 +88,13 @@ void Plant::fillGfloatArray(GLfloat* arrayGfloat){
     offset = v_branch[i]->fillGfloatArray(arrayGfloat, offset);
   }
 }
+
+void Plant::fillVectorVertices(std::vector<GLfloat>& vertices){
+	//erase the entire vector
+	vertices.clear();
+	//And fill it again
+	for(uint i = 0; i < v_branch.size(); i++){
+		v_branch[i]->fillVectorVertices(vertices);
+	}
+	std::cout << "End fill vector\n";
+}

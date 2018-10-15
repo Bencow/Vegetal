@@ -50,6 +50,8 @@ class Plant {
 
     void fillGfloatArray(GLfloat* arrayGfloat);
 
+    void fillVectorVertices(std::vector<GLfloat>& vertices);
+
 
 
 

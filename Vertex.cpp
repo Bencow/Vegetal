@@ -29,7 +29,7 @@ double Vertex::getAge(){
 
 std::ostream& operator <<(std::ostream& out, Vertex& myVertex){
 
-  out << "x : " << myVertex.getX() << " y : " << myVertex.getY() << " z : " << myVertex.getZ() << "\n";
+  out << myVertex.getX() << " " << myVertex.getY() << " " << myVertex.getZ() << "\n";
 
   return out;
 }
@@ -65,4 +65,22 @@ int Vertex::fillGfloatArray(GLfloat* arrayGfloat, int offset){
 	*/
     return offset;
 
+}
+
+void Vertex::fillVectorVertices(std::vector<GLfloat>& vertices){
+
+	vertices.push_back(m_x);
+    vertices.push_back(m_y);
+    vertices.push_back(m_z);
+
+    vertices.push_back(m_r);
+    vertices.push_back(m_g);
+    vertices.push_back(m_b);
+
+    vertices.push_back(m_nx);
+    vertices.push_back(m_ny);
+    vertices.push_back(m_nz);
+
+    vertices.push_back(m_tx);
+    vertices.push_back(m_ty);
 }

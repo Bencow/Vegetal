@@ -13,7 +13,8 @@
 
 
 #include <stdio.h>
-#include<iostream>
+#include <iostream>
+#include <vector>
 
 
 class Vertex {
@@ -85,6 +86,8 @@ class Vertex {
     double getAge();
 
     int fillGfloatArray(GLfloat* arrayGfloat, int offset);
+
+    void fillVectorVertices(std::vector<GLfloat>& vertices);
 
 };
 

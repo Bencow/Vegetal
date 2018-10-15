@@ -31,7 +31,7 @@ std::ostream& operator <<(std::ostream& out, Branch& myBranch){
 
   for(unsigned int i = 0 ; i < myBranch.getSize() ; i++)
   {
-    out << "vertix : " << i << "\t-> " << myBranch.getVertices()[i];
+    out << "vertex : " << i << " -> " << myBranch.getVertices()[i];
   }
 
   return out;
@@ -95,4 +95,15 @@ int Branch::fillGfloatArray(GLfloat* arrayGfloat, int offset){
   }
 
   return offset;
+}
+
+void Branch::fillVectorVertices(std::vector<GLfloat>& vertices)
+{
+	for(uint i = 0 ; i < v_vertices.size() - 1 ; ++i)
+	{
+		//each turn of this loop will add two vertex to the vector -> draw one line
+		//all vertex will be stored to times -> better implementation with the element buffer for further version...
+		v_vertices[i].fillVectorVertices(vertices);
+		v_vertices[i+1].fillVectorVertices(vertices);
+	}
 }

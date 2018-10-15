@@ -30,6 +30,12 @@
 #include "Vertex.hpp"
 #include "Data.hpp"
 
+#define speedCamera 0.1f
+
+
+//just to test quickly 
+bool go_update = false;
+
 //Define an error callback
 static void error_callback(int error, const char* description)
 {
@@ -40,8 +46,17 @@ static void error_callback(int error, const char* description)
 //Define the key input callback
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-    glfwSetWindowShouldClose(window, GL_TRUE);
+  ///////////////////////////////////////////
+  // WARNING : the keyboard is a qwerty !  //
+  ///////////////////////////////////////////
+
+  if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+  glfwSetWindowShouldClose(window, GL_TRUE);
+
+  if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
+  {
+    go_update = true;
+  }
 }
 
 bool getShaderCompileStatus(GLuint shader){
@@ -103,34 +118,50 @@ void generateVerices(Branch& b, std::vector<GLfloat> &tab)
   }
   std::cout << std::endl;
 }
-
-
-void addVertexToArray(std::vector<GLfloat> &vertices)
+//This function make the program crash why ???
+void manage_keyboadr_events(std::vector<GLfloat> &vertices, Plant& p)
 {
-  //first vertex (same as the previous one)
-  vertices.push_back(0.0f);//coord
-  vertices.push_back(0.1f);
-  vertices.push_back(0.5f);
-  vertices.push_back(0.0f);//normal
-  vertices.push_back(0.0f);
-  vertices.push_back(0.0f);
-  vertices.push_back(1.0f);//colour
-  vertices.push_back(1.0f);
-  vertices.push_back(1.0f);
-  vertices.push_back(0.0f);//text
-  vertices.push_back(0.0f);
-  //new vertex
-  vertices.push_back(0.0f);//coord
-  vertices.push_back(0.2f);
-  vertices.push_back(0.7f);
-  vertices.push_back(0.0f);//normal
-  vertices.push_back(0.0f);
-  vertices.push_back(0.0f);
-  vertices.push_back(1.0f);//colour
-  vertices.push_back(1.0f);
-  vertices.push_back(1.0f);
-  vertices.push_back(0.0f);//text
-  vertices.push_back(0.0f);
+  float camera_x = 0.5f;
+  float camera_y = 0.5f;
+  float camera_z = 0.5f;
+  // float camera_target_x = 0.0f;
+  // float camera_target_y = 0.0f;
+  // float camera_target_z = 0.0f;
+
+  char inputGive;
+
+  inputGive = getchar();
+
+  switch (inputGive) {
+    /////////////////////////////Update plant
+  case 'u':
+    p.update();
+    std::cout << p << "\n\n Number element : " << p.getNumberElementPlant() << "\n";
+    p.fillVectorVertices(vertices);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
+
+    break;
+  case 'a':
+    camera_x += speedCamera;
+    break;
+  case 'q':
+    camera_x -= speedCamera;
+    break;
+  case 'z':
+    camera_y += speedCamera;
+    break;
+  case 's':
+    camera_y -= speedCamera;
+    break;
+  case 'e':
+    camera_z += speedCamera;
+    break;
+  case 'd':
+    camera_z -= speedCamera;
+    break;
+  default :
+    break;
+  }
 }
 
 int main( void )
@@ -154,6 +185,7 @@ int main( void )
     glfwMakeContextCurrent(window);
     //Sets the key callback
     glfwSetKeyCallback(window, key_callback);
+
     //Initialize GLEW
     glewExperimental = GL_TRUE;
     GLenum err = glewInit();
@@ -173,90 +205,39 @@ int main( void )
     GLuint vbo;
     glGenBuffers(1, &vbo);
 
-    //TODO: load vertices
-/*
-    GLfloat vertices[] =
-    {
-                  //Pos                   normal                  colour               tex
-                  -0.5f, -0.5f, -0.5f,   0.0f, 0.0f, -1.0f,     1.0f, 1.0f, 1.0f,      0.0f, 0.0f,
-                   0.5f, -0.5f, -0.5f,   0.0f, 0.0f, -1.0f,     1.0f, 1.0f, 1.0f,      1.0f, 0.0f,
-                   0.5f,  0.5f, -0.5f,   0.0f, 0.0f, -1.0f,     1.0f, 1.0f, 1.0f,      1.0f, 1.0f,
-                   0.5f,  0.5f, -0.5f,   0.0f, 0.0f, -1.0f,     1.0f, 1.0f, 1.0f,      1.0f, 1.0f,
-                  -0.5f,  0.5f, -0.5f,   0.0f, 0.0f, -1.0f,     1.0f, 1.0f, 1.0f,      0.0f, 1.0f,
-                  -0.5f, -0.5f, -0.5f,   0.0f, 0.0f, -1.0f,     1.0f, 1.0f, 1.0f,      0.0f, 0.0f,
+    ////////////////////////////////////
+    //       TODO: load vertices      //
+    ////////////////////////////////////
+    std::cout << "Hello world\n\n";
 
-                  -0.5f, -0.5f,  0.5f,   0.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f,      0.0f, 0.0f,
-                   0.5f, -0.5f,  0.5f,   0.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f,      1.0f, 0.0f,
-                   0.5f,  0.5f,  0.5f,   0.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f,      1.0f, 1.0f,
-                   0.5f,  0.5f,  0.5f,   0.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f,      1.0f, 1.0f,
-                  -0.5f,  0.5f,  0.5f,   0.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f,      0.0f, 1.0f,
-                  -0.5f, -0.5f,  0.5f,   0.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f,      0.0f, 0.0f,
+    Vect vDepart(0.0f, 0.1f, 0.5f);
+    Vertex pointDepart(0.0f, 0.0f, 0.0f);
+    t_data dataDepart;
+    dataDepart.sizeNewVertices = 1.0f;
+    dataDepart.varX = 0.0f;
+    dataDepart.varY = 0.0f;
+    dataDepart.varZ = 0.0f;
 
-                  -0.5f,  0.5f,  0.5f,   -1.0f, 0.0f, 0.0f,     1.0f, 1.0f, 1.0f,      1.0f, 0.0f,
-                  -0.5f,  0.5f, -0.5f,   -1.0f, 0.0f, 0.0f,     1.0f, 1.0f, 1.0f,      1.0f, 1.0f,
-                  -0.5f, -0.5f, -0.5f,   -1.0f, 0.0f, 0.0f,     1.0f, 1.0f, 1.0f,      0.0f, 1.0f,
-                  -0.5f, -0.5f, -0.5f,   -1.0f, 0.0f, 0.0f,     1.0f, 1.0f, 1.0f,      0.0f, 1.0f,
-                  -0.5f, -0.5f,  0.5f,   -1.0f, 0.0f, 0.0f,     1.0f, 1.0f, 1.0f,      0.0f, 0.0f,
-                  -0.5f,  0.5f,  0.5f,   -1.0f, 0.0f, 0.0f,     1.0f, 1.0f, 1.0f,      1.0f, 0.0f,
-
-                   0.5f,  0.5f,  0.5f,   1.0f, 0.0f, 0.0f,     1.0f, 1.0f, 1.0f,      1.0f, 0.0f,
-                   0.5f,  0.5f, -0.5f,   1.0f, 0.0f, 0.0f,     1.0f, 1.0f, 1.0f,      1.0f, 1.0f,
-                   0.5f, -0.5f, -0.5f,   1.0f, 0.0f, 0.0f,     1.0f, 1.0f, 1.0f,      0.0f, 1.0f,
-                   0.5f, -0.5f, -0.5f,   1.0f, 0.0f, 0.0f,     1.0f, 1.0f, 1.0f,      0.0f, 1.0f,
-                   0.5f, -0.5f,  0.5f,   1.0f, 0.0f, 0.0f,     1.0f, 1.0f, 1.0f,      0.0f, 0.0f,
-                   0.5f,  0.5f,  0.5f,   1.0f, 0.0f, 0.0f,     1.0f, 1.0f, 1.0f,      1.0f, 0.0f,
-
-                  -0.5f, -0.5f, -0.5f,   0.0f, -1.0f, 0.0f,     1.0f, 1.0f, 1.0f,      0.0f, 1.0f,
-                   0.5f, -0.5f, -0.5f,   0.0f, -1.0f, 0.0f,     1.0f, 1.0f, 1.0f,      1.0f, 1.0f,
-                   0.5f, -0.5f,  0.5f,   0.0f, -1.0f, 0.0f,     1.0f, 1.0f, 1.0f,      1.0f, 0.0f,
-                   0.5f, -0.5f,  0.5f,   0.0f, -1.0f, 0.0f,     1.0f, 1.0f, 1.0f,      1.0f, 0.0f,
-                  -0.5f, -0.5f,  0.5f,   0.0f, -1.0f, 0.0f,     1.0f, 1.0f, 1.0f,      0.0f, 0.0f,
-                  -0.5f, -0.5f, -0.5f,   0.0f, -1.0f, 0.0f,     1.0f, 1.0f, 1.0f,      0.0f, 1.0f,
-
-                  -0.5f,  0.5f, -0.5f,   0.0f, 1.0f, 0.0f,      1.0f, 1.0f, 1.0f,      0.0f, 1.0f,
-                   0.5f,  0.5f, -0.5f,   0.0f, 1.0f, 0.0f,      1.0f, 1.0f, 1.0f,      1.0f, 1.0f,
-                   0.5f,  0.5f,  0.5f,   0.0f, 1.0f, 0.0f,      1.0f, 1.0f, 1.0f,      1.0f, 0.0f,
-                   0.5f,  0.5f,  0.5f,   0.0f, 1.0f, 0.0f,      1.0f, 1.0f, 1.0f,      1.0f, 0.0f,
-                  -0.5f,  0.5f,  0.5f,   0.0f, 1.0f, 0.0f,      1.0f, 1.0f, 1.0f,      0.0f, 0.0f,
-                  -0.5f,  0.5f, -0.5f,   0.0f, 1.0f, 0.0f,      1.0f, 1.0f, 1.0f,      0.0f, 1.0f
-
-    };
-*/
-
-    Branch trunk;
+    dataDepart.sizeMaxBranch = 100;
     
+    Plant newPlant(&pointDepart, dataDepart, vDepart);
+    newPlant.update();
+    std::cout << newPlant << "\n\nNumber unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
 
-    std::vector<GLfloat> vertices =
-    {
-      //Pos                   normal                  colour               tex
-      0.0f, 0.0f, 0.0f,      0.0f, 0.0f, 0.0f,        1.0f, 1.0f, 1.0f,      0.0f, 0.0f,
-      0.0f, 0.1f, 0.5f,      0.0f, 0.0f, 0.0f,        1.0f, 1.0f, 1.0f,      1.0f, 0.0f,
-    };
+    std::vector<GLfloat> vertices;
+    newPlant.fillVectorVertices(vertices);
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     //Note : the size total of the array is the size of a GLfloat * number of element in the vector (i.e. vertices.size() )
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
 
-    /*
-    GLfloat tableau[] =
-    {
-      //Pos                   normal                  colour               tex
-      0.0f, 0.0f, 0.0f,      0.0f, 0.0f, 0.0f,        1.0f, 1.0f, 1.0f,      0.0f, 0.0f,
-      0.0f, 0.1f, 0.5f,      0.0f, 0.0f, 0.0f,        1.0f, 1.0f, 1.0f,      1.0f, 0.0f,
-    }
-    std::cout << "GLfloat         " << sizeof(GLfloat) << "\n";
-    std::cout << "vertices        " << sizeof(vertices) << "\n";
-    std::cout << "vertices.data() " << sizeof(vertices.data()) << '\n';
-    std::cout << "GLfloat * size  " << sizeof(GLfloat) * vertices.size() << '\n';
-    std::cout << "tableau         " << sizeof(tableau) << '\n';
-    */
+
 
     //TODO: element buffer (make sure GLuint!!!!)
 
     //Example:load shader source file
     std::ifstream in("shader.vert");
-    std::string contents((std::istreambuf_iterator<char>(in)),
-                          std::istreambuf_iterator<char>());
+    std::string contents((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
     const char* vertSource = contents.c_str();
 
     //Example: compile a shader source file for vertex shading
@@ -268,8 +249,7 @@ int main( void )
 
     //TODO: load and compile fragment shader shader.frag
     std::ifstream in2("shader.frag");
-    std::string contents2((std::istreambuf_iterator<char>(in2)),
-                          std::istreambuf_iterator<char>());
+    std::string contents2((std::istreambuf_iterator<char>(in2)), std::istreambuf_iterator<char>());
     const char* fragSource = contents2.c_str();
 
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -288,21 +268,27 @@ int main( void )
 
 
     //TODO: link vertex data to shader
+    //Param : 1 input
+    //        2 nbr of value for that input
+    //        3 type of component
+    //        4 do the components have to be normalized (only the normal !)
+    //        5 number of bit for the other components
+    //        6 offset
     GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
-    glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 11*sizeof(float), 0);//avant dernier param = 7 * sizeof(float)
+    glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 11*sizeof(float), 0);
     glEnableVertexAttribArray(posAttrib);
 
     GLint colourAttrib = glGetAttribLocation(shaderProgram, "colour");
-    glVertexAttribPointer(colourAttrib, 3, GL_FLOAT, GL_TRUE, 11 * sizeof(float), (void*)(6 * sizeof(float)));
+    glVertexAttribPointer(colourAttrib, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(colourAttrib);
+
+    GLint normalAttrib = glGetAttribLocation(shaderProgram, "normal");
+    glVertexAttribPointer(normalAttrib, 3, GL_FLOAT, GL_TRUE, 11 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(normalAttrib);
 
     GLint textureAttrib = glGetAttribLocation(shaderProgram, "texcoord");
     glVertexAttribPointer(textureAttrib, 2, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(9 * sizeof(float)));
     glEnableVertexAttribArray(textureAttrib);
-
-    GLint normalAttrib = glGetAttribLocation(shaderProgram, "normal");
-    glVertexAttribPointer(normalAttrib, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(normalAttrib);
 
     //Load texture
     GLuint tex;
@@ -351,14 +337,22 @@ int main( void )
     //Main Loop
     //clock_t start = std::clock();
     clock_t start = std::clock();
-    bool secondVertexLoaded = false;
 
+    
     do
     {
-        clock_t now = std::clock();
-
         double frame_time = (double) (clock()-start) / double(CLOCKS_PER_SEC);
         float period = 5; //seconds
+
+        if(go_update)
+        {
+          newPlant.update();
+          newPlant.fillVectorVertices(vertices);
+          glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
+          go_update = false;
+        }
+
+
 
         //==================================
         //       TODO: 3D Transforms
@@ -385,29 +379,9 @@ int main( void )
         //Clear color buffer
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-        // glDrawArrays(GL_TRIANGLES, 0, 36);
-        // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
         //at the beginning, draw a simple line
-        if((now - start)/ double(CLOCKS_PER_SEC) < 0.1)
-        {
-          glDrawArrays(GL_LINES, 0, 2);
-
-        }
-
-        else
-        {
-          if(!secondVertexLoaded)
-          {
-            std::cout << "turfu";
-            //load again the buffer
-            addVertexToArray(vertices);
-            glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
-            secondVertexLoaded = true;
-          }
-          glDrawArrays(GL_LINES, 0, 4);
-        }
+        //number of edge to draw is equal to the number of vertices + 1 because there is no loop in this tree
+        glDrawArrays(GL_LINES, 0, newPlant.getNumberElementPlant() + 1);
 
         //Swap buffers
         glfwSwapBuffers(window);
@@ -416,7 +390,7 @@ int main( void )
 
     } //Check if the ESC key had been pressed or if the window had been closed
     while (!glfwWindowShouldClose(window));
-
+    
     glDeleteTextures(1, &tex);
     glDeleteProgram(shaderProgram);
     glDeleteShader(fragmentShader);
@@ -430,4 +404,5 @@ int main( void )
     glfwTerminate();
 
     exit(EXIT_SUCCESS);
+    return 0;
 }
