@@ -61,6 +61,6 @@ void main()
     //outColor = specular;
     // outColor = (diffuse + specular) * (1/(d*d));
 
-		//for this project, we will only use for the moment, we don't need texture
+	//for this project, we will only use for the moment, we don't need texture
     outColor = diffuse + specular + ambient;
 }

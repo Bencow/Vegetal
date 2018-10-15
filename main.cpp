@@ -24,6 +24,11 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
+#include "Plant.hpp"
+#include "Branch.hpp"
+#include "Vect.hpp"
+#include "Vertex.hpp"
+#include "Data.hpp"
 
 //Define an error callback
 static void error_callback(int error, const char* description)
@@ -171,6 +176,8 @@ int main( void )
 
     };
 */
+
+    Branch trunk;
 
     std::vector<GLfloat> vertices =
     {
