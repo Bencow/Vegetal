@@ -23,10 +23,6 @@ Branch::~Branch(){
 
 }
 
-void Branch::addVertex(const Vertex& newOne){
-  v_vertices.push_back(newOne);
-}
-
 std::ostream& operator <<(std::ostream& out, Branch& myBranch){
 
   for(unsigned int i = 0 ; i < myBranch.getSize() ; i++)
@@ -55,7 +51,7 @@ Branch* Branch::update()
   //To put real time
   newVertex.setBorn(0.0);
 
-  addVertex(newVertex);
+  v_vertices.push_back(newVertex);
 
 
   //Variation of next vec direction
@@ -72,10 +68,7 @@ Branch* Branch::update()
     return ptr of new branche
   }
   */
-
-
     return NULL;
-
 }
 
 int Branch::getNumberElementBranch(){

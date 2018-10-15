@@ -210,7 +210,7 @@ int main( void )
     ////////////////////////////////////
     std::cout << "Hello world\n\n";
 
-    Vect vDepart(0.0f, 0.1f, 0.5f);
+    Vect vDepart(0.0f, 0.0f, 0.5f);
     Vertex pointDepart(0.0f, 0.0f, 0.0f);
     t_data dataDepart;
     dataDepart.sizeNewVertices = 0.5f;
@@ -351,18 +351,19 @@ int main( void )
           newPlant.fillVectorVertices(vertices);
           glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
 
+          std::cout << newPlant << "Number unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
+
           for(uint i = 0 ; i  < vertices.size() ; ++i)
           {
-            std::cout << vertices[i] << " ";
-            if((i % 10) == 0)
+            if((i % 11) == 0)
                std::cout << std::endl;
+            std::cout << vertices[i] << " ";
+            
           }
           std::cout << std::endl;
 
           go_update = false;
         }
-
-
 
         //==================================
         //       TODO: 3D Transforms
@@ -391,7 +392,10 @@ int main( void )
 
         //at the beginning, draw a simple line
         //number of edge to draw is equal to the number of vertices + 1 because there is no loop in this tree
-        glDrawArrays(GL_LINES, 0, newPlant.getNumberElementPlant() + 1);
+        //Param : 1 type of primitive
+        //        2 offset (how many vertices to skip)
+        //        3 number of VERTICES not primitives
+        glDrawArrays(GL_LINES, 0, newPlant.getNumberElementPlant() * 2);
 
         //Swap buffers
         glfwSwapBuffers(window);

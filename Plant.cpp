@@ -41,16 +41,21 @@ std::ostream& operator <<(std::ostream& out, Plant& myPlant){
 
 void Plant::update(){
 
-  Branch* newBranch;
-
-  for(int i = 0; i < (int)v_branch.size(); i++){
-    newBranch = v_branch[i]->update();
-    if(newBranch != NULL){
-      v_branch.push_back(newBranch);
-    }
-  }
-
-  std::cout << "Update Plant Done\n\n";
+	Branch* newBranch;
+	//For all the branches in the tree
+	for(int i = 0; i < (int)v_branch.size(); i++)
+	{
+		//update this branch
+		newBranch = v_branch[i]->update();
+		//And if this branch created a new one
+		if(newBranch != NULL)
+		{
+			//Add this new branch to the tree
+		   	v_branch.push_back(newBranch);
+		}
+	}
+	//test
+	std::cout << "Update Plant Done\n\n";
 
 }
 
