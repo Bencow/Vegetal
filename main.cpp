@@ -431,6 +431,26 @@ int main( void )
         glUniform4fv(uniLightCol, 1, glm::value_ptr(light_colour));
 
         //==================================
+        //       TODO: camera gesture
+        //==================================
+           glm::mat4 view = glm::lookAt(
+               glm::vec3(camera_x, camera_y, camera_z), //Camera position
+               glm::vec3(camera_target_x, camera_target_y, camera_target_z), //Camera view target
+               glm::vec3(0.0f, 0.0f, 1.0f)  //Camera up vector which is usually z
+           );
+           GLint uniView = glGetUniformLocation(shaderProgram, "view");
+           glUniformMatrix4fv(uniView, 1, GL_FALSE, glm::value_ptr(view));
+
+           //TODO: create and load projection matrix
+           glm::mat4 proj = glm::perspective(45.0f,                              //VERTICAL FOV
+                                             float(window_width) / float(window_height),       //aspect ratio
+                                             1.0f,                                             //near plane distance (min z)
+                                             10.0f                                             //Far plane distance (max z)
+           );
+           GLint uniProj = glGetUniformLocation(shaderProgram, "proj");
+           glUniformMatrix4fv(uniProj, 1, GL_FALSE, glm::value_ptr(proj));
+
+        //==================================
         //          Draw Model
         //==================================
         //Clear color buffer
