@@ -33,7 +33,7 @@
 #define speedCamera 0.1f
 
 
-//just to test quickly 
+//just to test quickly
 bool go_update = false;
 
 //Define an error callback
@@ -166,6 +166,8 @@ void manage_keyboadr_events(std::vector<GLfloat> &vertices, Plant& p)
 
 int main( void )
 {
+
+    srand(time(0));
     //Set the error callback
     glfwSetErrorCallback(error_callback);
     //Initialize GLFW
@@ -219,7 +221,7 @@ int main( void )
     dataDepart.varZ = 0.0f;
 
     dataDepart.sizeMaxBranch = 100;
-    
+
     Plant newPlant(&pointDepart, dataDepart, vDepart);
     newPlant.update();
     std::cout << newPlant << "\n\nNumber unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
@@ -338,7 +340,7 @@ int main( void )
     //clock_t start = std::clock();
     clock_t start = std::clock();
 
-    
+
     do
     {
         double frame_time = (double) (clock()-start) / double(CLOCKS_PER_SEC);
@@ -358,7 +360,7 @@ int main( void )
             if((i % 11) == 0)
                std::cout << std::endl;
             std::cout << vertices[i] << " ";
-            
+
           }
           std::cout << std::endl;
 
@@ -404,7 +406,7 @@ int main( void )
 
     } //Check if the ESC key had been pressed or if the window had been closed
     while (!glfwWindowShouldClose(window));
-    
+
     glDeleteTextures(1, &tex);
     glDeleteProgram(shaderProgram);
     glDeleteShader(fragmentShader);

@@ -57,11 +57,12 @@ Branch* Branch::update()
   //Variation of next vec direction
 
   //////////////////////////////////////HEre variation turn into int : to upgrade
-  /*
-  m_vecDirection.setX(m_vecDirection.getX() + (rand() % (int)m_data.varX) - (m_data.varX/2));
-  m_vecDirection.setY(m_vecDirection.getY() + (rand() % (int)m_data.varY) - (m_data.varY/2));
-  m_vecDirection.setZ(m_vecDirection.getZ() + (rand() % (int)m_data.varZ) - (m_data.varZ/2));
-*/
+  //check https://stackoverflow.com/questions/686353/c-random-float-number-generation  for debug
+
+  m_vecDirection.setX(m_vecDirection.getX() + (static_cast <float>(rand())) % (static_cast <float> (m_data.varX - m_data.varX/2)));
+  m_vecDirection.setY(m_vecDirection.getY() + (static_cast <float>(rand())) % (static_cast <float> (m_data.varY - m_data.varY/2)));
+  m_vecDirection.setZ(m_vecDirection.getZ() + (static_cast <float>(rand())) % (static_cast <float> (m_data.varZ - m_data.varZ/2)));
+
 
   /*
   if(decide to create a new branch){
