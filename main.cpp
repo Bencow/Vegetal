@@ -33,8 +33,16 @@
 #define speedCamera 0.1f
 
 
-//just to test quickly 
+//just to test quickly
 bool go_update = false;
+
+//Camera gesture
+float camera_x = 0.5f;
+float camera_y = 0.5f;
+float camera_z = 0.5f;
+float camera_target_x = 0.0f;
+float camera_target_y = 0.0f;
+float camera_target_z = 0.0f;
 
 //Define an error callback
 static void error_callback(int error, const char* description)
@@ -57,6 +65,44 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
   {
     go_update = true;
   }
+  else if(key == 'q' && action == GLFW_PRESS){
+    camera_x += speedCamera;
+  }
+  else if(key == 'a' && action == GLFW_PRESS){
+    camera_x -= speedCamera;
+  }
+  else if(key == 'w' && action == GLFW_PRESS){
+    camera_y += speedCamera;
+  }
+  else if(key == 's' && action == GLFW_PRESS){
+    camera_y -= speedCamera;
+  }
+  else if(key == 'e' && action == GLFW_PRESS){
+    camera_z += speedCamera;
+  }
+  else if(key == 'd' && action == GLFW_PRESS){
+    camera_z -= speedCamera;
+  }
+
+  else if(key == 'r' && action == GLFW_PRESS){
+    camera_target_x += speedCamera;
+  }
+  else if(key == 'f' && action == GLFW_PRESS){
+    camera_target_x -= speedCamera;
+  }
+  else if(key == 't' && action == GLFW_PRESS){
+    camera_target_y += speedCamera;
+  }
+  else if(key == 'g' && action == GLFW_PRESS){
+    camera_target_y -= speedCamera;
+  }
+  else if(key == 'y' && action == GLFW_PRESS){
+    camera_target_z += speedCamera;
+  }
+  else if(key == 'h' && action == GLFW_PRESS){
+    camera_target_z -= speedCamera;
+  }
+
 }
 
 bool getShaderCompileStatus(GLuint shader){
@@ -219,7 +265,7 @@ int main( void )
     dataDepart.varZ = 0.0f;
 
     dataDepart.sizeMaxBranch = 100;
-    
+
     Plant newPlant(&pointDepart, dataDepart, vDepart);
     newPlant.update();
     std::cout << newPlant << "\n\nNumber unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
@@ -338,7 +384,7 @@ int main( void )
     //clock_t start = std::clock();
     clock_t start = std::clock();
 
-    
+
     do
     {
         double frame_time = (double) (clock()-start) / double(CLOCKS_PER_SEC);
@@ -358,7 +404,7 @@ int main( void )
             if((i % 11) == 0)
                std::cout << std::endl;
             std::cout << vertices[i] << " ";
-            
+
           }
           std::cout << std::endl;
 
@@ -404,7 +450,7 @@ int main( void )
 
     } //Check if the ESC key had been pressed or if the window had been closed
     while (!glfwWindowShouldClose(window));
-    
+
     glDeleteTextures(1, &tex);
     glDeleteProgram(shaderProgram);
     glDeleteShader(fragmentShader);
