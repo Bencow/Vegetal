@@ -214,7 +214,9 @@ int main( void )
     ////////////////////////////////////
     std::cout << "Hello world\n\n";
 
-    Vect vDepart(0.0f, 0.1f, 0.5f);
+    Vect vDepart(0.0f, 0.0f, 0.5f);
+    normalize(vDepart);
+
     Vertex pointDepart(0.0f, 0.0f, -0.6f);
     t_data dataDepart;
     dataDepart.sizeNewVertices = 0.2f;
@@ -348,10 +350,15 @@ int main( void )
         double frame_time = (double) (clock()-start) / double(CLOCKS_PER_SEC);
         float period = 5; //seconds
 
+
+        //==================================
+        //          Update tree
+        //==================================
+
         //if SPACE is pressed go_update = true
         if(go_update)
         {
-          newPlant.update_2();
+          newPlant.update();
           newPlant.fillVectorVertices(vertices);
           glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
 
@@ -446,4 +453,5 @@ int main_()
     std::cout << var1 << std::setw(3) << var2 << std::endl; 
     std::cout << var1 << std::setw(3) << var2 << std::endl; 
     */
+    return 0;
 }
