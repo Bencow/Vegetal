@@ -4,6 +4,7 @@
 
 
 #include <stdio.h>
+#include <fstream>
 #include "Vect.hpp"
 
 #include <string>
@@ -29,6 +30,7 @@ std::istream& operator >>(std::istream& in, t_data& myData);
 
 void dataStructToCop(t_data& dataCop, t_data& dataToCop);
 
+void readParameter(t_data& myData);
 
 
 #endif

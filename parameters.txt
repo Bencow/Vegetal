@@ -1,0 +1,9 @@
+begin
+sizeNewVertices= 1.0
+varX= 1.0
+varY= 0.5
+varZ= -0.5
+sizeMaxBranch= 10
+frequencyNewBranch= 25
+numberBranchCreat= 1
+end

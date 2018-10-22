@@ -26,6 +26,7 @@ void dataStructToCop(t_data& dataCop, t_data& dataToCop){
   dataCop.frequencyNewBranch = dataToCop.frequencyNewBranch;
   dataCop.numberBranchCreat = dataToCop.numberBranchCreat;
 }
+
 std::istream& operator >>(std::istream& in, t_data& myData){
   std::string valueGet;
   int valueInt;
@@ -72,4 +73,23 @@ std::istream& operator >>(std::istream& in, t_data& myData){
   std::cout << myData << "\n";
 
   return in;
+}
+
+void readParameter(t_data& myData) {
+
+	std::string nameFile;
+	
+	std::cout << "Name of file please : ";
+
+	std::cin >> nameFile;
+
+	std::ifstream fichierData(nameFile.c_str(), std::ios::in);  // on ouvre le fichier en lecture
+
+	while (!fichierData) {
+		std::cout << "ERROR NAME DATA\n";
+	}
+
+	fichierData >> myData;
+
+	fichierData.close();
 }
