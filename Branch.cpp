@@ -9,14 +9,20 @@
 
 #include <iostream>
 #include "Branch.hpp"
+#include "Vect.hpp"
+
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 Branch::Branch(){
 
 }
 
-Branch::Branch(Vertex* anchor): m_anchor(anchor){
-
+Branch::Branch(Vertex* anchor): m_anchor(anchor)
+{
   v_vertices.push_back(*anchor);
+  m_finished = false;
 }
 
 Branch::~Branch(){
@@ -61,15 +67,95 @@ Branch* Branch::update()
   m_vecDirection.setX(m_vecDirection.getX() + (rand() % (int)m_data.varX) - (m_data.varX/2));
   m_vecDirection.setY(m_vecDirection.getY() + (rand() % (int)m_data.varY) - (m_data.varY/2));
   m_vecDirection.setZ(m_vecDirection.getZ() + (rand() % (int)m_data.varZ) - (m_data.varZ/2));
-*/
+  */
+
+  m_vecDirection.setX(/*m_vecDirection.getX() + */( ((rand() % 100) - 50)/40) );
+  m_vecDirection.setY(/*m_vecDirection.getY() + */( ((rand() % 100) - 50)/40) );
+  //m_vecDirection.setZ(m_vecDirection.getZ() + ( ((rand() % 100) - 50)/10 ) );
 
   /*
   if(decide to create a new branch){
     return ptr of new branche
   }
   */
-    return NULL;
+
+   return NULL;
 }
+
+void Branch::createNewVertex()
+{
+  Vertex last( v_vertices.at( v_vertices.size()-1) );
+
+  //Pi + (Vi * L)
+  //with P previous vertex, V direction vector, L length of the edge
+  //note : all the direction vectors have to be normalized, so we use only sizeNewVertices to manage the length
+  Vertex newVertex(last);
+  newVertex.setX(last.getX() + m_vecDirection.getX() * m_data.sizeNewVertices);
+  newVertex.setY(last.getY() + m_vecDirection.getY() * m_data.sizeNewVertices);
+  newVertex.setZ(last.getZ() + m_vecDirection.getZ() * m_data.sizeNewVertices);
+
+  v_vertices.push_back(newVertex);
+}
+
+/* in this version each branch do :
+ * - do not create other vertices on the same branch
+ * - create 3 new branches equidistant
+ * - length of the new edges are the previous edge's length divided by 2
+ */
+//Doesn't work -> return only one branch -> solution return a vector of branch
+std::vector<Branch*> Branch::update_2()
+{
+  std::vector<Branch*> newBranches;
+	//if the branch has not finished to grow
+	if(!m_finished)
+	{
+		//create 3 new branches
+		for(int i = 0 ; i < 3 ; ++i)
+		{
+			//create the branch and initialize the anchor with the last element of the previous branch
+			//				  Branch(last_vertex_of_the_actual_branch)
+			Branch* bud = new Branch(&v_vertices[v_vertices.size()-1]);//it can be neater with iterator ?	
+			
+			//set the direction vector of the new branch
+
+			//Find a vector orthogonal to the previous direction vector
+      Vect orth = findRandOrthogonal(m_vecDirection);
+
+      //rotate around direction vector of the branch
+      //3 new branches : 0°, 120° and 240°
+      //create a vec to create the glm::matrix
+      glm::vec3 old_dir;
+      old_dir.x = m_vecDirection.getX();
+      old_dir.y = m_vecDirection.getY();
+      old_dir.z = m_vecDirection.getZ();
+      //initialize the matrix
+      glm::mat4 transform = glm::mat4(1.0f);
+      transform = glm::rotate(transform, glm::radians(i * 120.0f), old_dir);
+
+      //apply the transform
+      glm::vec4 dir = transform * glm::vec4(convertVect_glm(orth));
+      
+      //casting it to our own type
+      Vect newDirection(dir.x, dir.y, dir.z);
+
+      bud->setVecDirection(newDirection);
+
+      //then create a new point on this branch
+      bud->createNewVertex();
+
+      newBranches.push_back(bud);
+		}
+		//stop this branch to grow
+		//to avoid creating three other branches on the next turn
+		m_finished = true;
+
+		
+	}
+	//Store the new branch in the plant
+	//return the vector (which may be empty !)
+  return newBranches;
+}
+
 
 int Branch::getNumberElementBranch(){
   return v_vertices.size() - 1;

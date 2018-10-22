@@ -32,6 +32,8 @@ class Branch {
 
     t_data m_data;
 
+    bool m_finished;
+
   public:
     Branch();
     Branch(Vertex* anchor);
@@ -46,10 +48,14 @@ class Branch {
 
     std::vector<Vertex>& getVertices(){return v_vertices;}
 
+    bool getFinished() const { return m_finished; }
+    void setFinished(bool val){ m_finished = val; }
 
     void addVertex(const Vertex& newOne);
+    void createNewVertex();
 
     Branch* update();
+    std::vector<Branch*> update_2();
 
     int getNumberElementBranch();
 

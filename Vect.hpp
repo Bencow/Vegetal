@@ -12,6 +12,11 @@
 #include <stdio.h>
 #include<iostream>
 
+//Matrix libraries
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
+
 class Vect {
   private:
     float m_x;
@@ -41,10 +46,23 @@ class Vect {
 
     void operator =(const Vect vectToCop);
 
-
 };
 
 std::ostream& operator <<(std::ostream& out, Vect& myVect);
+
+//Math things
+Vect findRandOrthogonal(const Vect v);
+Vect crossProduct(const Vect v, const Vect u);
+Vect rotation2D(Vect u, Vect v, float alpha);
+
+
+//Math functions
+Vect findRandOrthogonal(const Vect v);
+Vect crossProduct(Vect v, Vect u);
+void normalize(Vect& v);
+void rotateX(double alpha, Vect rotateMatrix[3]);
+void getTransposeMatrix(Vect M[3], Vect M_T[3]);
+glm::vec4 convertVect_glm(Vect u);
 
 
 

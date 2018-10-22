@@ -7,10 +7,12 @@
 #include <GL/glew.h>
 
 #include<iostream> //cout
+#include<iomanip>//setw
 #include <fstream> //fstream
 #include <vector>
 #include <ctime>
 #include <chrono>
+
 
 //Include GLFW
 #include <GLFW/glfw3.h>
@@ -166,6 +168,8 @@ void manage_keyboadr_events(std::vector<GLfloat> &vertices, Plant& p)
 
 int main( void )
 {
+    srand(time(NULL));
+
     //Set the error callback
     glfwSetErrorCallback(error_callback);
     //Initialize GLFW
@@ -210,12 +214,12 @@ int main( void )
     ////////////////////////////////////
     std::cout << "Hello world\n\n";
 
-    Vect vDepart(0.0f, 0.0f, 0.5f);
-    Vertex pointDepart(0.0f, 0.0f, 0.0f);
+    Vect vDepart(0.0f, 0.1f, 0.5f);
+    Vertex pointDepart(0.0f, 0.0f, -0.6f);
     t_data dataDepart;
-    dataDepart.sizeNewVertices = 0.5f;
-    dataDepart.varX = 0.0f;
-    dataDepart.varY = 0.0f;
+    dataDepart.sizeNewVertices = 0.2f;
+    dataDepart.varX = 1.0f;
+    dataDepart.varY = -0.5f;
     dataDepart.varZ = 0.0f;
 
     dataDepart.sizeMaxBranch = 100;
@@ -347,7 +351,7 @@ int main( void )
         //if SPACE is pressed go_update = true
         if(go_update)
         {
-          newPlant.update();
+          newPlant.update_2();
           newPlant.fillVectorVertices(vertices);
           glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
 
@@ -421,63 +425,25 @@ int main( void )
     return 0;
 }
 
-int main_test()
+int main_()
 {
-  //TODO: load vertices
-  Vect vDepart(0.5f, 1.0f, 0.5f);
-  Vertex pointDepart(0.0f, 0.0f, 0.0f);
-  t_data dataDepart;
-  dataDepart.sizeNewVertices = 1.0f;
-  dataDepart.varX = 0.0f;
-  dataDepart.varY = 0.0f;
-  dataDepart.varZ = 0.0f;
-  dataDepart.sizeMaxBranch = 100;
+    //test maths functions :
+    Vect v(2.0f, 0.0f, 0.0f);
+    Vect u = findRandOrthogonal(v);
+    Vect w = crossProduct(v, u);
+    
+    std::cout << "v " << v
+              << "u " << u
+              << "w " << w;
+    
+    /*
+    int var1 = -35;
+    int var2 = 1;
 
-  Plant newPlant(&pointDepart, dataDepart, vDepart);
+    std::cout << var1 << var2 << std::endl; 
+    std::cout << var2 << var1 << std::endl; 
 
-  std::cout << newPlant << "Number unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
-
-  std::vector<GLfloat> vertices;
-
-  //vertices.push_back(1.0f);
-  //std::cout << vertices.at(0) << std::endl;
-  //std::cout << vertices.at(0) << std::endl;
-
-  newPlant.fillVectorVertices(vertices);
-
-  for(uint i = 0 ; i  < vertices.size() ; ++i)
-  {
-    std::cout << vertices[i] << " ";
-    // if((11 % i) == 0)
-    //   std::cout << std::endl;
-  }
-  std::cout << std::endl;
-
-  newPlant.update();
-  std::cout << newPlant << "Number unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
-
-  newPlant.fillVectorVertices(vertices);
-
-  for(uint i = 0 ; i  < vertices.size() ; ++i)
-  {
-    std::cout << vertices[i] << " ";
-    if((i % 10) == 0)
-       std::cout << std::endl;
-  }
-  std::cout << std::endl;
-
-  newPlant.update();
-  std::cout << newPlant << "Number unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
-
-  newPlant.fillVectorVertices(vertices);
-
-  for(uint i = 0 ; i  < vertices.size() ; ++i)
-  {
-    std::cout << vertices[i] << " ";
-    if((i % 10) == 0)
-       std::cout << std::endl;
-  }
-  std::cout << std::endl;
-
-  return 0;
+    std::cout << var1 << std::setw(3) << var2 << std::endl; 
+    std::cout << var1 << std::setw(3) << var2 << std::endl; 
+    */
 }
