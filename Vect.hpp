@@ -59,7 +59,7 @@ Vect rotation2D(Vect u, Vect v, float alpha);
 //Math functions
 Vect findRandOrthogonal(const Vect v);
 Vect crossProduct(Vect v, Vect u);
-void normalize(Vect& v);
+bool normalize(Vect& v);
 void rotateX(double alpha, Vect rotateMatrix[3]);
 void getTransposeMatrix(Vect M[3], Vect M_T[3]);
 glm::vec4 convertVect_glm(Vect u);

@@ -16,12 +16,18 @@ Plant::~Plant(){
 
 }
 
-Plant::Plant(Vertex* anchor, t_data dataDepart, Vect vecDepart): m_anchor(anchor){
+Plant::Plant(Vertex* anchor, t_data dataDepart, Vect vecDepart): m_anchor(anchor)
+{
+  //Il faudrait faire :
+	Branch* newBranch = new Branch(anchor, dataDepart, vecDepart);//Implement that shit
+	v_branch.push_back(newBranch);
 
+	//old fashioned
+	/*
   v_branch.push_back(new Branch(anchor));
   dataStructToCop(v_branch[0]->getData(), dataDepart);
   v_branch[0]->setVecDirection(vecDepart);
-
+	*/
 }
 
 std::ostream& operator <<(std::ostream& out, Plant& myPlant){

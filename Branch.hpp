@@ -37,13 +37,14 @@ class Branch {
   public:
     Branch();
     Branch(Vertex* anchor);
+    Branch(Vertex* anchor, t_data dataDepart, Vect vecDepart);
     ~Branch();
 
     Vertex getVertex(int i)const{ return v_vertices[i]; }
     unsigned int getSize()const { return v_vertices.size(); }
 
-    void setVecDirection(Vect value){ m_vecDirection = value;}
-
+    void setVecDirection(Vect value){ m_vecDirection = value; }
+    void setDataSizeMax(int val) {m_data.sizeMaxBranch = val; }
     t_data& getData(){return m_data;}
 
     std::vector<Vertex>& getVertices(){return v_vertices;}
@@ -61,7 +62,6 @@ class Branch {
 
     int getNumberVertexBranch();
 
-    ///////////////////////////////////////Here
     int fillGfloatArray(GLfloat* arrayGfloat, int offset);
 
     void fillVectorVertices(std::vector<GLfloat>& vertices);

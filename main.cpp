@@ -228,7 +228,7 @@ int main( void )
     
     Plant newPlant(&pointDepart, dataDepart, vDepart);
     newPlant.update();
-    std::cout << newPlant << "\n\nNumber unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
+    // std::cout << newPlant << "\n\nNumber unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
 
     std::vector<GLfloat> vertices;
     newPlant.fillVectorVertices(vertices);
@@ -362,8 +362,9 @@ int main( void )
           newPlant.fillVectorVertices(vertices);
           glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
 
-          std::cout << newPlant << "Number unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
-
+          std::cout << "number branch " << newPlant.getNumberBranch() << std::endl;
+          //std::cout << newPlant << "Number unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
+          /*
           for(uint i = 0 ; i  < vertices.size() ; ++i)
           {
             if((i % 11) == 0)
@@ -372,7 +373,7 @@ int main( void )
             
           }
           std::cout << std::endl;
-
+          */
           go_update = false;
         }
 

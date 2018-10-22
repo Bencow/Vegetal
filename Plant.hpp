@@ -43,6 +43,8 @@ class Plant {
     void update();
     void update_2();
 
+    int getNumberBranch()const { return v_branch.size(); }
+
     int getNumberElementPlant();
 
     int getNumberFloatPlant();

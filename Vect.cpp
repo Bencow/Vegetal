@@ -62,6 +62,9 @@ void Vect::operator =(const Vect vectToCop){
   m_z = vectToCop.getZ();
 }
 
+
+//This function is not 100% fiable because, if v(1, 0, 0), this function choose to put the furst coordonate to 0
+// and then the orthogonal vector is the null vector...
 Vect findRandOrthogonal(const Vect v)
 {
 	Vect u;
@@ -99,14 +102,23 @@ Vect crossProduct(Vect v, Vect u)
 	return w;
 }
 
-void normalize(Vect& v)
+//return false if it's the vector null
+bool normalize(Vect& v)
 {
 	//calculate the norm of v
 	double norm = sqrt( pow(v.getX(), 2) + pow(v.getY(), 2) + pow(v.getZ(), 2) );
-	//Divide all the components of v by the norm
-	v.setX(v.getX() / norm);
-	v.setY(v.getY() / norm);
-	v.setZ(v.getZ() / norm);
+	if(norm == 0)
+	{
+		return false;
+	}
+	else
+	{	
+		//Divide all the components of v by the norm
+		v.setX(v.getX() / norm);
+		v.setY(v.getY() / norm);
+		v.setZ(v.getZ() / norm);
+		return true;
+	}
 }
 
 //return a matrix 3*3

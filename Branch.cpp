@@ -21,8 +21,20 @@ Branch::Branch(){
 
 Branch::Branch(Vertex* anchor): m_anchor(anchor)
 {
+  m_data.sizeMaxBranch = 100;//Should not be hardcoded
+  m_data.sizeNewVertices = 0.2f;//idem
+
+
   v_vertices.push_back(*anchor);
   m_finished = false;
+}
+
+Branch::Branch(Vertex* anchor, t_data dataDepart, Vect vecDepart) : m_anchor(anchor)
+{
+  copyData(m_data, dataDepart);
+  m_vecDirection = vecDepart;
+  m_finished = false;
+  v_vertices.push_back(*anchor);//v_vertices<Vertex> !
 }
 
 Branch::~Branch(){
@@ -46,8 +58,8 @@ Branch* Branch::update()
     std::cout << "size max of the branch is reached" << std::endl;
     return NULL;
   }
-
-  Vertex& lastVertexBranch = v_vertices[v_vertices.size() - 1];
+  //copy localy the last vertex of the current branch
+  Vertex lastVertexBranch = v_vertices[v_vertices.size() - 1];
 
   //Creation new vertex
   Vertex newVertex(lastVertexBranch.getX() + (m_vecDirection.getX() * m_data.sizeNewVertices),
@@ -59,25 +71,26 @@ Branch* Branch::update()
 
   v_vertices.push_back(newVertex);
 
-
   //Variation of next vec direction
-
-  //////////////////////////////////////HEre variation turn into int : to upgrade
-  /*
-  m_vecDirection.setX(m_vecDirection.getX() + (rand() % (int)m_data.varX) - (m_data.varX/2));
-  m_vecDirection.setY(m_vecDirection.getY() + (rand() % (int)m_data.varY) - (m_data.varY/2));
-  m_vecDirection.setZ(m_vecDirection.getZ() + (rand() % (int)m_data.varZ) - (m_data.varZ/2));
-  */
-
   m_vecDirection.setX(/*m_vecDirection.getX() + */( ((rand() % 100) - 50)/40) );
   m_vecDirection.setY(/*m_vecDirection.getY() + */( ((rand() % 100) - 50)/40) );
-  //m_vecDirection.setZ(m_vecDirection.getZ() + ( ((rand() % 100) - 50)/10 ) );
+  //Doesn't change in Z for now
 
-  /*
-  if(decide to create a new branch){
-    return ptr of new branche
+  normalize(m_vecDirection);
+
+  //if we decide to create a new branch
+  //if this branch is the trunk
+  if(true)
+  {
+    //Find a vector orthogonal to the previous direction vector
+    Vect orthogonal = findRandOrthogonal(m_vecDirection);
+    normalize(orthogonal);
+    //Create a new branch with the last node of the previous branch as anchor
+    Branch* newBranch = new Branch(&lastVertexBranch, m_data, orthogonal);
+
+    return newBranch;
   }
-  */
+  
 
    return NULL;
 }
@@ -132,7 +145,7 @@ std::vector<Branch*> Branch::update_2()
       glm::mat4 transform = glm::mat4(1.0f);
       transform = glm::rotate(transform, glm::radians(i * 120.0f), old_dir);
 
-      //apply the transform
+      //apply the transform to the orthogonal vector to find the two other vectors
       glm::vec4 dir = transform * glm::vec4(convertVect_glm(orth));
       
       //casting it to our own type
@@ -148,8 +161,6 @@ std::vector<Branch*> Branch::update_2()
 		//stop this branch to grow
 		//to avoid creating three other branches on the next turn
 		m_finished = true;
-
-		
 	}
 	//Store the new branch in the plant
 	//return the vector (which may be empty !)
