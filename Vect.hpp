@@ -57,7 +57,7 @@ Vect rotation2D(Vect u, Vect v, float alpha);
 
 
 //Math functions
-Vect findRandOrthogonal(const Vect v);
+Vect findRandOrthogonal(const Vect& v);
 Vect crossProduct(Vect v, Vect u);
 bool normalize(Vect& v);
 void rotateX(double alpha, Vect rotateMatrix[3]);

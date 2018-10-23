@@ -62,10 +62,23 @@ void Vect::operator =(const Vect vectToCop){
   m_z = vectToCop.getZ();
 }
 
+//Pre condition : the input vector must not be null
+//Post condition : return the value of the componant not equal to zero
+int twoComponantEqualZero(const Vect& v)
+{
+	if(v.getX() == 0 && v.getY() == 0)
+		return 3;
+	else if(v.getY() == 0 && v.getZ() == 0)
+		return 2;
+	else if(v.getZ() == 0 && v.getX() == 0)
+		return 3;
+	else
+		return 0;//at least two componants are different from 0
+}
 
-//This function is not 100% fiable because, if v(1, 0, 0), this function choose to put the furst coordonate to 0
+//This function is not 100% fiable because, if v(1, 0, 0), this function choose to put the first coordonate to 0
 // and then the orthogonal vector is the null vector...
-Vect findRandOrthogonal(const Vect v)
+Vect findRandOrthogonal_1(const Vect& v)
 {
 	Vect u;
 	//better implementation would be setting a random coord and then find a null dot product
@@ -81,7 +94,7 @@ Vect findRandOrthogonal(const Vect v)
 	{
 		u.setX( -v.getZ());
 		u.setY(0);
-		u.setZ( v.getX() ); 
+		u.setZ( v.getX() );
 	}
 	else if(coord_to_reset == 2)
 	{
@@ -89,7 +102,62 @@ Vect findRandOrthogonal(const Vect v)
 		u.setY( v.getX() );
 		u.setZ(0);
 	}
-
+	return u;
+}
+Vect findRandOrthogonal(const Vect& v)
+{
+	Vect u;
+	int r;
+	if(v.getZ() != 0)// z != 0
+	{	
+		r = rand()%2;
+		if(r == 0)
+		{
+			u.setX(1);
+			u.setY(0);
+			u.setZ(-v.getX() / v.getZ());
+		}
+		else
+		{
+			u.setX(0);
+			u.setY(1);
+			u.setZ(-v.getY() / v.getZ());
+		}
+	}
+	else if(v.getY() != 0)
+	{
+		r = rand()%2;
+		if(r == 0)
+		{
+			u.setX(1);
+			u.setY(-v.getX() / v.getY());
+			u.setZ(0);
+		}
+		else
+		{
+			u.setX(0);
+			u.setY(-v.getZ() / v.getY());
+			u.setZ(1);
+		}
+	}
+	else if(v.getX() != 0)
+	{
+		r = rand()%2;
+		if(r == 0)
+		{
+			u.setX(-v.getY() / v.getX());
+			u.setY(1);
+			u.setZ(0);
+		}
+		else
+		{
+			u.setX(-v.getZ() / v.getX());
+			u.setY(0);
+			u.setZ(1);
+		}
+	}
+	else
+		std::cout << "Error, try to find orthogonal vector of a null vector"
 	return u;
 }
 
