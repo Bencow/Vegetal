@@ -10,6 +10,7 @@ std::ostream& operator <<(std::ostream& out, t_data& myData){
   return out;
 }
 
+//Copy all the arguments of DataToCop in DataCop
 void copyData(t_data& dataCop, t_data& dataToCop){
 
   dataCop.sizeNewVertices = dataToCop.sizeNewVertices;

@@ -24,7 +24,6 @@ Branch::Branch(Vertex* anchor): m_anchor(anchor)
   m_data.sizeMaxBranch = 100;//Should not be hardcoded
   m_data.sizeNewVertices = 0.2f;//idem
 
-
   v_vertices.push_back(*anchor);
   m_finished = false;
 }
@@ -34,7 +33,7 @@ Branch::Branch(Vertex* anchor, t_data dataDepart, Vect vecDepart) : m_anchor(anc
   copyData(m_data, dataDepart);
   m_vecDirection = vecDepart;
   m_finished = false;
-  v_vertices.push_back(*anchor);//v_vertices<Vertex> !
+  v_vertices.push_back(*anchor);//v_vertices<Vertex> so dereference anchor !
 }
 
 Branch::~Branch(){
@@ -59,7 +58,7 @@ Branch* Branch::update()
     return NULL;
   }
   //copy localy the last vertex of the current branch
-  Vertex lastVertexBranch = v_vertices[v_vertices.size() - 1];
+  Vertex lastVertexBranch = v_vertices.back();
 
   //Creation new vertex
   Vertex newVertex(lastVertexBranch.getX() + (m_vecDirection.getX() * m_data.sizeNewVertices),
@@ -79,7 +78,7 @@ Branch* Branch::update()
   normalize(m_vecDirection);
 
   //if we decide to create a new branch
-  //if this branch is the trunk
+  //find a realistic condition !
   if(true)
   {
     //Find a vector orthogonal to the previous direction vector
@@ -90,14 +89,13 @@ Branch* Branch::update()
 
     return newBranch;
   }
-  
 
    return NULL;
 }
 
 void Branch::createNewVertex()
 {
-  Vertex last( v_vertices.at( v_vertices.size()-1) );
+  Vertex last =  v_vertices.back();
 
   //Pi + (Vi * L)
   //with P previous vertex, V direction vector, L length of the edge

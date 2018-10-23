@@ -109,6 +109,7 @@ bool normalize(Vect& v)
 	double norm = sqrt( pow(v.getX(), 2) + pow(v.getY(), 2) + pow(v.getZ(), 2) );
 	if(norm == 0)
 	{
+		std::cout << "Caution this vector is null !!!" << std::endl;
 		return false;
 	}
 	else

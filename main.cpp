@@ -214,7 +214,7 @@ int main( void )
     ////////////////////////////////////
     std::cout << "Hello world\n\n";
 
-    Vect vDepart(0.0f, 0.0f, 0.5f);
+    Vect vDepart(0.025f, 0.025f, 0.5f);
     normalize(vDepart);
 
     Vertex pointDepart(0.0f, 0.0f, -0.6f);
@@ -227,8 +227,15 @@ int main( void )
     dataDepart.sizeMaxBranch = 100;
     
     Plant newPlant(&pointDepart, dataDepart, vDepart);
+
+    //display our plant member variables
+
+    
+    //std::cout << "hey0";
     newPlant.update();
+    // std::cout << "hey1";
     // std::cout << newPlant << "\n\nNumber unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
+    
 
     std::vector<GLfloat> vertices;
     newPlant.fillVectorVertices(vertices);
@@ -343,7 +350,7 @@ int main( void )
     //Main Loop
     //clock_t start = std::clock();
     clock_t start = std::clock();
-
+    go_update = false;
     
     do
     {
