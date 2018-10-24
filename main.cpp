@@ -76,6 +76,16 @@ bool getShaderCompileStatus(GLuint shader){
     }
 }
 
+GLuint createShader(GLenum type, const GLchar* src) 
+{
+    GLuint shader = glCreateShader(type);
+    glShaderSource(shader, 1, &src, nullptr);
+    glCompileShader(shader);
+    getShaderCompileStatus(shader);
+    return shader;
+}
+
+
 void generateVerices(Branch& b, std::vector<GLfloat> &tab)
 {
   GLfloat* data;
@@ -120,7 +130,9 @@ void generateVerices(Branch& b, std::vector<GLfloat> &tab)
   }
   std::cout << std::endl;
 }
-//This function make the program crash why ???
+
+
+
 void manage_keyboadr_events(std::vector<GLfloat> &vertices, Plant& p)
 {
   float camera_x = 0.5f;
@@ -165,6 +177,7 @@ void manage_keyboadr_events(std::vector<GLfloat> &vertices, Plant& p)
     break;
   }
 }
+
 
 
 //////////////////////////////////////
@@ -256,36 +269,27 @@ int main( void )
     std::string contents((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
     const char* vertSource = contents.c_str();
     //Example: compile a shader source file for vertex shading
-    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertSource, NULL);
-    glCompileShader(vertexShader);
-    getShaderCompileStatus(vertexShader);
+    GLuint vertexShader = createShader(GL_VERTEX_SHADER, vertSource);
 
     //load fragment shader
     std::ifstream in2("shader.frag");
     std::string contents2((std::istreambuf_iterator<char>(in2)), std::istreambuf_iterator<char>());
     const char* fragSource = contents2.c_str();
-    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragSource, NULL);
-    glCompileShader(fragmentShader);
-    getShaderCompileStatus(fragmentShader);
+    GLuint fragmentShader = createShader(GL_FRAGMENT_SHADER, fragSource);
 
     //load geomerty shader
     std::ifstream in3("shader.geom");
     std::string contents3((std::istreambuf_iterator<char>(in3)), std::istreambuf_iterator<char>());
     const char* geomSource = contents3.c_str();
     //Example: compile a shader source file for vertex shading
-    GLuint geomShader = glCreateShader(GL_GEOMETRY_SHADER);
-    glShaderSource(geomShader, 1, &geomSource, NULL);
-    glCompileShader(geomShader);
-    getShaderCompileStatus(geomShader);
+    GLuint geomShader = createShader(GL_GEOMETRY_SHADER, geomSource);
 
 
     //TODO: link shaders into a program
     GLuint shaderProgram = glCreateProgram();
     glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
     glAttachShader(shaderProgram, geomShader);
+    glAttachShader(shaderProgram, fragmentShader);
     glBindFragDataLocation(shaderProgram, 0, "outColor");
     glLinkProgram(shaderProgram);
     glUseProgram(shaderProgram);
@@ -425,7 +429,7 @@ int main( void )
         //Param : 1 type of primitive
         //        2 offset (how many vertices to skip)
         //        3 number of VERTICES not primitives
-        glDrawArrays(GL_LINES, 0, newPlant.getNumberElementPlant() * 2);
+        glDrawArrays(GL_POINTS, 0, newPlant.getNumberElementPlant() * 2);
 
         //Swap buffers
         glfwSwapBuffers(window);
@@ -438,6 +442,7 @@ int main( void )
     glDeleteTextures(1, &tex);
     glDeleteProgram(shaderProgram);
     glDeleteShader(fragmentShader);
+    glDeleteShader(geomShader);
     glDeleteShader(vertexShader);
     glDeleteBuffers(1, &vbo);
     glDeleteVertexArrays(1, &vao);
