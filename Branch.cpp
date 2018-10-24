@@ -28,7 +28,7 @@ Branch::Branch(Vertex* anchor): m_anchor(anchor)
   m_finished = false;
 }
 
-Branch::Branch(Vertex* anchor, t_data dataDepart, Vect vecDepart) : m_anchor(anchor)
+Branch::Branch(Vertex* anchor, t_data dataDepart, Vect vecDepart, int* count) : m_anchor(anchor), m_count(count)
 {
   copyData(m_data, dataDepart);
   m_vecDirection = vecDepart;
@@ -52,6 +52,7 @@ std::ostream& operator <<(std::ostream& out, Branch& myBranch){
 
 Branch* Branch::update()
 {
+
   if((int)v_vertices.size() > m_data.sizeMaxBranch)
   {
     std::cout << "size max of the branch is reached" << std::endl;
@@ -64,11 +65,11 @@ Branch* Branch::update()
   Vertex newVertex(lastVertexBranch.getX() + (m_vecDirection.getX() * m_data.sizeNewVertices),
     			   lastVertexBranch.getY() + (m_vecDirection.getY() * m_data.sizeNewVertices),
     			   lastVertexBranch.getZ() + (m_vecDirection.getZ() * m_data.sizeNewVertices));
-
   //To put real time
   newVertex.setBorn(0.0);
-
   v_vertices.push_back(newVertex);
+  //diminish the size of the new edges
+  m_data.sizeNewVertices = m_data.sizeNewVertices / 1.5f;
 
   //Variation of next vec direction
   m_vecDirection.setX(/*m_vecDirection.getX() + */( ((rand() % 100) - 50)/40) );
@@ -79,13 +80,16 @@ Branch* Branch::update()
 
   //if we decide to create a new branch
   //find a realistic condition !
-  if(true)
+  //Warning, in x % y, if y < 0 => crash !
+
+  if(rand()%(5 - *m_count) == 0)
+  //if(true)
   {
     //Find a vector orthogonal to the previous direction vector
     Vect orthogonal = findRandOrthogonal(m_vecDirection);
     normalize(orthogonal);
     //Create a new branch with the last node of the previous branch as anchor
-    Branch* newBranch = new Branch(&lastVertexBranch, m_data, orthogonal);
+    Branch* newBranch = new Branch(&lastVertexBranch, m_data, orthogonal, m_count);
 
     return newBranch;
   }
@@ -191,7 +195,7 @@ void Branch::fillVectorVertices(std::vector<GLfloat>& vertices)
 	for(uint i = 0 ; i < v_vertices.size() - 1 ; ++i)
 	{
 		//each turn of this loop will add two vertex to the vector -> draw one line
-		//all vertex will be stored to times -> better implementation with the element buffer for further version...
+		//all vertex will be stored two times -> better implementation with the element buffer for further version...
 		v_vertices[i].fillVectorVertices(vertices);
 		v_vertices[i+1].fillVectorVertices(vertices);
 	}

@@ -25,12 +25,12 @@ Plant::Plant(Vertex* anchor): m_anchor(anchor)
 	*/
 }
 
-Plant::Plant(Vertex* anchor, t_data dataDepart, Vect vecDepart): m_anchor(anchor)
+Plant::Plant(Vertex* anchor, t_data dataDepart, Vect vecDepart, int* count): m_anchor(anchor)
 {
 	//initaialize the anchor of the tree
 	m_anchor = anchor;
 	//create a first branch
-	v_branch.push_back(new Branch(anchor, dataDepart, vecDepart));
+	v_branch.push_back(new Branch(anchor, dataDepart, vecDepart, count));
 }
 
 std::ostream& operator <<(std::ostream& out, Plant& myPlant){

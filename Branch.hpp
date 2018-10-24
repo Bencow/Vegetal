@@ -32,12 +32,14 @@ class Branch {
 
     t_data m_data;
 
+    int* m_count;
+
     bool m_finished;
 
   public:
     Branch();
     Branch(Vertex* anchor);
-    Branch(Vertex* anchor, t_data dataDepart, Vect vecDepart);
+    Branch(Vertex* anchor, t_data dataDepart, Vect vecDepart,int* count);
     ~Branch();
 
     Vertex getVertex(int i)const{ return v_vertices[i]; }

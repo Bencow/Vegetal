@@ -106,7 +106,7 @@ Vect findRandOrthogonal_1(const Vect& v)
 }
 Vect findRandOrthogonal(const Vect& v)
 {
-	Vect u;
+	Vect u(1,1,1);
 	int r;
 	if(v.getZ() != 0)// z != 0
 	{	
@@ -157,7 +157,11 @@ Vect findRandOrthogonal(const Vect& v)
 		}
 	}
 	else
-		std::cout << "Error, try to find orthogonal vector of a null vector"
+	{
+		std::cout << "Error, try to find orthogonal vector of a null vector";
+		if (!v.getX() && !v.getY() && !v.getZ())
+			std::cout << " je confirme " << std::endl;
+	}
 	return u;
 }
 

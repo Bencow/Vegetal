@@ -214,26 +214,26 @@ int main( void )
     ////////////////////////////////////
     std::cout << "Hello world\n\n";
 
+
+    int count = 0;
     Vect vDepart(0.025f, 0.025f, 0.5f);
     normalize(vDepart);
 
     Vertex pointDepart(0.0f, 0.0f, -0.6f);
     t_data dataDepart;
-    dataDepart.sizeNewVertices = 0.2f;
+    dataDepart.sizeNewVertices = 0.5f;
     dataDepart.varX = 1.0f;
     dataDepart.varY = -0.5f;
     dataDepart.varZ = 0.0f;
 
     dataDepart.sizeMaxBranch = 100;
     
-    Plant newPlant(&pointDepart, dataDepart, vDepart);
+    Plant newPlant(&pointDepart, dataDepart, vDepart, &count);
 
     //display our plant member variables
 
     
-    //std::cout << "hey0";
     newPlant.update();
-    // std::cout << "hey1";
     // std::cout << newPlant << "\n\nNumber unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
     
 
@@ -382,6 +382,11 @@ int main( void )
           std::cout << std::endl;
           */
           go_update = false;
+          if(count < 4)
+          {
+            count++;
+          }
+          std::cout << "count=" << count << std::endl;
         }
 
         //==================================

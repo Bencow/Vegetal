@@ -51,12 +51,7 @@ class Vect {
 std::ostream& operator <<(std::ostream& out, Vect& myVect);
 
 //Math things
-Vect findRandOrthogonal(const Vect v);
-Vect crossProduct(const Vect v, const Vect u);
 Vect rotation2D(Vect u, Vect v, float alpha);
-
-
-//Math functions
 Vect findRandOrthogonal(const Vect& v);
 Vect crossProduct(Vect v, Vect u);
 bool normalize(Vect& v);

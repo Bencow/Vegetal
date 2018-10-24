@@ -31,7 +31,7 @@ class Plant {
   public:
     Plant();
     Plant(Vertex* anchor);
-    Plant(Vertex* anchor, t_data dataDepart, Vect vecDepart);
+    Plant(Vertex* anchor, t_data dataDepart, Vect vecDepart, int* count);
 
     ~Plant();
 
