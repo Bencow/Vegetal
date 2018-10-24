@@ -104,64 +104,158 @@ Vect findRandOrthogonal_1(const Vect& v)
 	}
 	return u;
 }
+
+int codeZero(const Vect& v)
+{
+	float x = v.getX();
+	float y = v.getY();
+	float z = v.getZ();
+
+	if(x == 0)
+	{
+		if(y==0)
+		{
+			if(z==0)
+				return 8;//xyz==0
+			else
+				return 5;//xy==0
+		}
+		else
+		{
+			if(z==0)
+				return 6;//xz==0
+			else
+				return 2;//x==0
+		}
+	}
+	//x!=0
+	if(y==0)
+	{
+		if(z==0)
+			return 7;//yz=0
+		else
+			return 3;//y==0
+	}
+	//xy!=0
+	if(z==0)
+	{
+		return 4;//z==0
+	}
+	else
+		return 1;//all diferent from 0
+}
+
+Vect turfu(const Vect& v)
+{
+	int code = codeZero(v);
+
+	switch(code)
+	{
+		case 1://all diferent from 0
+
+		break;
+		case 2://x==0
+
+		break;
+		case 3://y==0
+
+		break;
+		case 4://z==0
+
+		break;
+		case 5://xy==0
+
+		break;
+		case 6://xz==0
+
+		break;
+		case 7://yz=0
+
+		break;
+		case 8://xyz==0
+
+		break;
+
+		
+	}
+}
+
 Vect findRandOrthogonal(const Vect& v)
 {
+	float x = v.getX();
+	float y = v.getY();
+	float z = v.getZ();
+
+	int r = rand()%2;
+	float val = rand()%11;
 	Vect u(1,1,1);
-	int r;
-	if(v.getZ() != 0)// z != 0
+	val++;
+	val /= 10.0f;
+
+	//std::cout << "r=" << r << " val=" << val << std::endl;
+
+	if(z != 0)// z != 0
 	{	
-		r = rand()%2;
 		if(r == 0)
 		{
-			u.setX(1);
+			u.setX(val);
 			u.setY(0);
-			u.setZ(-v.getX() / v.getZ());
+			u.setZ(-(val * x) / z);
 		}
 		else
 		{
 			u.setX(0);
-			u.setY(1);
-			u.setZ(-v.getY() / v.getZ());
+			u.setY(val);
+			u.setZ(-(val *y )/ z);
 		}
 	}
-	else if(v.getY() != 0)
+	else if(y != 0)
 	{
-		r = rand()%2;
 		if(r == 0)
 		{
-			u.setX(1);
-			u.setY(-v.getX() / v.getY());
+			u.setX(val);
+			u.setY(-(val * x) / y);
 			u.setZ(0);
 		}
 		else
 		{
 			u.setX(0);
-			u.setY(-v.getZ() / v.getY());
-			u.setZ(1);
+			u.setY(-(val * z) / y);
+			u.setZ(val);
 		}
 	}
-	else if(v.getX() != 0)
+	else if(x != 0)
 	{
-		r = rand()%2;
 		if(r == 0)
 		{
-			u.setX(-v.getY() / v.getX());
-			u.setY(1);
+			u.setX(-(-val * y) / x);
+			u.setY(val);
 			u.setZ(0);
 		}
 		else
 		{
-			u.setX(-v.getZ() / v.getX());
+			u.setX(-(z * val) / x);
 			u.setY(0);
-			u.setZ(1);
+			u.setZ(val);
 		}
 	}
 	else
 	{
 		std::cout << "Error, try to find orthogonal vector of a null vector";
-		if (!v.getX() && !v.getY() && !v.getZ())
+		if (x==0 && y==0 && z==0 )
+		{
 			std::cout << " je confirme " << std::endl;
+			u.setX(val);
+			u.setY(1);
+			u.setZ(1);			
+		}	
 	}
+	return u;
+}
+
+Vect mixVect(const Vect& v)
+{
+	Vect u(v.getZ(), v.getY(), v.getX());
 	return u;
 }
 

@@ -59,56 +59,60 @@ Branch* Branch::update()
     return NULL;
   }
   //copy localy the last vertex of the current branch
-  Vertex lastVertexBranch = v_vertices.back();
+  // Vertex lastVertexBranch = v_vertices.back();
 
   //Creation new vertex
-  Vertex newVertex(lastVertexBranch.getX() + (m_vecDirection.getX() * m_data.sizeNewVertices),
-    			   lastVertexBranch.getY() + (m_vecDirection.getY() * m_data.sizeNewVertices),
-    			   lastVertexBranch.getZ() + (m_vecDirection.getZ() * m_data.sizeNewVertices));
-  //To put real time
-  newVertex.setBorn(0.0);
-  v_vertices.push_back(newVertex);
+  // Vertex newVertex(lastVertexBranch.getX() + (m_vecDirection.getX() * m_data.sizeNewVertices),
+  //   			   lastVertexBranch.getY() + (m_vecDirection.getY() * m_data.sizeNewVertices),
+  //   			   lastVertexBranch.getZ() + (m_vecDirection.getZ() * m_data.sizeNewVertices));
+  // newVertex.setBorn(0.0);
+  // v_vertices.push_back(newVertex);
+
   //diminish the size of the new edges
   m_data.sizeNewVertices = m_data.sizeNewVertices / 1.5f;
 
   //Variation of next vec direction
-  m_vecDirection.setX(/*m_vecDirection.getX() + */( ((rand() % 100) - 50)/40) );
-  m_vecDirection.setY(/*m_vecDirection.getY() + */( ((rand() % 100) - 50)/40) );
-  //Doesn't change in Z for now
+  if(*m_count > 0)
+  {
+    m_vecDirection.setX(( ((rand() % 100) - 50)/40) );
+    m_vecDirection.setY(( ((rand() % 100) - 50)/40) );
+    //Doesn't change in Z for now
+  }
 
   normalize(m_vecDirection);
 
   //if we decide to create a new branch
   //find a realistic condition !
   //Warning, in x % y, if y < 0 => crash !
-
-  if(rand()%(5 - *m_count) == 0)
+  if(rand()%(5 - *m_count) == 0 && *m_count > 0)
   //if(true)
   {
     //Find a vector orthogonal to the previous direction vector
     Vect orthogonal = findRandOrthogonal(m_vecDirection);
     normalize(orthogonal);
     //Create a new branch with the last node of the previous branch as anchor
-    Branch* newBranch = new Branch(&lastVertexBranch, m_data, orthogonal, m_count);
-
+    Branch* newBranch = new Branch(&v_vertices.back(), m_data, orthogonal, m_count);
+    newBranch->createNewVertex();
+    //the current branch create a new vertex
+    createNewVertex();
     return newBranch;
   }
+  //the current branch create a new vertex
+  createNewVertex();
 
    return NULL;
 }
 
 void Branch::createNewVertex()
 {
-  Vertex last =  v_vertices.back();
-
+  Vertex lastVertexBranch = v_vertices.back();
   //Pi + (Vi * L)
   //with P previous vertex, V direction vector, L length of the edge
   //note : all the direction vectors have to be normalized, so we use only sizeNewVertices to manage the length
-  Vertex newVertex(last);
-  newVertex.setX(last.getX() + m_vecDirection.getX() * m_data.sizeNewVertices);
-  newVertex.setY(last.getY() + m_vecDirection.getY() * m_data.sizeNewVertices);
-  newVertex.setZ(last.getZ() + m_vecDirection.getZ() * m_data.sizeNewVertices);
-
+  Vertex newVertex(lastVertexBranch.getX() + (m_vecDirection.getX() * m_data.sizeNewVertices),
+             lastVertexBranch.getY() + (m_vecDirection.getY() * m_data.sizeNewVertices),
+             lastVertexBranch.getZ() + (m_vecDirection.getZ() * m_data.sizeNewVertices));
+  newVertex.setBorn(0.0);
   v_vertices.push_back(newVertex);
 }
 

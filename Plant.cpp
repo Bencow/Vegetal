@@ -25,12 +25,12 @@ Plant::Plant(Vertex* anchor): m_anchor(anchor)
 	*/
 }
 
-Plant::Plant(Vertex* anchor, t_data dataDepart, Vect vecDepart, int* count): m_anchor(anchor)
+Plant::Plant(Vertex* anchor, t_data dataDepart, Vect vecDepart): m_anchor(anchor), m_count(0)
 {
 	//initaialize the anchor of the tree
 	m_anchor = anchor;
 	//create a first branch
-	v_branch.push_back(new Branch(anchor, dataDepart, vecDepart, count));
+	v_branch.push_back(new Branch(anchor, dataDepart, vecDepart, &m_count));
 }
 
 std::ostream& operator <<(std::ostream& out, Plant& myPlant){
@@ -67,7 +67,12 @@ void Plant::update(){
 		  v_branch.push_back(newBranch);
 		}
 	}
-	
+	//update the counter
+	if(m_count < 4)
+	{
+		m_count++;
+		std::cout << "count=" << m_count << std::endl;
+	}
 	//test
 	std::cout << "Update Plant Done\n\n";
 

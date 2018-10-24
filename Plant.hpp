@@ -26,12 +26,12 @@ class Plant {
     Vertex* m_anchor;
 
     std::vector<Branch*> v_branch;
-
+    int m_count;
 
   public:
     Plant();
     Plant(Vertex* anchor);
-    Plant(Vertex* anchor, t_data dataDepart, Vect vecDepart, int* count);
+    Plant(Vertex* anchor, t_data dataDepart, Vect vecDepart);
 
     ~Plant();
 

@@ -166,6 +166,13 @@ void manage_keyboadr_events(std::vector<GLfloat> &vertices, Plant& p)
   }
 }
 
+
+//////////////////////////////////////
+//             MAIN                 //
+//////////////////////////////////////
+
+
+
 int main( void )
 {
     srand(time(NULL));
@@ -214,8 +221,6 @@ int main( void )
     ////////////////////////////////////
     std::cout << "Hello world\n\n";
 
-
-    int count = 0;
     Vect vDepart(0.025f, 0.025f, 0.5f);
     normalize(vDepart);
 
@@ -228,7 +233,7 @@ int main( void )
 
     dataDepart.sizeMaxBranch = 100;
     
-    Plant newPlant(&pointDepart, dataDepart, vDepart, &count);
+    Plant newPlant(&pointDepart, dataDepart, vDepart);
 
     //display our plant member variables
 
@@ -382,11 +387,6 @@ int main( void )
           std::cout << std::endl;
           */
           go_update = false;
-          if(count < 4)
-          {
-            count++;
-          }
-          std::cout << "count=" << count << std::endl;
         }
 
         //==================================
@@ -447,14 +447,18 @@ int main( void )
 
 int main_()
 {
+    srand(time(NULL));
     //test maths functions :
-    Vect v(2.0f, 0.0f, 0.0f);
-    Vect u = findRandOrthogonal(v);
-    Vect w = crossProduct(v, u);
-    
-    std::cout << "v " << v
-              << "u " << u
-              << "w " << w;
+    Vect v(0.025f, 0.025f, 0.5f);
+    normalize(v);
+
+    for(int i = 0 ; i < 10000 ; i++)
+    {
+        v = findRandOrthogonal(v);
+        normalize(v);
+        std::cout << ".";
+    }
+
     
     /*
     int var1 = -35;
