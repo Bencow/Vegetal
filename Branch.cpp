@@ -58,15 +58,6 @@ Branch* Branch::update()
     std::cout << "size max of the branch is reached" << std::endl;
     return NULL;
   }
-  //copy localy the last vertex of the current branch
-  // Vertex lastVertexBranch = v_vertices.back();
-
-  //Creation new vertex
-  // Vertex newVertex(lastVertexBranch.getX() + (m_vecDirection.getX() * m_data.sizeNewVertices),
-  //   			   lastVertexBranch.getY() + (m_vecDirection.getY() * m_data.sizeNewVertices),
-  //   			   lastVertexBranch.getZ() + (m_vecDirection.getZ() * m_data.sizeNewVertices));
-  // newVertex.setBorn(0.0);
-  // v_vertices.push_back(newVertex);
 
   //diminish the size of the new edges
   m_data.sizeNewVertices = m_data.sizeNewVertices / 1.5f;
@@ -78,7 +69,7 @@ Branch* Branch::update()
     m_vecDirection.setY(( ((rand() % 100) - 50)/40) );
     //Doesn't change in Z for now
   }
-
+  
   normalize(m_vecDirection);
 
   //if we decide to create a new branch

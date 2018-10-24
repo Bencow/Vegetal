@@ -249,37 +249,43 @@ int main( void )
     //Note : the size total of the array is the size of a GLfloat * number of element in the vector (i.e. vertices.size() )
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
 
-
-
     //TODO: element buffer (make sure GLuint!!!!)
 
-    //Example:load shader source file
+    //load shader source file
     std::ifstream in("shader.vert");
     std::string contents((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
     const char* vertSource = contents.c_str();
-
     //Example: compile a shader source file for vertex shading
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertSource, NULL);
     glCompileShader(vertexShader);
-
     getShaderCompileStatus(vertexShader);
 
-    //TODO: load and compile fragment shader shader.frag
+    //load fragment shader
     std::ifstream in2("shader.frag");
     std::string contents2((std::istreambuf_iterator<char>(in2)), std::istreambuf_iterator<char>());
     const char* fragSource = contents2.c_str();
-
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentShader, 1, &fragSource, NULL);
     glCompileShader(fragmentShader);
-
     getShaderCompileStatus(fragmentShader);
+
+    //load geomerty shader
+    std::ifstream in3("shader.geom");
+    std::string contents3((std::istreambuf_iterator<char>(in3)), std::istreambuf_iterator<char>());
+    const char* geomSource = contents3.c_str();
+    //Example: compile a shader source file for vertex shading
+    GLuint geomShader = glCreateShader(GL_GEOMETRY_SHADER);
+    glShaderSource(geomShader, 1, &geomSource, NULL);
+    glCompileShader(geomShader);
+    getShaderCompileStatus(geomShader);
+
 
     //TODO: link shaders into a program
     GLuint shaderProgram = glCreateProgram();
     glAttachShader(shaderProgram, vertexShader);
     glAttachShader(shaderProgram, fragmentShader);
+    glAttachShader(shaderProgram, geomShader);
     glBindFragDataLocation(shaderProgram, 0, "outColor");
     glLinkProgram(shaderProgram);
     glUseProgram(shaderProgram);
