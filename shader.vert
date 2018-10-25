@@ -34,6 +34,11 @@ void main()
 	//send projected position so we know where to draw on screen
     gl_Position = proj * fragPositionView;
 
+
+
+    //gl_Position = vec4(position, 1.0);//used for testing geometry shader
+
+
     //Remember, everything which is passed through to the fragment shader
     //is interpolated between vertices. This includes Texcoord, Colour,
     //fragNormalView, fragPositionView, and gl_Position

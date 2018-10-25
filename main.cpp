@@ -85,54 +85,6 @@ GLuint createShader(GLenum type, const GLchar* src)
     return shader;
 }
 
-
-void generateVerices(Branch& b, std::vector<GLfloat> &tab)
-{
-  GLfloat* data;
-
-  for(unsigned int i = 0 ; i < b.getSize() ; i++)
-  {
-    //Local copy of the current vertex
-    Vertex trans(b.getVertex(i));
-    //Then push back all the data of the current vertex
-    tab.push_back(trans.getX());
-    tab.push_back(trans.getY());
-    tab.push_back(trans.getZ());
-
-    tab.push_back(trans.getR());
-    tab.push_back(trans.getG());
-    tab.push_back(trans.getB());
-
-    tab.push_back(trans.getNX());
-    tab.push_back(trans.getNY());
-    tab.push_back(trans.getNZ());
-
-    tab.push_back(trans.getTX());
-    tab.push_back(trans.getTY());
-  }
-  //test
-  for(unsigned int i = 0 ; i < 22 ; i++)
-  {
-    if(i % 11 == 0){
-      std::cout << std::endl;
-    }
-    std::cout << tab[i] << " ";
-  }
-  std::cout << std::endl;
-
-  data = tab.data();
-  for(unsigned int i = 0 ; i < 22 ; i++)
-  {
-    if(i % 11 == 0){
-      std::cout << std::endl;
-    }
-    std::cout << data[i] << " ";
-  }
-  std::cout << std::endl;
-}
-
-
-
 void manage_keyboadr_events(std::vector<GLfloat> &vertices, Plant& p)
 {
   float camera_x = 0.5f;
@@ -177,6 +129,9 @@ void manage_keyboadr_events(std::vector<GLfloat> &vertices, Plant& p)
     break;
   }
 }
+
+
+
 
 
 
@@ -258,6 +213,7 @@ int main( void )
     std::vector<GLfloat> vertices;
     newPlant.fillVectorVertices(vertices);
 
+
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     //Note : the size total of the array is the size of a GLfloat * number of element in the vector (i.e. vertices.size() )
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
@@ -278,17 +234,17 @@ int main( void )
     GLuint fragmentShader = createShader(GL_FRAGMENT_SHADER, fragSource);
 
     //load geomerty shader
-    std::ifstream in3("shader.geom");
-    std::string contents3((std::istreambuf_iterator<char>(in3)), std::istreambuf_iterator<char>());
-    const char* geomSource = contents3.c_str();
-    //Example: compile a shader source file for vertex shading
-    GLuint geomShader = createShader(GL_GEOMETRY_SHADER, geomSource);
+    // std::ifstream in3("shader.geom");
+    // std::string contents3((std::istreambuf_iterator<char>(in3)), std::istreambuf_iterator<char>());
+    // const char* geomSource = contents3.c_str();
+    // //Example: compile a shader source file for vertex shading
+    // GLuint geomShader = createShader(GL_GEOMETRY_SHADER, geomSource);
 
 
     //TODO: link shaders into a program
     GLuint shaderProgram = glCreateProgram();
     glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, geomShader);
+    //glAttachShader(shaderProgram, geomShader);
     glAttachShader(shaderProgram, fragmentShader);
     glBindFragDataLocation(shaderProgram, 0, "outColor");
     glLinkProgram(shaderProgram);
@@ -429,7 +385,7 @@ int main( void )
         //Param : 1 type of primitive
         //        2 offset (how many vertices to skip)
         //        3 number of VERTICES not primitives
-        glDrawArrays(GL_POINTS, 0, newPlant.getNumberElementPlant() * 2);
+        glDrawArrays(GL_POINTS, 0, newPlant.getNumberElementPlant());
 
         //Swap buffers
         glfwSwapBuffers(window);
@@ -442,7 +398,7 @@ int main( void )
     glDeleteTextures(1, &tex);
     glDeleteProgram(shaderProgram);
     glDeleteShader(fragmentShader);
-    glDeleteShader(geomShader);
+    //glDeleteShader(geomShader);
     glDeleteShader(vertexShader);
     glDeleteBuffers(1, &vbo);
     glDeleteVertexArrays(1, &vao);

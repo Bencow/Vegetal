@@ -191,7 +191,10 @@ void Branch::fillVectorVertices(std::vector<GLfloat>& vertices)
 	{
 		//each turn of this loop will add two vertex to the vector -> draw one line
 		//all vertex will be stored two times -> better implementation with the element buffer for further version...
+
+
+    //Now i try to put only once each vertex
 		v_vertices[i].fillVectorVertices(vertices);
-		v_vertices[i+1].fillVectorVertices(vertices);
+		//v_vertices[i+1].fillVectorVertices(vertices);
 	}
 }
