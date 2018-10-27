@@ -1,8 +1,9 @@
 //
 //  Plant.hpp
-//  code generer
 //
-//  Created by Quentin Mulliez c3316168 on 13/09/2018.
+//  Author :
+//  Quentin Mulliez
+//  Benoit Coville
 //
 //
 
@@ -51,10 +52,9 @@ class Plant {
 
     int getNumberUniqueVertexPlant();
 
-    void fillGfloatArray(GLfloat* arrayGfloat);
 
     void fillVectorVertices(std::vector<GLfloat>& vertices);
-
+    void fillSkeleton(std::vector< std::vector<GLfloat> >& skeleton);
 
 
 

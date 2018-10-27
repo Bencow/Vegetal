@@ -1,8 +1,9 @@
 //
 //  Vertex.hpp
-//  code generer
 //
-//  Created by Quentin Mulliez c3316168 on 13/09/2018.
+//  Author :
+//  Quentin Mulliez
+//  Benoit Coville
 //
 //
 
@@ -15,6 +16,8 @@
 #include <stdio.h>
 #include <iostream>
 #include <vector>
+
+#define N_VERTEX_COMP 11
 
 
 class Vertex {

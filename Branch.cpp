@@ -1,8 +1,9 @@
 //
 //  Branch.cpp
-//  code generer
 //
-//  Created by Quentin Mulliez c3316168 on 13/09/2018.
+//  Author :
+//  Quentin Mulliez
+//  Benoit Coville
 //
 //
 
@@ -166,12 +167,12 @@ std::vector<Branch*> Branch::update_2()
 
 
 int Branch::getNumberElementBranch(){
-  return v_vertices.size() - 1;
+  return v_vertices.size();
 }
 
 int Branch::getNumberVertexBranch(){
   //anchor count in the previous branch
-  return v_vertices.size() - 1;
+  return v_vertices.size();
 }
 
 
@@ -197,4 +198,15 @@ void Branch::fillVectorVertices(std::vector<GLfloat>& vertices)
 		v_vertices[i].fillVectorVertices(vertices);
 		//v_vertices[i+1].fillVectorVertices(vertices);
 	}
+}
+std::vector<GLfloat> Branch::fillSkeleton()
+{
+  std::vector<GLfloat> vertices;
+
+  for(uint i = 0 ; i < v_vertices.size() ; ++i)
+  {
+    //Now i try to put only once each vertex
+    v_vertices[i].fillVectorVertices(vertices);
+  }
+  return vertices;
 }

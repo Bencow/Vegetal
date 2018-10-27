@@ -1,8 +1,9 @@
 //
 //  Branch.hpp
-//  code generer
 //
-//  Created by Quentin Mulliez c3316168 on 13/09/2018.
+//  Author :
+//  Quentin Mulliez
+//  Benoit Coville
 //
 //
 
@@ -67,6 +68,7 @@ class Branch {
     int fillGfloatArray(GLfloat* arrayGfloat, int offset);
 
     void fillVectorVertices(std::vector<GLfloat>& vertices);
+    std::vector<GLfloat> fillSkeleton();
 
 };
 

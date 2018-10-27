@@ -1,8 +1,9 @@
 //
 //  Vect.cpp
-//  code generer
 //
-//  Created by Quentin Mulliez c3316168 on 13/09/2018.
+//  Author :
+//  Quentin Mulliez
+//  Benoit Coville
 //
 //
 
@@ -145,7 +146,7 @@ int codeZero(const Vect& v)
 		return 1;//all diferent from 0
 }
 
-Vect turfu(const Vect& v)
+void turfu(const Vect& v)
 {
 	int code = codeZero(v);
 
@@ -323,69 +324,3 @@ glm::vec4 convertVect_glm(Vect u)
 
 	return v;
 }
-
-/*
-void matrixProduct(Vect A[3], Vect B[3], Vect R[3])
-{
-	R[0].setX( A[0].getX()*B[0].getX() + A[0].getY()*B[1].getgetX() + A[0].getZ()*B[2].getgetX() );
-	R[0].setY( A[0].getX()*B[0].getX() + A[0].getY()*B[1].getgetX() + A[0].getZ()*B[2].getgetX() );
-	R[0].setZ( A[0].getX()*B[0].getX() + A[0].getY()*B[1].getgetX() + A[0].getZ()*B[2].getgetX() );
-	R[1].setX( A[1].getX()*B[0].getY() + A[1].getY()*B[1].getgetY() + A[1].getZ()*B[2].getgetY() );
-	R[1].setY( A[1].getX()*B[0].getY() + A[1].getY()*B[1].getgetY() + A[1].getZ()*B[2].getgetY() );
-	R[1].setZ( A[1].getX()*B[0].getY() + A[1].getY()*B[1].getgetY() + A[1].getZ()*B[2].getgetY() );
-	R[2].setX( A[2].getX()*B[0].getZ() + A[2].getY()*B[1].getgetZ() + A[2].getZ()*B[2].getgetZ() );
-	R[2].setY( A[2].getX()*B[0].getZ() + A[2].getY()*B[1].getgetZ() + A[2].getZ()*B[2].getgetZ() );
-	R[2].setZ( A[2].getX()*B[0].getZ() + A[2].getY()*B[1].getgetZ() + A[2].getZ()*B[2].getgetZ() );
-}
-*/
-
-
-//v is an orthogonal vector to the plane we want to rotate in
-//alpha is the angle of a rotation
-/*
-Vect rotateVectorArbitraryAxis(Vect u, double alpha )
-{
-	//conversion from degree to radians
-	alpha = apha * 0.01745329;
-
-
-	//find an ONB :
-	Vect v = findRandOrthogonal(u);
-	normalize(u);
-	normalize(v);
-
-	Vect w = crossProduct(u, v);
-	//initialize the change-of-basis-matrix (from F to E)
-	Vect M[3] = {u , v , w};
-	
-	//rotation matrix of 120° around X
-	Vect Rx[3];
-	rotateX(120, Rx);
-
-	//transpose of M
-	Vect M_T[3];
-	getTransposeMatrix(M, M_T);
-
-	Vect tranform[3];
-	//Do the the first product
-	matrixProduct(M, Rx, tranform);
-	//Do the second one
-	matrixProduct(tranform, M_T, tranform);
-
-
-}
-*/
-
-
-
-/* Rotation around an arbitrary axis
- * Param :
- * u , v 
- *
- */
-/*
-Vect rotation2D(Vect u, Vect v, float alpha)
-{
-
-}
-*/

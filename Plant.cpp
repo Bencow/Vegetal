@@ -1,9 +1,9 @@
 //
 //  Plant.cpp
-//  code generer
-//
-//  Created by Quentin Mulliez c3316168 on 13/09/2018.
-//
+//  
+//	Author :
+//  Quentin Mulliez
+//	Benoit Coville
 //
 
 #include "Plant.hpp"
@@ -129,13 +129,7 @@ int Plant::getNumberUniqueVertexPlant(){
   return somme;
 }
 
-void Plant::fillGfloatArray(GLfloat* arrayGfloat){
-  int offset = 0;
 
-  for(int i = 0; i < (int)v_branch.size(); i++){
-    offset = v_branch[i]->fillGfloatArray(arrayGfloat, offset);
-  }
-}
 
 void Plant::fillVectorVertices(std::vector<GLfloat>& vertices){
 	//erase the entire vector
@@ -145,4 +139,19 @@ void Plant::fillVectorVertices(std::vector<GLfloat>& vertices){
 		v_branch[i]->fillVectorVertices(vertices);
 	}
 	std::cout << "End fill vector\n";
+}
+
+void Plant::fillSkeleton(std::vector< std::vector<GLfloat> >& skeleton){
+	//erase the entire vector
+	skeleton.clear();
+
+
+	std::cout << "number branch " << v_branch.size() << std::endl;
+	//And fill it again
+	//fill each branch
+	for(uint i = 0; i < v_branch.size(); i++)
+	{
+		skeleton.push_back(v_branch[i]->fillSkeleton());
+	}
+	std::cout << "End fill skeleton\n";
 }
