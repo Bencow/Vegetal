@@ -131,17 +131,32 @@ void manage_keyboadr_events(std::vector<GLfloat> &vertices, Plant& p)
   }
 }
 
+void printSkeleton(std::vector< std::vector<Vertex*> >& skeleton)
+{
+    std::cout << "print skeleton" << std::endl;
+    for(uint i = 0 ; i < skeleton.size() ; i++)
+    {
+        for(uint j = 0 ; j < skeleton[i].size() ; j++)
+        {
+            std::cout << *skeleton[i][j];
+        }
+        std::cout << std::endl;
+    }
+}
 
-void addVolume(std::vector<GLfloat> &vertices, std::vector< std::vector<GLfloat> >& skeleton, int type_primitive)
+void addVolume(std::vector<GLfloat> &vertices, std::vector< std::vector<Vertex*> >& skeleton, int type_primitive)
 {
     if(type_primitive == 0)//Simple vertex
     {
         //fill the vector vertices with all the points contained in the skeleton
+        //For all the branches
         for(uint i = 0 ; i < skeleton.size() ; i++)
         {
+            //for all the vertices in the branch n°i
             for(uint j = 0 ; j < skeleton[i].size() ; j++)
             {
-                vertices.push_back(skeleton[i][j]);
+                //copy all the floats of the vertex in the array vertices
+                skeleton[i][j]->fillVectorVertices(vertices);
             }
         }
     }
@@ -150,19 +165,12 @@ void addVolume(std::vector<GLfloat> &vertices, std::vector< std::vector<GLfloat>
         //for all branches
         for(uint i = 0 ; i < skeleton.size() ; i++)
         {
-            //for all vertices in branch i
-            for(uint j = 0 ; j < skeleton[i].size() - N_VERTEX_COMP ; j = j + N_VERTEX_COMP)
+            //for all vertices in branch i (except the last one)
+            for(uint j = 0 ; j < skeleton[i].size()-1 ; ++j)
             {
-                for(uint k = 0 ; k < N_VERTEX_COMP ; k++)
-                {
-                    //push back all the componants of th current vertex
-                    vertices.push_back(skeleton[i][j + k]);
-                }
-                for(uint k = 0 ; k < N_VERTEX_COMP ; k++)
-                {
-                    //push back all the componant of the next vertex
-                    vertices.push_back(skeleton[i][j + k + N_VERTEX_COMP]);
-                }
+                //copy the current vertex and the next one to draw a line between both
+                skeleton[i][j]->fillVectorVertices(vertices);
+                skeleton[i][j+1]->fillVectorVertices(vertices);
             }
         }
     }
@@ -248,38 +256,29 @@ int main( void )
     //Skeleton is an array of array
     //first dimension of the array is the branch
     //second is the vertex
-    std::vector< std::vector<GLfloat> > skeleton;
+    std::vector< std::vector<Vertex*> > skeleton;
     newPlant.fillSkeleton(skeleton);
 
     std::cout << "number branch " << newPlant.getNumberBranch() << std::endl;
     std::cout << "number element " << newPlant.getNumberElementPlant() << std::endl;
     //std::cout << newPlant << "Number unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
 
-    //print skeleton
-    for(uint i = 0 ; i < skeleton.size() ; i++)
-    {
-        for(uint j = 0 ; j < skeleton[i].size() ; j++)
-        {
-            if((j % 11) == 0)
-            {
-                std::cout << std::endl;
-            }
-            std::cout << (int)skeleton[i][j] << " ";
-        }
-        std::cout << std::endl;
-    }
+
 
     std::vector<GLfloat> vertices;
     addVolume(vertices, skeleton, PRIMITIVE);
 
-    //print vertices
-    for(uint i = 0 ; i  < vertices.size() ; ++i)
-    {
-      if((i % 11) == 0)
-         std::cout << std::endl;
-      std::cout << vertices[i] << " ";
+
+    printSkeleton(skeleton);
+
+    // //print vertices
+    // for(uint i = 0 ; i  < vertices.size() ; ++i)
+    // {
+    //   if((i % 11) == 0)
+    //      std::cout << std::endl;
+    //   std::cout << vertices[i] << " ";
       
-    }
+    // }
 
 
 
@@ -414,26 +413,16 @@ int main( void )
           std::cout << "number element " << newPlant.getNumberElementPlant() << std::endl;
           //std::cout << newPlant << "Number unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
           
-          // //print skeleton
-          // for(uint i = 0 ; i < skeleton.size() ; i++)
-          // {
-          //     for(uint j = 0 ; j < skeleton[i].size() ; j++)
-          //     {
-          //         if((j % 11) == 0)
-          //             std::cout << std::endl;
-          //         std::cout << (int)skeleton[i][j] << " ";
-          //     }
-          //     std::cout << std::endl;
-          // }
+          printSkeleton(skeleton);
 
-          //print vertices
-          for(uint i = 0 ; i  < vertices.size() ; ++i)
-          {
-            if((i % 11) == 0)
-               std::cout << std::endl;
-            std::cout << std::setw(12) << vertices[i] << " ";
+          // //print vertices
+          // for(uint i = 0 ; i  < vertices.size() ; ++i)
+          // {
+          //   if((i % 11) == 0)
+          //      std::cout << std::endl;
+          //   std::cout << std::setw(12) << vertices[i] << " ";
             
-          }
+          // }
 
           
           go_update = false;

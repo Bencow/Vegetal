@@ -8,7 +8,6 @@
 //
 
 #include "Vect.hpp"
-#include<iomanip>//setw
 #include <cmath>
 
 
@@ -179,6 +178,7 @@ void turfu(const Vect& v)
 
 		
 	}
+
 }
 
 Vect findRandOrthogonal(const Vect& v)

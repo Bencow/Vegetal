@@ -68,7 +68,7 @@ class Branch {
     int fillGfloatArray(GLfloat* arrayGfloat, int offset);
 
     void fillVectorVertices(std::vector<GLfloat>& vertices);
-    std::vector<GLfloat> fillSkeleton();
+    std::vector<Vertex*> fillSkeleton();
 
 };
 

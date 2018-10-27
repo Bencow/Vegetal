@@ -199,14 +199,16 @@ void Branch::fillVectorVertices(std::vector<GLfloat>& vertices)
 		//v_vertices[i+1].fillVectorVertices(vertices);
 	}
 }
-std::vector<GLfloat> Branch::fillSkeleton()
+std::vector<Vertex*> Branch::fillSkeleton()
 {
-  std::vector<GLfloat> vertices;
+  std::vector<Vertex*> vertices;
 
   for(uint i = 0 ; i < v_vertices.size() ; ++i)
   {
-    //Now i try to put only once each vertex
-    v_vertices[i].fillVectorVertices(vertices);
+    //Now i put only once each vertex
+    //v_vertices[i].fillVectorVertices(vertices);
+    vertices.push_back(&v_vertices[i]);
   }
+  //Note : we return the vector of vertex because, skeleton is a 2D array !
   return vertices;
 }

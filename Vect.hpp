@@ -12,6 +12,8 @@
 
 #include <stdio.h>
 #include<iostream>
+#include<iomanip>//setw
+
 
 //Matrix libraries
 #include "glm/glm.hpp"

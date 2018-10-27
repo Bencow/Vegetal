@@ -15,6 +15,7 @@
 
 #include <stdio.h>
 #include <iostream>
+#include<iomanip>//setw
 #include <vector>
 
 #define N_VERTEX_COMP 11
@@ -95,7 +96,7 @@ class Vertex {
 };
 
 
-std::ostream& operator <<(std::ostream& out, Vertex& myVertex);
+std::ostream& operator <<(std::ostream& out, Vertex& v);
 
 
 #endif /* Vertex_hpp */

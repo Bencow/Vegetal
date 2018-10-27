@@ -54,7 +54,7 @@ class Plant {
 
 
     void fillVectorVertices(std::vector<GLfloat>& vertices);
-    void fillSkeleton(std::vector< std::vector<GLfloat> >& skeleton);
+    void fillSkeleton(std::vector< std::vector<Vertex*> >& skeleton);
 
 
 

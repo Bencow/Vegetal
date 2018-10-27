@@ -141,9 +141,9 @@ void Plant::fillVectorVertices(std::vector<GLfloat>& vertices){
 	std::cout << "End fill vector\n";
 }
 
-void Plant::fillSkeleton(std::vector< std::vector<GLfloat> >& skeleton){
+void Plant::fillSkeleton(std::vector< std::vector<Vertex*> >& skeleton){
 	//erase the entire vector
-	skeleton.clear();
+	skeleton.clear();//Now it's useless to earase the skeleton becaus the vertices already created don't change
 
 
 	std::cout << "number branch " << v_branch.size() << std::endl;
