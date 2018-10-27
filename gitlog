@@ -1,0 +1,137 @@
+commit 120232caad9f7fe67e45f4d804a0415caa1de93d
+Author: Benoit <covillebenoit@gmail.com>
+Date:   Sat Oct 27 12:48:39 2018 +1100
+
+    CB create skeleton vector
+
+commit 4f40d62fadc181d40974f5fbd9ab714e8d0d4c41
+Author: Benoit <covillebenoit@gmail.com>
+Date:   Thu Oct 25 13:17:26 2018 +1100
+
+    CF back to draw only the vertices without volume
+
+commit 30e47967e027a0ffd2a26d88f8de1363eca23be3
+Author: Benoit <covillebenoit@gmail.com>
+Date:   Wed Oct 24 18:09:54 2018 +1100
+
+    CB createShader function works, geomShader doesn't
+
+commit 84fc446b475fa22b8dcc23b6585512182d4ae9cf
+Author: Benoit <covillebenoit@gmail.com>
+Date:   Wed Oct 24 17:13:25 2018 +1100
+
+    CF add simple geometry shader
+
+commit a2e4b36163b76720d2b06875a6cbd70d4b3e2f3f
+Author: Benoit <covillebenoit@gmail.com>
+Date:   Wed Oct 24 16:08:30 2018 +1100
+
+    CF create nex vertex after having created a new branch
+
+commit 03ab62401c78da04354c80faa3084ddf70cf1ccd
+Author: Benoit <covillebenoit@gmail.com>
+Date:   Wed Oct 24 13:44:08 2018 +1100
+
+    CF increase chance of creating new branch and diminish the length of edge each turn
+
+commit a715dcead960f9e6b723725ca3bc45c719cc8fed
+Author: Benoit <covillebenoit@gmail.com>
+Date:   Wed Oct 24 00:15:08 2018 +1100
+
+    X new implementation of findRandOrthogonal function
+
+commit 18a499c0cf234ee00429e75465d8a606ecb0dbdb
+Author: Benoit <covillebenoit@gmail.com>
+Date:   Tue Oct 23 23:25:46 2018 +1100
+
+    CFx tree creates branches but lots of null vectors !
+
+commit 3d59ca3cf5e0f6f55f845d1a6b0676caedd15b4b
+Author: Benoit <covillebenoit@gmail.com>
+Date:   Mon Oct 22 20:06:22 2018 +1100
+
+    CC add a new branch each time update, crash for the moment
+
+commit acdf11a5f1d59de40929baa56a96f175a77fa917
+Author: Benoit <covillebenoit@gmail.com>
+Date:   Mon Oct 22 18:21:03 2018 +1100
+
+    CF broken line growing with one branch only Demo module 2
+
+commit f908e6c00bb5c44488c400e3989bfb27cd1d046b
+Author: Benoit <covillebenoit@gmail.com>
+Date:   Mon Oct 22 18:13:01 2018 +1100
+
+    CB update_2 fractal tree with glm math func, do not display what expected
+
+commit fb035639852d50250f5056eb708031687c6f3d6c
+Author: Benoit <covillebenoit@gmail.com>
+Date:   Tue Oct 16 00:11:47 2018 +1100
+
+    CF display a growing line with update when key-event (global variables)
+
+commit fe43168653f9a5f3e78edce063f1e30692a4634b
+Author: Benoit <covillebenoit@gmail.com>
+Date:   Mon Oct 15 22:18:44 2018 +1100
+
+    CB display another edge every two update, don't know why
+
+commit c0a77404b2981de6f311adb120d284d3db17c54f
+Author: Benoit <covillebenoit@gmail.com>
+Date:   Mon Oct 15 21:56:06 2018 +1100
+
+    CB display first edge of the tree, second edge is displayed after to update
+
+commit 263bbc5503ca2148611f581c0b5d3c4ce8fb4f27
+Author: Benoit <covillebenoit@gmail.com>
+Date:   Mon Oct 15 17:13:41 2018 +1100
+
+    CF add the good version of the data files
+
+commit 4829bcb6dd920f230b5fdd55544e5d91843f8f8d
+Author: Benoit <covillebenoit@gmail.com>
+Date:   Mon Oct 15 16:57:49 2018 +1100
+
+    CF add all the data files to the project
+
+commit 32df66c09f69adc753690942949f2c1af35d4381
+Author: Benoit <covillebenoit@gmail.com>
+Date:   Sun Oct 14 17:29:23 2018 +1100
+
+    CF add a vertex to the vector and load again the buffer while running
+
+commit 1282dcb5048ebb13407b09448c01f41242433b31
+Author: Benoit <covillebenoit@gmail.com>
+Date:   Sun Oct 14 17:01:15 2018 +1100
+
+    CF replace the array vertices by a vector
+
+commit 4c18d4bc59f4529292fa9febf3cc694e5c818c1c
+Author: Benoit <covillebenoit@gmail.com>
+Date:   Sun Oct 14 16:37:00 2018 +1100
+
+    CF simple line spinning
+
+commit 2cd9b888b14a0315605d90564cfea4cd7480ae19
+Author: Benoit <covillebenoit@gmail.com>
+Date:   Sun Oct 14 15:23:31 2018 +1100
+
+    CF white spinning cube with light (texture not used anymore in the fragment shader)
+
+commit 65dfe4bd4f1b6dd100e116bdef65fb4d753de0c0
+Author: Benoit <covillebenoit@gmail.com>
+Date:   Thu Sep 13 16:43:50 2018 +1000
+
+    add gitignore and a kitten picture
+
+commit 9b0da5b9e801f85922ae2003413910bdc18062c2
+Author: Benoit <covillebenoit@gmail.com>
+Date:   Thu Sep 13 16:42:20 2018 +1000
+
+    add soil and GLFW librairies
+
+commit 06823a77463396480a78aa2c56f1be69eadfbc80
+Author: Benoit <covillebenoit@gmail.com>
+Date:   Thu Sep 13 16:37:25 2018 +1000
+
+    initial commit, cube spinning with light
