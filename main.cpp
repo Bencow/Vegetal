@@ -84,7 +84,7 @@ GLuint createShader(GLenum type, const GLchar* src)
     getShaderCompileStatus(shader);
     return shader;
 }
-
+ 
 void manage_keyboadr_events(std::vector<GLfloat> &vertices, Plant& p)
 {
   float camera_x = 0.5f;
