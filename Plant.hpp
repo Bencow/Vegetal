@@ -27,6 +27,7 @@ class Plant {
     Vertex* m_anchor;
 
     std::vector<Branch*> v_branch;
+    std::vector<Vertex> v_leaves;
     int m_count;
 
   public:
@@ -50,10 +51,13 @@ class Plant {
     int getNumberFloatPlant();
 
     int getNumberUniqueVertexPlant();
+    
+    uint getNumberLeaves();
 
 
     void fillVectorVertices(std::vector<GLfloat>& vertices);
     void fillSkeleton(std::vector< std::vector<Vertex*> >& skeleton);
+    void add_leaves(std::vector<Vertex*>& leaves_skeleton);
 
 
 

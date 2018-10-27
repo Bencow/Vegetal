@@ -69,6 +69,8 @@ class Branch {
 
     void fillVectorVertices(std::vector<GLfloat>& vertices);
     std::vector<Vertex*> fillSkeleton();
+    Vertex get_leaves_position();
+
 
 };
 

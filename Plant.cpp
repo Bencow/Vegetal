@@ -132,3 +132,20 @@ void Plant::fillSkeleton(std::vector< std::vector<Vertex*> >& skeleton){
 	}
 	std::cout << "End fill skeleton\n";
 }
+
+void Plant::add_leaves(std::vector<Vertex*>& leaves_skeleton)
+{
+	for(uint i = 0 ; i < v_branch.size() ; ++i)
+	{
+		std::cout << i << std::endl;
+		//store the leaves in the plant
+		v_leaves.push_back(v_branch[i]->get_leaves_position());
+		//and send them to the skeleton for display
+		leaves_skeleton.push_back(&v_leaves[i]);
+	}
+}
+
+uint Plant::getNumberLeaves()
+{
+	return v_leaves.size();
+}
