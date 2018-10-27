@@ -1,13 +1,13 @@
 //
 //  Vect.cpp
-//  code generer
 //
-//  Created by Quentin Mulliez c3316168 on 13/09/2018.
+//  Author :
+//  Quentin Mulliez
+//  Benoit Coville
 //
 //
 
 #include "Vect.hpp"
-#include<iomanip>//setw
 #include <cmath>
 
 
@@ -145,7 +145,7 @@ int codeZero(const Vect& v)
 		return 1;//all diferent from 0
 }
 
-Vect turfu(const Vect& v)
+void turfu(const Vect& v)
 {
 	int code = codeZero(v);
 
@@ -316,40 +316,11 @@ void getTransposeMatrix(Vect M[3], Vect M_T[3])
 	M_T[i].setZ(M[1].getZ());
 	M_T[i].setZ(M[2].getZ());
 }
-
-
-//v is an orthogonal vector to the plane we want to rotate in
-//alpha is the angle of a rotation
 /*
-Vect rotateVectorArbitraryAxis(Vect u, double alpha )
+glm::vec4 convertVect_glm(Vect u)
 {
-	//conversion from degree to radians
-	alpha = apha * 0.01745329;
+	glm::vec4 v(u.getX(), u.getY(), u.getZ(), 0);
 
-
-	//find an ONB :
-	Vect v = findRandOrthogonal(u);
-	normalize(u);
-	normalize(v);
-
-	Vect w = crossProduct(u, v);
-	//initialize the change-of-basis-matrix (from F to E)
-	Vect M[3] = {u , v , w};
-	
-	//rotation matrix of 120° around X
-	Vect Rx[3];
-	rotateX(120, Rx);
-
-	//transpose of M
-	Vect M_T[3];
-	getTransposeMatrix(M, M_T);
-
-	Vect tranform[3];
-	//Do the the first product
-	matrixProduct(M, Rx, tranform);
-	//Do the second one
-	matrixProduct(tranform, M_T, tranform);
-
-
+	return v;
 }
 */
