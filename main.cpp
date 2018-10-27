@@ -386,6 +386,7 @@ int main( void )
         //        2 offset (how many vertices to skip)
         //        3 number of VERTICES not primitives
         glDrawArrays(GL_POINTS, 0, newPlant.getNumberElementPlant());
+        // glDrawArrays(GL_LINES, 0, newPlant.getNumberElementPlant() * 2);
 
         //Swap buffers
         glfwSwapBuffers(window);

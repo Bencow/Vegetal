@@ -132,8 +132,9 @@ void Branch::fillVectorVertices(std::vector<GLfloat>& vertices)
 		//all vertex will be stored two times -> better implementation with the element buffer for further version...
 
 
-    //Now i try to put only once each vertex
+    //Now i put only once each vertex -> display only the vertices (not the edges!)
 		v_vertices[i].fillVectorVertices(vertices);
 		//v_vertices[i+1].fillVectorVertices(vertices);
-	}
+	
+  }
 }
