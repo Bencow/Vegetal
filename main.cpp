@@ -33,7 +33,7 @@
 #include "Data.hpp"
 
 #define speedCamera 0.1f
-#define PRIMITIVE 0
+#define PRIMITIVE 1
 
 
 //just to test quickly 

@@ -178,7 +178,7 @@ void turfu(const Vect& v)
 
 		
 	}
-
+	return 0;//just to avoid the warining
 }
 
 Vect findRandOrthogonal(const Vect& v)
