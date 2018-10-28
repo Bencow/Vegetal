@@ -2,7 +2,7 @@
 //#define GLEW_STATIC
 
 //Library for loading textures (Simple OpenGL Image Library)
-#include <soil/src/SOIL.h>
+#include "soil/src/SOIL.h"
 
 #include <GL/glew.h>
 
@@ -212,6 +212,8 @@ void manage_keyboadr_events(std::vector<GLfloat> &vertices, Plant& p)
 
 int main( void )
 {
+
+    srand(time(0));
     //Set the error callback
     glfwSetErrorCallback(error_callback);
     //Initialize GLFW
@@ -259,12 +261,8 @@ int main( void )
     Vect vDepart(0.0f, 0.0f, 0.5f);
     Vertex pointDepart(0.0f, 0.0f, 0.0f);
     t_data dataDepart;
-    dataDepart.sizeNewVertices = 0.5f;
-    dataDepart.varX = 0.0f;
-    dataDepart.varY = 0.0f;
-    dataDepart.varZ = 0.0f;
-
-    dataDepart.sizeMaxBranch = 100;
+    
+	  readParameter(dataDepart);
 
     Plant newPlant(&pointDepart, dataDepart, vDepart);
     newPlant.update();
@@ -399,7 +397,7 @@ int main( void )
 
           std::cout << newPlant << "Number unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
 
-          for(uint i = 0 ; i  < vertices.size() ; ++i)
+          for(int i = 0 ; i  < vertices.size() ; ++i)
           {
             if((i % 11) == 0)
                std::cout << std::endl;
@@ -511,7 +509,7 @@ int main_test()
 
   newPlant.fillVectorVertices(vertices);
 
-  for(uint i = 0 ; i  < vertices.size() ; ++i)
+  for(int i = 0 ; i  < vertices.size() ; ++i)
   {
     std::cout << vertices[i] << " ";
     // if((11 % i) == 0)
@@ -524,7 +522,7 @@ int main_test()
 
   newPlant.fillVectorVertices(vertices);
 
-  for(uint i = 0 ; i  < vertices.size() ; ++i)
+  for(int i = 0 ; i  < vertices.size() ; ++i)
   {
     std::cout << vertices[i] << " ";
     if((i % 10) == 0)
@@ -537,7 +535,7 @@ int main_test()
 
   newPlant.fillVectorVertices(vertices);
 
-  for(uint i = 0 ; i  < vertices.size() ; ++i)
+  for(int i = 0 ; i  < vertices.size() ; ++i)
   {
     std::cout << vertices[i] << " ";
     if((i % 10) == 0)
