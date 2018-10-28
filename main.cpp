@@ -32,7 +32,7 @@
 #include "Vertex.hpp"
 #include "Data.hpp"
 
-#define speedCamera 0.1f
+#define speedCamera 0.5f
 #define PRIMITIVE 1
 
 
@@ -68,41 +68,41 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
   {
     go_update = true;
   }
-  else if(key == 'q' && action == GLFW_PRESS){
+  else if(key == GLFW_KEY_Q && action == GLFW_PRESS){
     camera_x += speedCamera;
   }
-  else if(key == 'a' && action == GLFW_PRESS){
+  else if(key == GLFW_KEY_A && action == GLFW_PRESS){
     camera_x -= speedCamera;
   }
-  else if(key == 'w' && action == GLFW_PRESS){
+  else if(key == GLFW_KEY_W && action == GLFW_PRESS){
     camera_y += speedCamera;
   }
-  else if(key == 's' && action == GLFW_PRESS){
+  else if(key == GLFW_KEY_S && action == GLFW_PRESS){
     camera_y -= speedCamera;
   }
-  else if(key == 'e' && action == GLFW_PRESS){
+  else if(key == GLFW_KEY_E && action == GLFW_PRESS){
     camera_z += speedCamera;
   }
-  else if(key == 'd' && action == GLFW_PRESS){
+  else if(key == GLFW_KEY_D && action == GLFW_PRESS){
     camera_z -= speedCamera;
   }
 
-  else if(key == 'r' && action == GLFW_PRESS){
+  else if(key == GLFW_KEY_R && action == GLFW_PRESS){
     camera_target_x += speedCamera;
   }
-  else if(key == 'f' && action == GLFW_PRESS){
+  else if(key == GLFW_KEY_F && action == GLFW_PRESS){
     camera_target_x -= speedCamera;
   }
-  else if(key == 't' && action == GLFW_PRESS){
+  else if(key == GLFW_KEY_T && action == GLFW_PRESS){
     camera_target_y += speedCamera;
   }
-  else if(key == 'g' && action == GLFW_PRESS){
+  else if(key == GLFW_KEY_G && action == GLFW_PRESS){
     camera_target_y -= speedCamera;
   }
-  else if(key == 'y' && action == GLFW_PRESS){
+  else if(key == GLFW_KEY_Y && action == GLFW_PRESS){
     camera_target_z += speedCamera;
   }
-  else if(key == 'h' && action == GLFW_PRESS){
+  else if(key == GLFW_KEY_H && action == GLFW_PRESS){
     camera_target_z -= speedCamera;
   }
 
@@ -473,7 +473,7 @@ int main( void )
         //       TODO: 3D Transforms
         //==================================
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::rotate(model, 360 * float(frame_time) / period , glm::vec3(0.0f, 0.0f, 1.0f));
+        //model = glm::rotate(model, 360 * float(frame_time) / period , glm::vec3(0.0f, 0.0f, 1.0f));
         glUniformMatrix4fv(uniModel, 1, GL_FALSE, glm::value_ptr(model));//upload the matrux in the vertex shader
 
         //==================================
@@ -501,7 +501,7 @@ int main( void )
 
            //TODO: create and load projection matrix
            glm::mat4 proj = glm::perspective(45.0f,                              //VERTICAL FOV
-                                             float(window_width) / float(window_height),       //aspect ratio
+                                             640.f / 480.f,       //aspect ratio
                                              1.0f,                                             //near plane distance (min z)
                                              10.0f                                             //Far plane distance (max z)
            );
