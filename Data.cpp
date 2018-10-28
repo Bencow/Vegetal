@@ -77,14 +77,14 @@ std::istream& operator >>(std::istream& in, t_data& myData){
 }
 
 void readParameter(t_data& myData) {
-
+  /*
 	std::string nameFile;
 	
 	std::cout << "Name of file please : ";
 
 	std::cin >> nameFile;
-
-	std::ifstream fichierData(nameFile.c_str(), std::ios::in);  // on ouvre le fichier en lecture
+  */
+	std::ifstream fichierData("parameters.txt", std::ios::in);  // on ouvre le fichier en lecture
 
 	while (!fichierData) {
 		std::cout << "ERROR NAME DATA\n";
