@@ -86,7 +86,6 @@ Branch* Branch::update()
   }
   //the current branch create a new vertex
   createNewVertex();
-
    return NULL;
 }
 
@@ -134,7 +133,6 @@ void Branch::fillVectorVertices(std::vector<GLfloat>& vertices)
 
     //Now i put only once each vertex -> display only the vertices (not the edges!)
 		v_vertices[i].fillVectorVertices(vertices);
-		//v_vertices[i+1].fillVectorVertices(vertices);
-	
-  }
+		v_vertices[i+1].fillVectorVertices(vertices);
+	}
 }
