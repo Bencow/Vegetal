@@ -120,7 +120,7 @@ void Plant::fillVectorVertices(std::vector<GLfloat>& vertices){
 
 void Plant::fillSkeleton(std::vector< std::vector<Vertex*> >& skeleton){
 	//erase the entire vector
-	skeleton.clear();//Now it's useless to earase the skeleton becaus the vertices already created don't change
+	skeleton.clear();
 
 	std::cout << "number branch " << v_branch.size() << std::endl;
 	//And fill it again
@@ -136,7 +136,6 @@ void Plant::add_leaves(std::vector<Vertex*>& leaves_skeleton)
 {
 	for(int i = 0 ; i < (int)v_branch.size() ; ++i)
 	{
-		std::cout << i << std::endl;
 		//store the leaves in the plant
 		v_leaves.push_back(v_branch[i]->get_leaves_position());
 		//and send them to the skeleton for display

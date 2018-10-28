@@ -65,15 +65,13 @@ Branch* Branch::update()
   {
     m_vecDirection.setX(m_vecDirection.getX() + (((rand() % 100 * m_data.varX) - (100 * (m_data.varX / 2))) / 100));
     m_vecDirection.setY(m_vecDirection.getY() + (((rand() % 100 * m_data.varY) - (100 * (m_data.varY / 2))) / 100));
-	m_vecDirection.setZ(m_vecDirection.getZ() + (((rand() % 100 * m_data.varY) - (100 * (m_data.varZ / 2))) / 100));
+	  m_vecDirection.setZ(m_vecDirection.getZ() + (((rand() % 100 * m_data.varY) - (100 * (m_data.varZ / 2))) / 100));
   }
 
   normalize(m_vecDirection);
 
 
   //if we decide to create a new branch
-  //find a realistic condition !
-  //Warning, in x % y, if y < 0 => crash !
   if(rand()%100 <= m_data.frequencyNewBranch && (int)v_vertices.size() < m_data.sizeMaxBranch)
   {
 		  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -89,7 +87,7 @@ Branch* Branch::update()
 		  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		  //Create a new branch with the last node of the previous branch as anchor
 		  newBranch = new Branch(&v_vertices.back(), m_data , orthogonal, m_count);
-		  //newBranch->createNewVertex();
+		  newBranch->createNewVertex();
 		  //the current branch create a new vertex
   }
   //the current branch create a new vertex
@@ -165,13 +163,12 @@ std::vector<Vertex*> Branch::fillSkeleton()
 //first option one leave without any direction and located only at the end of a branch
 Vertex Branch::get_leaves_position()
 {
-  Vertex leaf = v_vertices[v_vertices.size() -1];
+  Vertex leaf = v_vertices.back();
 
   //change the color of the vertex to see that it's a leaf and note a simple branch
   leaf.setR(1);
   leaf.setG(0);
   leaf.setB(0);
-
 
   return leaf;//return a pointer to the last element of the branch
 }

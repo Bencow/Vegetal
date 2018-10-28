@@ -34,7 +34,15 @@
 
 #define speedCamera 1.0f
 #define speedRotation 10.0f
+
+
+#define POINTS 0
+#define LINES 1
+#define TRIANGLES 2
+
+
 #define PRIMITIVE 1
+#define PRIMITIVE_LEAVES 2
 
 
 //just to test quickly
@@ -191,7 +199,7 @@ void printSkeleton(std::vector< std::vector<Vertex*> >& skeleton)
 
 void add_volume_branch(std::vector<GLfloat> &vertices, std::vector< std::vector<Vertex*> >& skeleton, int type_primitive)
 {
-    if(type_primitive == 0)//Simple vertex
+    if(type_primitive == POINTS)//Simple vertex
     {
         //fill the vector vertices with all the points contained in the skeleton
         //For all the branches
@@ -205,7 +213,7 @@ void add_volume_branch(std::vector<GLfloat> &vertices, std::vector< std::vector<
             }
         }
     }
-    if(type_primitive == 1)//line between the current vertex and the next one
+    if(type_primitive == LINES)//line between the current vertex and the next one
     {
         //for all branches
         for(int i = 0 ; i < (int)skeleton.size() ; i++)
@@ -224,7 +232,7 @@ void add_volume_branch(std::vector<GLfloat> &vertices, std::vector< std::vector<
 
 void add_volume_leaves(std::vector<GLfloat>& leaves, std::vector<Vertex*> skeleton_leaves, int primitive)
 {
-    if(true)//add the type of primitive after
+    if(primitive == POINTS)//draw points
     {
         for(int i = 0 ; i < (int)skeleton_leaves.size() ; ++i)
         {
@@ -232,6 +240,29 @@ void add_volume_leaves(std::vector<GLfloat>& leaves, std::vector<Vertex*> skelet
             skeleton_leaves[i]->fillVectorVertices(leaves);
         }
     }
+    if(primitive == TRIANGLES)//draw triangles
+    {
+
+        for(int i = 0 ; i < (int)skeleton_leaves.size() ; ++i)
+        {
+            Vertex current = *skeleton_leaves[i];
+
+            //copy all the floats of the vertex in the array vertices
+            current.fillVectorVertices(leaves);
+
+            //add atribut size of leaves later !
+            current.setX(current.getX() + ((rand()%9)+1-5)/100.0f  );//0.1 max !
+            current.setX(current.getX() + ((rand()%9)+1-5)/100.0f  );//0.1 max !
+            current.setX(current.getX() + ((rand()%9)+1-5)/100.0f  );//0.1 max !
+            current.fillVectorVertices(leaves);
+
+            current.setX(current.getX() + ((rand()%9)+1-5)/100.0f  );//0.1 max !
+            current.setX(current.getX() + ((rand()%9)+1-5)/100.0f  );//0.1 max !
+            current.setX(current.getX() + ((rand()%9)+1-5)/100.0f  );//0.1 max !
+            current.fillVectorVertices(leaves);
+        }
+    }
+
 }
 
 //////////////////////////////////////
@@ -365,7 +396,6 @@ int main( void )
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices_leaves.size(), vertices_leaves.data(), GL_STATIC_DRAW);
     setShaderAttributs(posAttrib, colourAttrib, normalAttrib, textureAttrib);
 
-    
     //////////////////////////////////
     //Set up things for the ground  //
     //////////////////////////////////   
@@ -504,7 +534,11 @@ int main( void )
 
         //draw leaves
         glBindVertexArray(vao_leaves);
-        glDrawArrays(GL_POINTS, 0, newPlant.getNumberLeaves()); 
+
+        if(PRIMITIVE_LEAVES == POINTS)
+            glDrawArrays(GL_POINTS, 0, newPlant.getNumberLeaves()); 
+        if(PRIMITIVE_LEAVES == TRIANGLES)
+            glDrawArrays(GL_TRIANGLES, 0, newPlant.getNumberLeaves() * 3);
 
         //Draw branch
         glBindVertexArray(vao_branch);
