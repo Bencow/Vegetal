@@ -123,7 +123,7 @@ bool getShaderCompileStatus(GLuint shader){
     }
 }
 
-GLuint createShader(GLenum type, const GLchar* src) 
+GLuint createShader(GLenum type, const GLchar* src)
 {
     GLuint shader = glCreateShader(type);
     glShaderSource(shader, 1, &src, nullptr);
@@ -131,51 +131,7 @@ GLuint createShader(GLenum type, const GLchar* src)
     getShaderCompileStatus(shader);
     return shader;
 }
- 
-void manage_keyboadr_events(std::vector<GLfloat> &vertices, Plant& p)
-{
-  float camera_x = 0.5f;
-  float camera_y = 0.5f;
-  float camera_z = 0.5f;
-  // float camera_target_x = 0.0f;
-  // float camera_target_y = 0.0f;
-  // float camera_target_z = 0.0f;
 
-  char inputGive;
-
-  inputGive = getchar();
-
-  switch (inputGive) {
-    /////////////////////////////Update plant
-  case 'u':
-    p.update();
-    std::cout << p << "\n\n Number element : " << p.getNumberElementPlant() << "\n";
-    p.fillVectorVertices(vertices);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
-
-    break;
-  case 'a':
-    camera_x += speedCamera;
-    break;
-  case 'q':
-    camera_x -= speedCamera;
-    break;
-  case 'z':
-    camera_y += speedCamera;
-    break;
-  case 's':
-    camera_y -= speedCamera;
-    break;
-  case 'e':
-    camera_z += speedCamera;
-    break;
-  case 'd':
-    camera_z -= speedCamera;
-    break;
-  default :
-    break;
-  }
-}
 
 void printSkeleton(std::vector< std::vector<Vertex*> >& skeleton)
 {
@@ -284,17 +240,17 @@ int main( void )
 
     Vertex pointDepart(0.0f, 0.0f, -0.6f);
     t_data dataDepart;
-    
+
 	  readParameter(dataDepart);
 
     Plant newPlant(&pointDepart, dataDepart, vDepart);
 
     //display our plant member variables
 
-    
+
     newPlant.update();
     // std::cout << newPlant << "\n\nNumber unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
-    
+
     //Skeleton is an array of array
     //first dimension of the array is the branch
     //second is the vertex
@@ -319,7 +275,7 @@ int main( void )
     //   if((i % 11) == 0)
     //      std::cout << std::endl;
     //   std::cout << vertices[i] << " ";
-      
+
     // }
 
 
@@ -454,7 +410,7 @@ int main( void )
           std::cout << "number element " << newPlant.getNumberElementPlant() << std::endl;
           //std::cout << newPlant << "Number unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
 
-          
+
           printSkeleton(skeleton);
 
           // //print vertices
@@ -463,7 +419,7 @@ int main( void )
           //   if((i % 11) == 0)
           //      std::cout << std::endl;
           //   std::cout << std::setw(12) << vertices[i] << " ";
-            
+
           // }
 
           go_update = false;
