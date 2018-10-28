@@ -94,6 +94,29 @@ GLuint createShader(GLenum type, std::string shader_name)
     return shader;
 }
  
+void setShaderAttributs(GLint posAttrib, GLint colourAttrib, GLint normalAttrib, GLint textureAttrib)
+{
+    //TODO: link vertex data to shader
+    //Param : 1 input
+    //        2 nbr of value for that input
+    //        3 type of component
+    //        4 do the components have to be normalized (only the normal !)
+    //        5 number of bit for the other components
+    //        6 offset
+    glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 11*sizeof(float), 0);
+    glEnableVertexAttribArray(posAttrib);
+
+    glVertexAttribPointer(colourAttrib, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(colourAttrib);
+
+    glVertexAttribPointer(normalAttrib, 3, GL_FLOAT, GL_TRUE, 11 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(normalAttrib);
+
+    glVertexAttribPointer(textureAttrib, 2, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(9 * sizeof(float)));
+    glEnableVertexAttribArray(textureAttrib);
+}
+
+
 void manage_keyboadr_events(std::vector<GLfloat> &vertices, Plant& p)
 {
   float camera_x = 0.5f;
@@ -201,8 +224,6 @@ void add_volume_leaves(std::vector<GLfloat>& leaves, std::vector<Vertex*> skelet
 //             MAIN                 //
 //////////////////////////////////////
 
-
-
 int main( void )
 {
     srand(time(NULL));
@@ -295,6 +316,10 @@ int main( void )
     glLinkProgram(shaderProgram);
     glUseProgram(shaderProgram);
 
+    GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
+    GLint colourAttrib = glGetAttribLocation(shaderProgram, "colour");
+    GLint normalAttrib = glGetAttribLocation(shaderProgram, "normal");
+    GLint textureAttrib = glGetAttribLocation(shaderProgram, "texcoord");
 
     //////////////////////////////////
     //Set up things for the branches//
@@ -307,30 +332,7 @@ int main( void )
     //Note : the size total of the array is the size of a GLfloat * number of element in the vector (i.e. vertices.size() )
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices_branch.size(), vertices_branch.data(), GL_STATIC_DRAW);
     
-    //shader attribut.../////////////////
-    //TODO: link vertex data to shader
-    //Param : 1 input
-    //        2 nbr of value for that input
-    //        3 type of component
-    //        4 do the components have to be normalized (only the normal !)
-    //        5 number of bit for the other components
-    //        6 offset
-    GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
-    glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 11*sizeof(float), 0);
-    glEnableVertexAttribArray(posAttrib);
-
-    GLint colourAttrib = glGetAttribLocation(shaderProgram, "colour");
-    glVertexAttribPointer(colourAttrib, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(colourAttrib);
-
-    GLint normalAttrib = glGetAttribLocation(shaderProgram, "normal");
-    glVertexAttribPointer(normalAttrib, 3, GL_FLOAT, GL_TRUE, 11 * sizeof(float), (void*)(6 * sizeof(float)));
-    glEnableVertexAttribArray(normalAttrib);
-
-    GLint textureAttrib = glGetAttribLocation(shaderProgram, "texcoord");
-    glVertexAttribPointer(textureAttrib, 2, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(9 * sizeof(float)));
-    glEnableVertexAttribArray(textureAttrib);
-
+    setShaderAttributs(posAttrib, colourAttrib, normalAttrib, textureAttrib);
 
 
     //////////////////////////////////
@@ -341,24 +343,20 @@ int main( void )
     glBindBuffer(GL_ARRAY_BUFFER, vbo_leaves);//make vbo_leaves the active array buffer
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices_leaves.size(), vertices_leaves.data(), GL_STATIC_DRAW);
 
+    setShaderAttributs(posAttrib, colourAttrib, normalAttrib, textureAttrib);
 
-    //shader attribut.../////////////////
-
-    glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 11*sizeof(float), 0);
-    glEnableVertexAttribArray(posAttrib);
-
-    glVertexAttribPointer(colourAttrib, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(colourAttrib);
-
-    glVertexAttribPointer(normalAttrib, 3, GL_FLOAT, GL_TRUE, 11 * sizeof(float), (void*)(6 * sizeof(float)));
-    glEnableVertexAttribArray(normalAttrib);
-
-    glVertexAttribPointer(textureAttrib, 2, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(9 * sizeof(float)));
-    glEnableVertexAttribArray(textureAttrib);
-
+    
     //////////////////////////////////
     //Set up things for the ground  //
     //////////////////////////////////   
+    add_volume_leaves(vertices_leaves, skeleton_leaves, 0);
+    glBindVertexArray(vao_leaves);//use the vao_branch as active vao
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_leaves);//make vbo_leaves the active array buffer
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices_leaves.size(), vertices_leaves.data(), GL_STATIC_DRAW);
+
+
+    //shader attribut.../////////////////
+
 
 
 
