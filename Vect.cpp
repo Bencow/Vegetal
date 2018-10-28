@@ -205,6 +205,7 @@ Vect giveOrthoVec(const Vect& myVec)
       std::cout << "ERROR : vect null ask a orthogonal\n\n";
 		  break;
 	}
+}
 
 
 }
@@ -279,4 +280,6 @@ glm::vec4 convertVect_glm(Vect u)
 	glm::vec4 v(u.getX(), u.getY(), u.getZ(), 0);
 
 	return v;
-}*/
+}
+*/
+
