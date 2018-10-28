@@ -56,7 +56,7 @@ void Plant::update(){
 	
 	int size_now = v_branch.size();
 
-	for(int i = 0; i < size_now ; i++)
+	for(int i = 0; i < (int)size_now ; i++)
 	{
 		//update this branch
 		newBranch = v_branch[i]->update();
@@ -112,7 +112,7 @@ void Plant::fillVectorVertices(std::vector<GLfloat>& vertices){
 	//erase the entire vector
 	vertices.clear();
 	//And fill it again
-	for(int i = 0; i < v_branch.size(); i++){
+	for(int i = 0; i < (int)v_branch.size(); i++){
 		v_branch[i]->fillVectorVertices(vertices);
 	}
 	std::cout << "End fill vector\n";
@@ -125,7 +125,7 @@ void Plant::fillSkeleton(std::vector< std::vector<Vertex*> >& skeleton){
 	std::cout << "number branch " << v_branch.size() << std::endl;
 	//And fill it again
 	//fill each branch
-	for(int i = 0; i < v_branch.size(); i++)
+	for(int i = 0; i < (int)v_branch.size(); i++)
 	{
 		skeleton.push_back(v_branch[i]->fillSkeleton());
 	}
@@ -134,7 +134,7 @@ void Plant::fillSkeleton(std::vector< std::vector<Vertex*> >& skeleton){
 
 void Plant::add_leaves(std::vector<Vertex*>& leaves_skeleton)
 {
-	for(uint i = 0 ; i < v_branch.size() ; ++i)
+	for(int i = 0 ; i < (int)v_branch.size() ; ++i)
 	{
 		std::cout << i << std::endl;
 		//store the leaves in the plant

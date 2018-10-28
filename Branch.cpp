@@ -74,7 +74,7 @@ Branch* Branch::update()
   //if we decide to create a new branch
   //find a realistic condition !
   //Warning, in x % y, if y < 0 => crash !
-  if(rand()%100 <= m_data.frequencyNewBranch && v_vertices.size() < m_data.sizeMaxBranch)
+  if(rand()%100 <= m_data.frequencyNewBranch && (int)v_vertices.size() < m_data.sizeMaxBranch)
   {
 		  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		  //Find a vector orthogonal to the previous direction vector
@@ -136,7 +136,7 @@ int Branch::fillGfloatArray(GLfloat* arrayGfloat, int offset){
 
 void Branch::fillVectorVertices(std::vector<GLfloat>& vertices)
 {
-	for(int i = 0 ; i < v_vertices.size() - 1 ; ++i)
+	for(int i = 0 ; i < (int)v_vertices.size() - 1 ; ++i)
 	{
 		//each turn of this loop will add two vertex to the vector -> draw one line
 		//all vertex will be stored two times -> better implementation with the element buffer for further version...
@@ -151,7 +151,7 @@ std::vector<Vertex*> Branch::fillSkeleton()
 {
   std::vector<Vertex*> vertices;
 
-  for(int i = 0 ; i < v_vertices.size() ; ++i)
+  for(int i = 0 ; i < (int)v_vertices.size() ; ++i)
   {
     //Now i put only once each vertex
     //v_vertices[i].fillVectorVertices(vertices);

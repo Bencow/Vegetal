@@ -179,9 +179,9 @@ void setShaderAttributs(GLint posAttrib, GLint colourAttrib, GLint normalAttrib,
 void printSkeleton(std::vector< std::vector<Vertex*> >& skeleton)
 {
     std::cout << "print skeleton" << std::endl;
-    for(int i = 0 ; i < skeleton.size() ; i++)
+    for(int i = 0 ; i < (int)skeleton.size() ; i++)
     {
-        for(int j = 0 ; j < skeleton[i].size() ; j++)
+        for(int j = 0 ; j < (int)skeleton[i].size() ; j++)
         {
             std::cout << *skeleton[i][j];
         }
@@ -195,10 +195,10 @@ void add_volume_branch(std::vector<GLfloat> &vertices, std::vector< std::vector<
     {
         //fill the vector vertices with all the points contained in the skeleton
         //For all the branches
-        for(int i = 0 ; i < skeleton.size() ; i++)
+        for(int i = 0 ; i < (int)skeleton.size() ; i++)
         {
             //for all the vertices in the branch n°i
-            for(int j = 0 ; j < skeleton[i].size() ; j++)
+            for(int j = 0 ; j < (int)skeleton[i].size() ; j++)
             {
                 //copy all the floats of the vertex in the array vertices
                 skeleton[i][j]->fillVectorVertices(vertices);
@@ -208,10 +208,10 @@ void add_volume_branch(std::vector<GLfloat> &vertices, std::vector< std::vector<
     if(type_primitive == 1)//line between the current vertex and the next one
     {
         //for all branches
-        for(int i = 0 ; i < skeleton.size() ; i++)
+        for(int i = 0 ; i < (int)skeleton.size() ; i++)
         {
             //for all vertices in branch i (except the last one)
-            for(int j = 0 ; j < skeleton[i].size()-1 ; ++j)
+            for(int j = 0 ; j < (int)skeleton[i].size()-1 ; ++j)
             {
                 //copy the current vertex and the next one to draw a line between both
                 skeleton[i][j]->fillVectorVertices(vertices);
@@ -226,7 +226,7 @@ void add_volume_leaves(std::vector<GLfloat>& leaves, std::vector<Vertex*> skelet
 {
     if(true)//add the type of primitive after
     {
-        for(uint i = 0 ; i < skeleton_leaves.size() ; ++i)
+        for(int i = 0 ; i < (int)skeleton_leaves.size() ; ++i)
         {
             //copy all the floats of the vertex in the array vertices
             skeleton_leaves[i]->fillVectorVertices(leaves);

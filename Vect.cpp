@@ -177,7 +177,7 @@ int codeZero(const Vect& v){
 Vect giveOrthoVec(const Vect& myVec)
 {
 	int code = codeZero(myVec);
-
+	Vect err(0,0,0);//return this Vect in case of a problem
 	switch(code)
 	{
 		case 1://all diferent from 0
@@ -205,9 +205,8 @@ Vect giveOrthoVec(const Vect& myVec)
       std::cout << "ERROR : vect null ask a orthogonal\n\n";
 		  break;
 	}
-}
-
-
+	std::cout << "ERROR, invalid code received in giveOrthoVec function" << std::endl;
+	return err;
 }
 
 Vect mixVect(const Vect& v)
