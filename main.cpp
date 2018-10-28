@@ -136,9 +136,9 @@ GLuint createShader(GLenum type, const GLchar* src)
 void printSkeleton(std::vector< std::vector<Vertex*> >& skeleton)
 {
     std::cout << "print skeleton" << std::endl;
-    for(uint i = 0 ; i < skeleton.size() ; i++)
+    for(int i = 0 ; i < skeleton.size() ; i++)
     {
-        for(uint j = 0 ; j < skeleton[i].size() ; j++)
+        for(int j = 0 ; j < skeleton[i].size() ; j++)
         {
             std::cout << *skeleton[i][j];
         }
@@ -152,10 +152,10 @@ void addVolume(std::vector<GLfloat> &vertices, std::vector< std::vector<Vertex*>
     {
         //fill the vector vertices with all the points contained in the skeleton
         //For all the branches
-        for(uint i = 0 ; i < skeleton.size() ; i++)
+        for(int i = 0 ; i < skeleton.size() ; i++)
         {
             //for all the vertices in the branch n°i
-            for(uint j = 0 ; j < skeleton[i].size() ; j++)
+            for(int j = 0 ; j < skeleton[i].size() ; j++)
             {
                 //copy all the floats of the vertex in the array vertices
                 skeleton[i][j]->fillVectorVertices(vertices);
@@ -165,10 +165,10 @@ void addVolume(std::vector<GLfloat> &vertices, std::vector< std::vector<Vertex*>
     if(type_primitive == 1)//line between the current vertex and the next one
     {
         //for all branches
-        for(uint i = 0 ; i < skeleton.size() ; i++)
+        for(int i = 0 ; i < skeleton.size() ; i++)
         {
             //for all vertices in branch i (except the last one)
-            for(uint j = 0 ; j < skeleton[i].size()-1 ; ++j)
+            for(int j = 0 ; j < skeleton[i].size()-1 ; ++j)
             {
                 //copy the current vertex and the next one to draw a line between both
                 skeleton[i][j]->fillVectorVertices(vertices);
@@ -235,13 +235,12 @@ int main( void )
     ////////////////////////////////////
     std::cout << "Hello world\n\n";
 
-    Vect vDepart(0.025f, 0.025f, 0.5f);
-    normalize(vDepart);
+    Vect vDepart(0.0f, 0.0f, 1.0f);
 
-    Vertex pointDepart(0.0f, 0.0f, -0.6f);
+    Vertex pointDepart(0.0f, 0.0f, 0.0f);
     t_data dataDepart;
 
-	  readParameter(dataDepart);
+	readParameter(dataDepart);
 
     Plant newPlant(&pointDepart, dataDepart, vDepart);
 
@@ -362,7 +361,7 @@ int main( void )
 
 
     //Set a background color
-    glClearColor(0.0f, 0.0f, 1.0f, 0.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
     //Transforms :
     //glm::mat4 trans = glm::mat4(1.0f);
@@ -406,12 +405,12 @@ int main( void )
           addVolume(vertices, skeleton, PRIMITIVE);
           glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
 
-          std::cout << "number branch " << newPlant.getNumberBranch() << std::endl;
-          std::cout << "number element " << newPlant.getNumberElementPlant() << std::endl;
+          //std::cout << "number branch " << newPlant.getNumberBranch() << std::endl;
+          //std::cout << "number element " << newPlant.getNumberElementPlant() << std::endl;
           //std::cout << newPlant << "Number unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
 
 
-          printSkeleton(skeleton);
+          //printSkeleton(skeleton);
 
           // //print vertices
           // for(uint i = 0 ; i  < vertices.size() ; ++i)

@@ -52,14 +52,16 @@ std::ostream& operator <<(std::ostream& out, Vect& myVect);
 
 //Math things
 Vect rotation2D(Vect u, Vect v, float alpha);
-Vect findRandOrthogonal(const Vect& v);
-Vect findRandOrthogonal_1(const Vect& v);
 Vect mixVect(const Vect& v);
 Vect crossProduct(Vect v, Vect u);
 bool normalize(Vect& v);
 void rotateX(double alpha, Vect rotateMatrix[3]);
 void getTransposeMatrix(Vect M[3], Vect M_T[3]);
 
+Vect giveOrthoVec(const Vect& myVec);
+int codeZero(const Vect& v);
+Vect findRandOrthogonalTwoNull(int code);
+Vect findRandOrthogonalClass(Vect myVec);
 
 
 #endif /* Vect_hpp */

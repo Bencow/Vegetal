@@ -112,7 +112,7 @@ void Plant::fillVectorVertices(std::vector<GLfloat>& vertices){
 	//erase the entire vector
 	vertices.clear();
 	//And fill it again
-	for(uint i = 0; i < v_branch.size(); i++){
+	for(int i = 0; i < v_branch.size(); i++){
 		v_branch[i]->fillVectorVertices(vertices);
 	}
 	std::cout << "End fill vector\n";
@@ -126,7 +126,7 @@ void Plant::fillSkeleton(std::vector< std::vector<Vertex*> >& skeleton){
 	std::cout << "number branch " << v_branch.size() << std::endl;
 	//And fill it again
 	//fill each branch
-	for(uint i = 0; i < v_branch.size(); i++)
+	for(int i = 0; i < v_branch.size(); i++)
 	{
 		skeleton.push_back(v_branch[i]->fillSkeleton());
 	}

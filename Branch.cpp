@@ -56,38 +56,48 @@ Branch* Branch::update()
     return NULL;
   }
 
+  Branch* newBranch = NULL;
   //diminish the size of the new edges
-  m_data.sizeNewVertices = m_data.sizeNewVertices / 1.5f;
+  //m_data.sizeNewVertices = m_data.sizeNewVertices / 1.5f;
 
   //Variation of next vec direction
   if(*m_count > 0)
   {
-    m_vecDirection.setX(( ((rand() % 100) - 50)/40) );
-    m_vecDirection.setY(( ((rand() % 100) - 50)/40) );
-    //Doesn't change in Z for now
+    m_vecDirection.setX(m_vecDirection.getX() + (((rand() % 100 * m_data.varX) - (100 * (m_data.varX / 2))) / 100));
+    m_vecDirection.setY(m_vecDirection.getY() + (((rand() % 100 * m_data.varY) - (100 * (m_data.varY / 2))) / 100));
+	m_vecDirection.setZ(m_vecDirection.getZ() + (((rand() % 100 * m_data.varY) - (100 * (m_data.varZ / 2))) / 100));
   }
-  
+
   normalize(m_vecDirection);
+
 
   //if we decide to create a new branch
   //find a realistic condition !
   //Warning, in x % y, if y < 0 => crash !
-  if(rand()%(5 - *m_count) == 0 && *m_count > 0)
-  //if(true)
+  if(rand()%100 <= m_data.frequencyNewBranch && v_vertices.size() < m_data.sizeMaxBranch)
   {
-    //Find a vector orthogonal to the previous direction vector
-    Vect orthogonal = findRandOrthogonal(m_vecDirection);
-    normalize(orthogonal);
-    //Create a new branch with the last node of the previous branch as anchor
-    Branch* newBranch = new Branch(&v_vertices.back(), m_data, orthogonal, m_count);
-    newBranch->createNewVertex();
-    //the current branch create a new vertex
-    createNewVertex();
-    return newBranch;
+		  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		  //Find a vector orthogonal to the previous direction vector
+		  Vect orthogonal = giveOrthoVec(m_vecDirection);
+		  normalize(orthogonal);
+
+		  //Create new data with variation lenght
+		  if (m_data.sizeNewVertices >= 0.5f) {
+			  m_data.sizeNewVertices -= 0.1f;
+		  }
+
+		  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		  //Create a new branch with the last node of the previous branch as anchor
+		  newBranch = new Branch(&v_vertices.back(), m_data , orthogonal, m_count);
+		  //newBranch->createNewVertex();
+		  //the current branch create a new vertex
   }
   //the current branch create a new vertex
+
   createNewVertex();
-   return NULL;
+
+
+   return newBranch;
 }
 
 void Branch::createNewVertex()
@@ -126,7 +136,7 @@ int Branch::fillGfloatArray(GLfloat* arrayGfloat, int offset){
 
 void Branch::fillVectorVertices(std::vector<GLfloat>& vertices)
 {
-	for(uint i = 0 ; i < v_vertices.size() - 1 ; ++i)
+	for(int i = 0 ; i < v_vertices.size() - 1 ; ++i)
 	{
 		//each turn of this loop will add two vertex to the vector -> draw one line
 		//all vertex will be stored two times -> better implementation with the element buffer for further version...
@@ -142,7 +152,7 @@ std::vector<Vertex*> Branch::fillSkeleton()
 {
   std::vector<Vertex*> vertices;
 
-  for(uint i = 0 ; i < v_vertices.size() ; ++i)
+  for(int i = 0 ; i < v_vertices.size() ; ++i)
   {
     //Now i put only once each vertex
     //v_vertices[i].fillVectorVertices(vertices);
@@ -151,4 +161,3 @@ std::vector<Vertex*> Branch::fillSkeleton()
   //Note : we return the vector of vertex because, skeleton is a 2D array !
   return vertices;
 }
-
