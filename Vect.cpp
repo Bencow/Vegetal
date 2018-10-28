@@ -50,8 +50,8 @@ std::ostream& operator <<(std::ostream& out, Vect& myVect)
 {
 	//setw is just a function which print the value always on the same number of "space" on the screen
 	//because otherwise if x = 6 (1space) and y = -1234.5 (7 spaces) all the other data are shifted during displaying
-	out << " x: " << std::setw(4) << myVect.getX() 
-		<< " y: " << std::setw(4) << myVect.getY() 
+	out << " x: " << std::setw(4) << myVect.getX()
+		<< " y: " << std::setw(4) << myVect.getY()
 		<< " z: " << std::setw(4) << myVect.getZ() << "\n";
 	return out;
 }
@@ -62,24 +62,9 @@ void Vect::operator =(const Vect vectToCop){
   m_z = vectToCop.getZ();
 }
 
-//Pre condition : the input vector must not be null
-//Post condition : return the value of the componant not equal to zero
-int twoComponantEqualZero(const Vect& v)
-{
-	if(v.getX() == 0 && v.getY() == 0)
-		return 3;
-	else if(v.getY() == 0 && v.getZ() == 0)
-		return 2;
-	else if(v.getZ() == 0 && v.getX() == 0)
-		return 3;
-	else
-		return 0;//at least two componants are different from 0
-}
-
 //This function is not 100% fiable because, if v(1, 0, 0), this function choose to put the first coordonate to 0
 // and then the orthogonal vector is the null vector...
-Vect findRandOrthogonal_1(const Vect& v)
-{
+Vect findRandOrthogonalClass(Vect myVec){
 	Vect u;
 	//better implementation would be setting a random coord and then find a null dot product
 	int coord_to_reset = (rand() % 3);
@@ -87,26 +72,70 @@ Vect findRandOrthogonal_1(const Vect& v)
 	if(coord_to_reset == 0)
 	{
 		u.setX(0);
-		u.setY( - v.getZ() );
-		u.setZ( v.getY() );
+		u.setY( - myVec.getZ() );
+		u.setZ( myVec.getY() );
 	}
 	else if(coord_to_reset == 1)
 	{
-		u.setX( -v.getZ());
+		u.setX( -myVec.getZ());
 		u.setY(0);
-		u.setZ( v.getX() );
+		u.setZ( myVec.getX() );
 	}
 	else if(coord_to_reset == 2)
 	{
-		u.setX( - v.getY());
-		u.setY( v.getX() );
+		u.setX( - myVec.getY());
+		u.setY( myVec.getX() );
 		u.setZ(0);
 	}
 	return u;
 }
 
-int codeZero(const Vect& v)
-{
+Vect findRandOrthogonalTwoNull(int code){
+  Vect u;
+
+
+  float val1;
+  float val2;
+
+  if (rand() % 2 == 0) {
+	  val1 = 1.0f;
+	  val2 = rand() % 11;
+	  val2-=5;
+	  val2 /= 10.0f;
+	  val1 += val2;
+
+  }
+  else {
+	  val2 = 1.0f;
+	  val1 = rand() % 11;
+	  val1-= 5;
+	  val1 /= 10.0f;
+	  val2 += val1;
+  }
+
+  switch (code) {
+    case 5:
+      u.setZ(0.0f);
+      u.setX(val1);
+      u.setY(val2);
+      break;
+    case 6:
+      u.setZ(val1);
+      u.setX(val2);
+      u.setY(0.0f);
+      break;
+    case 8:
+      u.setZ(val1);
+      u.setX(0.0f);
+      u.setY(val2);
+      break;
+  }
+
+
+  return u;
+}
+
+int codeZero(const Vect& v){
 	float x = v.getX();
 	float y = v.getY();
 	float z = v.getZ();
@@ -145,112 +174,40 @@ int codeZero(const Vect& v)
 		return 1;//all diferent from 0
 }
 
-void turfu(const Vect& v)
+Vect giveOrthoVec(const Vect& myVec)
 {
-	int code = codeZero(v);
+	int code = codeZero(myVec);
 
 	switch(code)
 	{
 		case 1://all diferent from 0
-
-		break;
+      return findRandOrthogonalClass(myVec);
+		  break;
 		case 2://x==0
-
-		break;
+      return findRandOrthogonalClass(myVec);
+		  break;
 		case 3://y==0
-
-		break;
+      return findRandOrthogonalClass(myVec);
+      break;
 		case 4://z==0
-
-		break;
+      return findRandOrthogonalClass(myVec);
+      break;
 		case 5://xy==0
-
-		break;
+      return findRandOrthogonalTwoNull(code);
+		  break;
 		case 6://xz==0
-
-		break;
+      return findRandOrthogonalTwoNull(code);
+		  break;
 		case 7://yz=0
-
-		break;
+      return findRandOrthogonalTwoNull(code);
+		  break;
 		case 8://xyz==0
-
-		break;
-
-		
+      std::cout << "ERROR : vect null ask a orthogonal\n\n";
+		  break;
 	}
 }
 
-Vect findRandOrthogonal(const Vect& v)
-{
-	float x = v.getX();
-	float y = v.getY();
-	float z = v.getZ();
 
-	int r = rand()%2;
-	float val = rand()%11;
-	Vect u(1,1,1);
-	val++;
-	val /= 10.0f;
-
-	//std::cout << "r=" << r << " val=" << val << std::endl;
-
-	if(z != 0)// z != 0
-	{	
-		if(r == 0)
-		{
-			u.setX(val);
-			u.setY(0);
-			u.setZ(-(val * x) / z);
-		}
-		else
-		{
-			u.setX(0);
-			u.setY(val);
-			u.setZ(-(val *y )/ z);
-		}
-	}
-	else if(y != 0)
-	{
-		if(r == 0)
-		{
-			u.setX(val);
-			u.setY(-(val * x) / y);
-			u.setZ(0);
-		}
-		else
-		{
-			u.setX(0);
-			u.setY(-(val * z) / y);
-			u.setZ(val);
-		}
-	}
-	else if(x != 0)
-	{
-		if(r == 0)
-		{
-			u.setX(-(-val * y) / x);
-			u.setY(val);
-			u.setZ(0);
-		}
-		else
-		{
-			u.setX(-(z * val) / x);
-			u.setY(0);
-			u.setZ(val);
-		}
-	}
-	else
-	{
-		std::cout << "Error, try to find orthogonal vector of a null vector";
-		if (x==0 && y==0 && z==0 )
-		{
-			std::cout << " je confirme " << std::endl;
-			u.setX(val);
-			u.setY(1);
-			u.setZ(1);			
-		}	
-	}
-	return u;
 }
 
 Vect mixVect(const Vect& v)
@@ -279,7 +236,7 @@ bool normalize(Vect& v)
 		return false;
 	}
 	else
-	{	
+	{
 		//Divide all the components of v by the norm
 		v.setX(v.getX() / norm);
 		v.setY(v.getY() / norm);
@@ -316,6 +273,7 @@ void getTransposeMatrix(Vect M[3], Vect M_T[3])
 	M_T[i].setZ(M[1].getZ());
 	M_T[i].setZ(M[2].getZ());
 }
+
 /*
 glm::vec4 convertVect_glm(Vect u)
 {
@@ -324,3 +282,4 @@ glm::vec4 convertVect_glm(Vect u)
 	return v;
 }
 */
+

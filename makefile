@@ -1,3 +1,4 @@
+
 CC=g++
 CFLAGS=-c -Wall
 LDFLAGS=`pkg-config --cflags glfw3`
@@ -16,3 +17,4 @@ $(EXECUTABLE): $(OBJECTS)
 
 clean:
 	rm -rf *.o core
+
