@@ -32,7 +32,8 @@
 #include "Vertex.hpp"
 #include "Data.hpp"
 
-#define speedCamera 0.5f
+#define speedCamera 1.0f
+#define speedRotation 10.0f
 #define PRIMITIVE 1
 
 
@@ -40,12 +41,13 @@
 bool go_update = false;
 
 //Camera gesture
-float camera_x = 0.5f;
-float camera_y = 0.5f;
-float camera_z = 0.5f;
+float camera_x = 5.0f;
+float camera_y = 0.0f;
+float camera_z = 1.0f;
 float camera_target_x = 0.0f;
 float camera_target_y = 0.0f;
-float camera_target_z = 0.0f;
+float camera_target_z = 1.0f;
+float camera_angle_rotation = 0;
 
 //Define an error callback
 static void error_callback(int error, const char* description)
@@ -61,6 +63,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
   // WARNING : the keyboard is a qwerty !  //
   ///////////////////////////////////////////
 
+
   if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
   glfwSetWindowShouldClose(window, GL_TRUE);
 
@@ -68,23 +71,32 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
   {
     go_update = true;
   }
-  else if(key == GLFW_KEY_Q && action == GLFW_PRESS){
-    camera_x += speedCamera;
-  }
   else if(key == GLFW_KEY_A && action == GLFW_PRESS){
-    camera_x -= speedCamera;
+	  camera_angle_rotation -= speedRotation;
+	  if (camera_angle_rotation < 0) {
+		  camera_angle_rotation = 360;
+	  }
   }
-  else if(key == GLFW_KEY_W && action == GLFW_PRESS){
-    camera_y += speedCamera;
+  else if(key == GLFW_KEY_W && action == GLFW_PRESS){	
+	glm::vec3 myVecDirct(camera_x - camera_target_x, camera_y - camera_target_y, camera_z - camera_target_z);
+	myVecDirct = glm::normalize(myVecDirct);
+	camera_x -= myVecDirct.x * speedCamera;
+	camera_y -= myVecDirct.y * speedCamera;
+	camera_z -= myVecDirct.z * speedCamera;
+
   }
   else if(key == GLFW_KEY_S && action == GLFW_PRESS){
-    camera_y -= speedCamera;
-  }
-  else if(key == GLFW_KEY_E && action == GLFW_PRESS){
-    camera_z += speedCamera;
+	  glm::vec3 myVecDirct(camera_x - camera_target_x, camera_y - camera_target_y, camera_z - camera_target_z);
+	  myVecDirct = glm::normalize(myVecDirct);
+	  camera_x += myVecDirct.x * speedCamera;
+	  camera_y += myVecDirct.y * speedCamera;
+	  camera_z += myVecDirct.z * speedCamera;
   }
   else if(key == GLFW_KEY_D && action == GLFW_PRESS){
-    camera_z -= speedCamera;
+	  camera_angle_rotation+= speedRotation;
+	  if (camera_angle_rotation > 360) {
+		  camera_angle_rotation = 0;
+	  }
   }
 
   else if(key == GLFW_KEY_R && action == GLFW_PRESS){
@@ -99,10 +111,10 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
   else if(key == GLFW_KEY_G && action == GLFW_PRESS){
     camera_target_y -= speedCamera;
   }
-  else if(key == GLFW_KEY_Y && action == GLFW_PRESS){
+  else if(key == GLFW_KEY_UP && action == GLFW_PRESS){
     camera_target_z += speedCamera;
   }
-  else if(key == GLFW_KEY_H && action == GLFW_PRESS){
+  else if(key == GLFW_KEY_DOWN && action == GLFW_PRESS){
     camera_target_z -= speedCamera;
   }
 
@@ -428,7 +440,7 @@ int main( void )
         //       TODO: 3D Transforms
         //==================================
         glm::mat4 model = glm::mat4(1.0f);
-        //model = glm::rotate(model, 360 * float(frame_time) / period , glm::vec3(0.0f, 0.0f, 1.0f));
+        model = glm::rotate(model, camera_angle_rotation , glm::vec3(0.0f, 0.0f, 1.0f));
         glUniformMatrix4fv(uniModel, 1, GL_FALSE, glm::value_ptr(model));//upload the matrux in the vertex shader
 
         //==================================
@@ -457,8 +469,8 @@ int main( void )
            //TODO: create and load projection matrix
            glm::mat4 proj = glm::perspective(45.0f,                              //VERTICAL FOV
                                              640.f / 480.f,       //aspect ratio
-                                             1.0f,                                             //near plane distance (min z)
-                                             10.0f                                             //Far plane distance (max z)
+                                             0.1f,              //near plane distance (min z)
+                                             100.0f                //Far plane distance (max z)
            );
            GLint uniProj = glGetUniformLocation(shaderProgram, "proj");
            glUniformMatrix4fv(uniProj, 1, GL_FALSE, glm::value_ptr(proj));
