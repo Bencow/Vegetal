@@ -277,16 +277,16 @@ int main( void )
     std::vector<Vertex*> skeleton_leaves;
     std::vector<GLfloat> vertices_branch;
     std::vector<GLfloat> vertices_leaves;
-    GLfloat vertices_ground[] = 
+    GLfloat vertices_ground[] =
     {
-        //Pos                      colour               normal                tex
-         1.0f,  1.0f, 0.0f,    0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
-        -1.0f,  1.0f, 0.0f,    0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
-        -1.0f, -1.0f, 0.0f,    0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+        //Pos                  colour               normal                tex
+         1.0f,  1.0f, -0.6f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+        -1.0f,  1.0f, -0.6f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+        -1.0f, -1.0f, -0.6f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
 
-         1.0f,  1.0f, 0.0f,    0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
-         1.0f, -1.0f, 0.0f,    0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
-        -1.0f, -1.0f, 0.0f,    0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+         1.0f,  1.0f, -0.6f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+         1.0f, -1.0f, -0.6f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+        -1.0f, -1.0f, -0.6f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
         
     };
 
