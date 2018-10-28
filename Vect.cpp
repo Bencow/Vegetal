@@ -317,6 +317,7 @@ void getTransposeMatrix(Vect M[3], Vect M_T[3])
 	M_T[i].setZ(M[2].getZ());
 }
 
+
 glm::vec4 convertVect_glm(Vect u)
 {
 	glm::vec4 v(u.getX(), u.getY(), u.getZ(), 0);

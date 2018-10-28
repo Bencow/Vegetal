@@ -42,7 +42,6 @@ class Plant {
     std::vector<Branch*>& getBranchs(){return v_branch;}
 
     void update();
-    void update_2();
 
     int getNumberBranch()const { return v_branch.size(); }
 

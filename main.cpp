@@ -2,7 +2,7 @@
 //#define GLEW_STATIC
 
 //Library for loading textures (Simple OpenGL Image Library)
-#include <soil/src/SOIL.h>
+#include "soil/src/SOIL.h"
 
 #include <GL/glew.h>
 
@@ -36,8 +36,16 @@
 #define PRIMITIVE 1
 
 
-//just to test quickly 
+//just to test quickly
 bool go_update = false;
+
+//Camera gesture
+float camera_x = 0.5f;
+float camera_y = 0.5f;
+float camera_z = 0.5f;
+float camera_target_x = 0.0f;
+float camera_target_y = 0.0f;
+float camera_target_z = 0.0f;
 
 //Define an error callback
 static void error_callback(int error, const char* description)
@@ -60,6 +68,44 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
   {
     go_update = true;
   }
+  else if(key == 'q' && action == GLFW_PRESS){
+    camera_x += speedCamera;
+  }
+  else if(key == 'a' && action == GLFW_PRESS){
+    camera_x -= speedCamera;
+  }
+  else if(key == 'w' && action == GLFW_PRESS){
+    camera_y += speedCamera;
+  }
+  else if(key == 's' && action == GLFW_PRESS){
+    camera_y -= speedCamera;
+  }
+  else if(key == 'e' && action == GLFW_PRESS){
+    camera_z += speedCamera;
+  }
+  else if(key == 'd' && action == GLFW_PRESS){
+    camera_z -= speedCamera;
+  }
+
+  else if(key == 'r' && action == GLFW_PRESS){
+    camera_target_x += speedCamera;
+  }
+  else if(key == 'f' && action == GLFW_PRESS){
+    camera_target_x -= speedCamera;
+  }
+  else if(key == 't' && action == GLFW_PRESS){
+    camera_target_y += speedCamera;
+  }
+  else if(key == 'g' && action == GLFW_PRESS){
+    camera_target_y -= speedCamera;
+  }
+  else if(key == 'y' && action == GLFW_PRESS){
+    camera_target_z += speedCamera;
+  }
+  else if(key == 'h' && action == GLFW_PRESS){
+    camera_target_z -= speedCamera;
+  }
+
 }
 
 bool getShaderCompileStatus(GLuint shader){
@@ -85,7 +131,7 @@ GLuint createShader(GLenum type, const GLchar* src)
     getShaderCompileStatus(shader);
     return shader;
 }
-
+ 
 void manage_keyboadr_events(std::vector<GLfloat> &vertices, Plant& p)
 {
   float camera_x = 0.5f;
@@ -238,13 +284,9 @@ int main( void )
 
     Vertex pointDepart(0.0f, 0.0f, -0.6f);
     t_data dataDepart;
-    dataDepart.sizeNewVertices = 0.5f;
-    dataDepart.varX = 1.0f;
-    dataDepart.varY = -0.5f;
-    dataDepart.varZ = 0.0f;
-
-    dataDepart.sizeMaxBranch = 100;
     
+	  readParameter(dataDepart);
+
     Plant newPlant(&pointDepart, dataDepart, vDepart);
 
     //display our plant member variables
@@ -391,7 +433,6 @@ int main( void )
     //clock_t start = std::clock();
     clock_t start = std::clock();
     go_update = false;
-    
     do
     {
         double frame_time = (double) (clock()-start) / double(CLOCKS_PER_SEC);
@@ -412,6 +453,7 @@ int main( void )
           std::cout << "number branch " << newPlant.getNumberBranch() << std::endl;
           std::cout << "number element " << newPlant.getNumberElementPlant() << std::endl;
           //std::cout << newPlant << "Number unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
+
           
           printSkeleton(skeleton);
 
@@ -424,7 +466,6 @@ int main( void )
             
           // }
 
-          
           go_update = false;
         }
 
@@ -448,6 +489,26 @@ int main( void )
         glUniform4fv(uniLightCol, 1, glm::value_ptr(light_colour));
 
         //==================================
+        //       TODO: camera gesture
+        //==================================
+           glm::mat4 view = glm::lookAt(
+               glm::vec3(camera_x, camera_y, camera_z), //Camera position
+               glm::vec3(camera_target_x, camera_target_y, camera_target_z), //Camera view target
+               glm::vec3(0.0f, 0.0f, 1.0f)  //Camera up vector which is usually z
+           );
+           GLint uniView = glGetUniformLocation(shaderProgram, "view");
+           glUniformMatrix4fv(uniView, 1, GL_FALSE, glm::value_ptr(view));
+
+           //TODO: create and load projection matrix
+           glm::mat4 proj = glm::perspective(45.0f,                              //VERTICAL FOV
+                                             float(window_width) / float(window_height),       //aspect ratio
+                                             1.0f,                                             //near plane distance (min z)
+                                             10.0f                                             //Far plane distance (max z)
+           );
+           GLint uniProj = glGetUniformLocation(shaderProgram, "proj");
+           glUniformMatrix4fv(uniProj, 1, GL_FALSE, glm::value_ptr(proj));
+
+        //==================================
         //          Draw Model
         //==================================
         //Clear color buffer
@@ -458,10 +519,12 @@ int main( void )
         //Param : 1 type of primitive
         //        2 offset (how many vertices to skip)
         //        3 number of VERTICES not primitives
+
         if(PRIMITIVE == 0)
             glDrawArrays(GL_POINTS, 0, newPlant.getNumberElementPlant());
         if(PRIMITIVE == 1)
             glDrawArrays(GL_LINES, 0, newPlant.getNumberElementPlant() * 2);
+
 
         //Swap buffers
         glfwSwapBuffers(window);
@@ -470,7 +533,7 @@ int main( void )
 
     } //Check if the ESC key had been pressed or if the window had been closed
     while (!glfwWindowShouldClose(window));
-    
+
     glDeleteTextures(1, &tex);
     glDeleteProgram(shaderProgram);
     glDeleteShader(fragmentShader);
@@ -486,18 +549,4 @@ int main( void )
 
     exit(EXIT_SUCCESS);
     return 0;
-}
-
-int main_()
-{
-    srand(time(NULL));
-    
-    for (int i = 0 ; i < 11 ; i = i + 3)
-    {
-        std::cout << i << " ";
-    }
-
-
-    return 0;
-
 }

@@ -1,0 +1,37 @@
+todo :
+
+
+////////////////Creation of the squeleton :
+
+Solve the problem of null vectors
+- dot product equation
+- try to find when qnd in which conditions are they created
+
+Several problems come up with the new solution : 
+	- the tree is globably growing in one direction (because it first tries if z==0 then y==0) -> not balanced solution
+	- still null vectors...
+	- collisions
+
+Find a realistic condition to create new branches
+	OK, works but i can still find more realistic function, good at the beginning but after 10 count, grow exponantially, we don't want that, my function just delay the exponantial...
+	but why not we'll do only 5 updates max
+
+Avoid branches to go under the root...
+
+Add the leaves squeleton
+
+
+//////////////////////////////Adding volumes and forms :
+
+- Tuto geometry shader
+
+- print only the vertex (dots)
+
+- print a form for each vertex : circle, sphere, line with the next one(then cylinder), triangle, cube...
+
+- print leaves
+
+//////////////////////////////Animation :
+- find a function to make all the vertex move with the wind (depending of the hight ?)
+
+

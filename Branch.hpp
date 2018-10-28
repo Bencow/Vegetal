@@ -56,10 +56,10 @@ class Branch {
     void setFinished(bool val){ m_finished = val; }
 
     void addVertex(const Vertex& newOne);
-    void createNewVertex();
 
     Branch* update();
-    std::vector<Branch*> update_2();
+    void createNewVertex();
+
 
     int getNumberElementBranch();
 

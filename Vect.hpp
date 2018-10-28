@@ -15,10 +15,7 @@
 #include<iomanip>//setw
 
 
-//Matrix libraries
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtc/type_ptr.hpp"
+
 
 class Vect {
   private:
@@ -62,7 +59,6 @@ Vect crossProduct(Vect v, Vect u);
 bool normalize(Vect& v);
 void rotateX(double alpha, Vect rotateMatrix[3]);
 void getTransposeMatrix(Vect M[3], Vect M_T[3]);
-glm::vec4 convertVect_glm(Vect u);
 
 
 

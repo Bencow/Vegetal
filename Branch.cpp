@@ -12,10 +12,6 @@
 #include "Branch.hpp"
 #include "Vect.hpp"
 
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtc/type_ptr.hpp"
-
 Branch::Branch(){
 
 }
@@ -91,7 +87,6 @@ Branch* Branch::update()
   }
   //the current branch create a new vertex
   createNewVertex();
-
    return NULL;
 }
 
@@ -106,63 +101,6 @@ void Branch::createNewVertex()
              lastVertexBranch.getZ() + (m_vecDirection.getZ() * m_data.sizeNewVertices));
   newVertex.setBorn(0.0);
   v_vertices.push_back(newVertex);
-}
-
-/* in this version each branch do :
- * - do not create other vertices on the same branch
- * - create 3 new branches equidistant
- * - length of the new edges are the previous edge's length divided by 2
- */
-//Doesn't work -> return only one branch -> solution return a vector of branch
-std::vector<Branch*> Branch::update_2()
-{
-  std::vector<Branch*> newBranches;
-	//if the branch has not finished to grow
-	if(!m_finished)
-	{
-		//create 3 new branches
-		for(int i = 0 ; i < 3 ; ++i)
-		{
-			//create the branch and initialize the anchor with the last element of the previous branch
-			//				  Branch(last_vertex_of_the_actual_branch)
-			Branch* bud = new Branch(&v_vertices[v_vertices.size()-1]);//it can be neater with iterator ?	
-			
-			//set the direction vector of the new branch
-
-			//Find a vector orthogonal to the previous direction vector
-      Vect orth = findRandOrthogonal(m_vecDirection);
-
-      //rotate around direction vector of the branch
-      //3 new branches : 0°, 120° and 240°
-      //create a vec to create the glm::matrix
-      glm::vec3 old_dir;
-      old_dir.x = m_vecDirection.getX();
-      old_dir.y = m_vecDirection.getY();
-      old_dir.z = m_vecDirection.getZ();
-      //initialize the matrix
-      glm::mat4 transform = glm::mat4(1.0f);
-      transform = glm::rotate(transform, glm::radians(i * 120.0f), old_dir);
-
-      //apply the transform to the orthogonal vector to find the two other vectors
-      glm::vec4 dir = transform * glm::vec4(convertVect_glm(orth));
-      
-      //casting it to our own type
-      Vect newDirection(dir.x, dir.y, dir.z);
-
-      bud->setVecDirection(newDirection);
-
-      //then create a new point on this branch
-      bud->createNewVertex();
-
-      newBranches.push_back(bud);
-		}
-		//stop this branch to grow
-		//to avoid creating three other branches on the next turn
-		m_finished = true;
-	}
-	//Store the new branch in the plant
-	//return the vector (which may be empty !)
-  return newBranches;
 }
 
 
@@ -194,11 +132,12 @@ void Branch::fillVectorVertices(std::vector<GLfloat>& vertices)
 		//all vertex will be stored two times -> better implementation with the element buffer for further version...
 
 
-    //Now i try to put only once each vertex
+    //Now i put only once each vertex -> display only the vertices (not the edges!)
 		v_vertices[i].fillVectorVertices(vertices);
-		//v_vertices[i+1].fillVectorVertices(vertices);
+		v_vertices[i+1].fillVectorVertices(vertices);
 	}
 }
+
 std::vector<Vertex*> Branch::fillSkeleton()
 {
   std::vector<Vertex*> vertices;
@@ -212,3 +151,4 @@ std::vector<Vertex*> Branch::fillSkeleton()
   //Note : we return the vector of vertex because, skeleton is a 2D array !
   return vertices;
 }
+
