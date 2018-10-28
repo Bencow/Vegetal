@@ -1,8 +1,9 @@
 //
 //  Vertex.cpp
-//  code generer
 //
-//  Created by Quentin Mulliez c3316168 on 13/09/2018.
+//  Author :
+//  Quentin Mulliez
+//  Benoit Coville
 //
 //
 
@@ -27,9 +28,13 @@ double Vertex::getAge(){
   return m_born;
 }
 
-std::ostream& operator <<(std::ostream& out, Vertex& myVertex){
-
-  out << myVertex.getX() << " " << myVertex.getY() << " " << myVertex.getZ() << "\n";
+std::ostream& operator <<(std::ostream& out, Vertex& v)
+{
+  //setw is just a function which print the value always on the same number of "space" on the screen
+  //because otherwise if x = 6 (1space) and y = -1234.5 (7 spaces) all the other data are shifted during displaying
+  out << " x: " << std::setw(4) << v.getX() 
+    << " y: " << std::setw(4) << v.getY() 
+    << " z: " << std::setw(4) << v.getZ() << "\n";
 
   return out;
 }
@@ -67,8 +72,8 @@ int Vertex::fillGfloatArray(GLfloat* arrayGfloat, int offset){
 
 }
 
-void Vertex::fillVectorVertices(std::vector<GLfloat>& vertices){
-
+void Vertex::fillVectorVertices(std::vector<GLfloat>& vertices)
+{
 	vertices.push_back(m_x);
     vertices.push_back(m_y);
     vertices.push_back(m_z);
