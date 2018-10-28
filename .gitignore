@@ -31,10 +31,9 @@
 *.out
 *.app
 
-#Specific visual studio files
+#Other files
 *.sdf
 *.sln
 *.suo
 *.XML
-
 *.vcxproj*

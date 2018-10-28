@@ -16,12 +16,21 @@ Plant::~Plant(){
 
 }
 
-Plant::Plant(Vertex* anchor, t_data dataDepart, Vect vecDepart): m_anchor(anchor){
-
+Plant::Plant(Vertex* anchor): m_anchor(anchor)
+{
+	/*
   v_branch.push_back(new Branch(anchor));
-  dataStructToCop(v_branch[0]->getData(), dataDepart);
+  copyData(v_branch[0]->getData(), dataDepart);
   v_branch[0]->setVecDirection(vecDepart);
+	*/
+}
 
+Plant::Plant(Vertex* anchor, t_data dataDepart, Vect vecDepart): m_anchor(anchor), m_count(0)
+{
+	//initaialize the anchor of the tree
+	m_anchor = anchor;
+	//create a first branch
+	v_branch.push_back(new Branch(anchor, dataDepart, vecDepart, &m_count));
 }
 
 std::ostream& operator <<(std::ostream& out, Plant& myPlant){
@@ -43,21 +52,32 @@ void Plant::update(){
 
 	Branch* newBranch;
 	//For all the branches in the tree
-	for(int i = 0; i < (int)v_branch.size(); i++)
+	std::cout << v_branch.size() << std::endl;
+	
+	int size_now = v_branch.size();
+
+	for(int i = 0; i < size_now ; i++)
 	{
 		//update this branch
 		newBranch = v_branch[i]->update();
-		//And if this branch created a new one
+		//And if this branch create a new one
 		if(newBranch != NULL)
 		{
 			//Add this new branch to the tree
-		   	v_branch.push_back(newBranch);
+		  v_branch.push_back(newBranch);
 		}
+	}
+	//update the counter
+	if(m_count < 4)
+	{
+		m_count++;
+		std::cout << "count=" << m_count << std::endl;
 	}
 	//test
 	std::cout << "Update Plant Done\n\n";
 
 }
+
 
 int Plant::getNumberElementPlant(){
   int somme = 0;

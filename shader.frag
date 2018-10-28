@@ -62,5 +62,6 @@ void main()
     // outColor = (diffuse + specular) * (1/(d*d));
 
 	//for this project, we will only use for the moment, we don't need texture
-    outColor = diffuse + specular + ambient;
+    //outColor = diffuse + specular + ambient;
+    outColor = vec4(1.0, 1.0, 1.0, 1.0);
 }

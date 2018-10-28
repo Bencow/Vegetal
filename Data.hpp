@@ -25,10 +25,8 @@ struct t_data{
 
 std::ostream& operator <<(std::ostream& out, t_data& myData);
 
+void copyData(t_data& dataCop, t_data& dataToCop);
 std::istream& operator >>(std::istream& in, t_data& myData);
-
-
-void dataStructToCop(t_data& dataCop, t_data& dataToCop);
 
 void readParameter(t_data& myData);
 

@@ -7,10 +7,12 @@
 #include <GL/glew.h>
 
 #include<iostream> //cout
+#include<iomanip>//setw
 #include <fstream> //fstream
 #include <vector>
 #include <ctime>
 #include <chrono>
+
 
 //Include GLFW
 #include <GLFW/glfw3.h>
@@ -120,51 +122,15 @@ bool getShaderCompileStatus(GLuint shader){
     }
 }
 
-void generateVerices(Branch& b, std::vector<GLfloat> &tab)
+GLuint createShader(GLenum type, const GLchar* src) 
 {
-  GLfloat* data;
-
-  for(unsigned int i = 0 ; i < b.getSize() ; i++)
-  {
-    //Local copy of the current vertex
-    Vertex trans(b.getVertex(i));
-    //Then push back all the data of the current vertex
-    tab.push_back(trans.getX());
-    tab.push_back(trans.getY());
-    tab.push_back(trans.getZ());
-
-    tab.push_back(trans.getR());
-    tab.push_back(trans.getG());
-    tab.push_back(trans.getB());
-
-    tab.push_back(trans.getNX());
-    tab.push_back(trans.getNY());
-    tab.push_back(trans.getNZ());
-
-    tab.push_back(trans.getTX());
-    tab.push_back(trans.getTY());
-  }
-  //test
-  for(unsigned int i = 0 ; i < 22 ; i++)
-  {
-    if(i % 11 == 0){
-      std::cout << std::endl;
-    }
-    std::cout << tab[i] << " ";
-  }
-  std::cout << std::endl;
-
-  data = tab.data();
-  for(unsigned int i = 0 ; i < 22 ; i++)
-  {
-    if(i % 11 == 0){
-      std::cout << std::endl;
-    }
-    std::cout << data[i] << " ";
-  }
-  std::cout << std::endl;
+    GLuint shader = glCreateShader(type);
+    glShaderSource(shader, 1, &src, nullptr);
+    glCompileShader(shader);
+    getShaderCompileStatus(shader);
+    return shader;
 }
-//This function make the program crash why ???
+ 
 void manage_keyboadr_events(std::vector<GLfloat> &vertices, Plant& p)
 {
   float camera_x = 0.5f;
@@ -210,10 +176,21 @@ void manage_keyboadr_events(std::vector<GLfloat> &vertices, Plant& p)
   }
 }
 
+
+
+
+
+
+//////////////////////////////////////
+//             MAIN                 //
+//////////////////////////////////////
+
+
+
 int main( void )
 {
+    srand(time(NULL));
 
-    srand(time(0));
     //Set the error callback
     glfwSetErrorCallback(error_callback);
     //Initialize GLFW
@@ -258,53 +235,58 @@ int main( void )
     ////////////////////////////////////
     std::cout << "Hello world\n\n";
 
-    Vect vDepart(0.0f, 0.0f, 0.5f);
-    Vertex pointDepart(0.0f, 0.0f, 0.0f);
+    Vect vDepart(0.025f, 0.025f, 0.5f);
+    normalize(vDepart);
+
+    Vertex pointDepart(0.0f, 0.0f, -0.6f);
     t_data dataDepart;
     
 	  readParameter(dataDepart);
 
     Plant newPlant(&pointDepart, dataDepart, vDepart);
+
+    //display our plant member variables
+
+    
     newPlant.update();
-    std::cout << newPlant << "\n\nNumber unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
+    // std::cout << newPlant << "\n\nNumber unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
+    
 
     std::vector<GLfloat> vertices;
     newPlant.fillVectorVertices(vertices);
+
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     //Note : the size total of the array is the size of a GLfloat * number of element in the vector (i.e. vertices.size() )
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
 
-
-
     //TODO: element buffer (make sure GLuint!!!!)
 
-    //Example:load shader source file
+    //load shader source file
     std::ifstream in("shader.vert");
     std::string contents((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
     const char* vertSource = contents.c_str();
-
     //Example: compile a shader source file for vertex shading
-    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertSource, NULL);
-    glCompileShader(vertexShader);
+    GLuint vertexShader = createShader(GL_VERTEX_SHADER, vertSource);
 
-    getShaderCompileStatus(vertexShader);
-
-    //TODO: load and compile fragment shader shader.frag
+    //load fragment shader
     std::ifstream in2("shader.frag");
     std::string contents2((std::istreambuf_iterator<char>(in2)), std::istreambuf_iterator<char>());
     const char* fragSource = contents2.c_str();
+    GLuint fragmentShader = createShader(GL_FRAGMENT_SHADER, fragSource);
 
-    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragSource, NULL);
-    glCompileShader(fragmentShader);
+    //load geomerty shader
+    // std::ifstream in3("shader.geom");
+    // std::string contents3((std::istreambuf_iterator<char>(in3)), std::istreambuf_iterator<char>());
+    // const char* geomSource = contents3.c_str();
+    // //Example: compile a shader source file for vertex shading
+    // GLuint geomShader = createShader(GL_GEOMETRY_SHADER, geomSource);
 
-    getShaderCompileStatus(fragmentShader);
 
     //TODO: link shaders into a program
     GLuint shaderProgram = glCreateProgram();
     glAttachShader(shaderProgram, vertexShader);
+    //glAttachShader(shaderProgram, geomShader);
     glAttachShader(shaderProgram, fragmentShader);
     glBindFragDataLocation(shaderProgram, 0, "outColor");
     glLinkProgram(shaderProgram);
@@ -381,12 +363,16 @@ int main( void )
     //Main Loop
     //clock_t start = std::clock();
     clock_t start = std::clock();
-
-
+    go_update = false;
     do
     {
         double frame_time = (double) (clock()-start) / double(CLOCKS_PER_SEC);
         float period = 5; //seconds
+
+
+        //==================================
+        //          Update tree
+        //==================================
 
         //if SPACE is pressed go_update = true
         if(go_update)
@@ -395,9 +381,10 @@ int main( void )
           newPlant.fillVectorVertices(vertices);
           glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
 
-          std::cout << newPlant << "Number unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
-
-          for(int i = 0 ; i  < vertices.size() ; ++i)
+          std::cout << "number branch " << newPlant.getNumberBranch() << std::endl;
+          //std::cout << newPlant << "Number unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
+          /*
+          for(uint i = 0 ; i  < vertices.size() ; ++i)
           {
             if((i % 11) == 0)
                std::cout << std::endl;
@@ -405,7 +392,7 @@ int main( void )
 
           }
           std::cout << std::endl;
-
+          */
           go_update = false;
         }
 
@@ -459,7 +446,8 @@ int main( void )
         //Param : 1 type of primitive
         //        2 offset (how many vertices to skip)
         //        3 number of VERTICES not primitives
-        glDrawArrays(GL_LINES, 0, newPlant.getNumberElementPlant() * 2);
+        glDrawArrays(GL_POINTS, 0, newPlant.getNumberElementPlant());
+        // glDrawArrays(GL_LINES, 0, newPlant.getNumberElementPlant() * 2);
 
         //Swap buffers
         glfwSwapBuffers(window);
@@ -472,6 +460,7 @@ int main( void )
     glDeleteTextures(1, &tex);
     glDeleteProgram(shaderProgram);
     glDeleteShader(fragmentShader);
+    //glDeleteShader(geomShader);
     glDeleteShader(vertexShader);
     glDeleteBuffers(1, &vbo);
     glDeleteVertexArrays(1, &vao);
@@ -485,63 +474,28 @@ int main( void )
     return 0;
 }
 
-int main_test()
+int main_()
 {
-  //TODO: load vertices
-  Vect vDepart(0.5f, 1.0f, 0.5f);
-  Vertex pointDepart(0.0f, 0.0f, 0.0f);
-  t_data dataDepart;
-  dataDepart.sizeNewVertices = 1.0f;
-  dataDepart.varX = 0.0f;
-  dataDepart.varY = 0.0f;
-  dataDepart.varZ = 0.0f;
-  dataDepart.sizeMaxBranch = 100;
+    srand(time(NULL));
+    //test maths functions :
+    Vect v(0.025f, 0.025f, 0.5f);
+    normalize(v);
+    for(int i = 0 ; i < 10000 ; i++)
+    {
+        v = findRandOrthogonal(v);
+        normalize(v);
+        std::cout << ".";
+    }
 
-  Plant newPlant(&pointDepart, dataDepart, vDepart);
+    
+    /*
+    int var1 = -35;
+    int var2 = 1;
 
-  std::cout << newPlant << "Number unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
-
-  std::vector<GLfloat> vertices;
-
-  //vertices.push_back(1.0f);
-  //std::cout << vertices.at(0) << std::endl;
-  //std::cout << vertices.at(0) << std::endl;
-
-  newPlant.fillVectorVertices(vertices);
-
-  for(int i = 0 ; i  < vertices.size() ; ++i)
-  {
-    std::cout << vertices[i] << " ";
-    // if((11 % i) == 0)
-    //   std::cout << std::endl;
-  }
-  std::cout << std::endl;
-
-  newPlant.update();
-  std::cout << newPlant << "Number unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
-
-  newPlant.fillVectorVertices(vertices);
-
-  for(int i = 0 ; i  < vertices.size() ; ++i)
-  {
-    std::cout << vertices[i] << " ";
-    if((i % 10) == 0)
-       std::cout << std::endl;
-  }
-  std::cout << std::endl;
-
-  newPlant.update();
-  std::cout << newPlant << "Number unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
-
-  newPlant.fillVectorVertices(vertices);
-
-  for(int i = 0 ; i  < vertices.size() ; ++i)
-  {
-    std::cout << vertices[i] << " ";
-    if((i % 10) == 0)
-       std::cout << std::endl;
-  }
-  std::cout << std::endl;
-
-  return 0;
+    std::cout << var1 << var2 << std::endl; 
+    std::cout << var2 << var1 << std::endl; 
+    std::cout << var1 << std::setw(3) << var2 << std::endl; 
+    std::cout << var1 << std::setw(3) << var2 << std::endl; 
+    */
+    return 0;
 }

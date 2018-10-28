@@ -26,11 +26,11 @@ class Plant {
     Vertex* m_anchor;
 
     std::vector<Branch*> v_branch;
-
+    int m_count;
 
   public:
     Plant();
-
+    Plant(Vertex* anchor);
     Plant(Vertex* anchor, t_data dataDepart, Vect vecDepart);
 
     ~Plant();
@@ -41,6 +41,8 @@ class Plant {
     std::vector<Branch*>& getBranchs(){return v_branch;}
 
     void update();
+
+    int getNumberBranch()const { return v_branch.size(); }
 
     int getNumberElementPlant();
 
