@@ -116,7 +116,6 @@ void setShaderAttributs(GLint posAttrib, GLint colourAttrib, GLint normalAttrib,
     glEnableVertexAttribArray(textureAttrib);
 }
 
-
 void manage_keyboadr_events(std::vector<GLfloat> &vertices, Plant& p)
 {
   float camera_x = 0.5f;
@@ -278,6 +277,18 @@ int main( void )
     std::vector<Vertex*> skeleton_leaves;
     std::vector<GLfloat> vertices_branch;
     std::vector<GLfloat> vertices_leaves;
+    GLfloat vertices_ground[] = 
+    {
+        //Pos                      colour               normal                tex
+         1.0f,  1.0f, 0.0f,    0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+        -1.0f,  1.0f, 0.0f,    0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+        -1.0f, -1.0f, 0.0f,    0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+
+         1.0f,  1.0f, 0.0f,    0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+         1.0f, -1.0f, 0.0f,    0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+        -1.0f, -1.0f, 0.0f,    0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+        
+    };
 
     //update the plant once
     newPlant.update();
@@ -331,7 +342,6 @@ int main( void )
     glBindBuffer(GL_ARRAY_BUFFER, vbo_branch);//make vbo_leaves the active array buffer
     //Note : the size total of the array is the size of a GLfloat * number of element in the vector (i.e. vertices.size() )
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices_branch.size(), vertices_branch.data(), GL_STATIC_DRAW);
-    
     setShaderAttributs(posAttrib, colourAttrib, normalAttrib, textureAttrib);
 
 
@@ -342,20 +352,17 @@ int main( void )
     glBindVertexArray(vao_leaves);//use the vao_branch as active vao
     glBindBuffer(GL_ARRAY_BUFFER, vbo_leaves);//make vbo_leaves the active array buffer
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices_leaves.size(), vertices_leaves.data(), GL_STATIC_DRAW);
-
     setShaderAttributs(posAttrib, colourAttrib, normalAttrib, textureAttrib);
 
     
     //////////////////////////////////
     //Set up things for the ground  //
     //////////////////////////////////   
-    add_volume_leaves(vertices_leaves, skeleton_leaves, 0);
-    glBindVertexArray(vao_leaves);//use the vao_branch as active vao
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_leaves);//make vbo_leaves the active array buffer
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices_leaves.size(), vertices_leaves.data(), GL_STATIC_DRAW);
+    glBindVertexArray(vao_ground);//use the vao_branch as active vao
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_ground);//make vbo_leaves the active array buffer
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_ground), vertices_ground, GL_STATIC_DRAW);
+    setShaderAttributs(posAttrib, colourAttrib, normalAttrib, textureAttrib);
 
-
-    //shader attribut.../////////////////
 
 
 
@@ -481,8 +488,9 @@ int main( void )
             glDrawArrays(GL_LINES, 0, newPlant.getNumberElementPlant() * 2);
         
 
-
-
+        //draw ground
+        glBindVertexArray(vao_ground);
+        glDrawArrays(GL_TRIANGLES, 0, 6); 
 
 
 
