@@ -1,9 +1,9 @@
 begin
-sizeNewVertices= 0.5
+sizeNewVertices= 1
 varX= 1.0
-varY= -0.5
-varZ= 0.0
-sizeMaxBranch= 10
+varY= 1.0
+varZ= 0.1
+sizeMaxBranch= 15
 frequencyNewBranch= 25
 numberBranchCreat= 1
 end

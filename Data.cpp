@@ -33,6 +33,16 @@ std::istream& operator >>(std::istream& in, t_data& myData){
   int valueInt;
   float valueFloat;
 
+  //Valeur default
+  myData.frequencyNewBranch = 0;
+  myData.numberBranchCreat = 0;
+  myData.sizeMaxBranch = 100;
+  myData.sizeNewVertices = 1.0f;
+  myData.varX = 1.0f;
+  myData.varY = 1.0f;
+  myData.varZ = 1.0f;
+
+
   do{
     in >> valueGet;
   }while(valueGet != "begin");
