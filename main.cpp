@@ -82,10 +82,13 @@ bool getShaderCompileStatus(GLuint shader){
     }
 }
 
-GLuint createShader(GLenum type, const GLchar* src) 
+GLuint createShader(GLenum type, std::string shader_name) 
 {
+    std::ifstream in(shader_name);
+    std::string contents((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
+    const char* source = contents.c_str();
     GLuint shader = glCreateShader(type);
-    glShaderSource(shader, 1, &src, nullptr);
+    glShaderSource(shader, 1, &source, nullptr);
     glCompileShader(shader);
     getShaderCompileStatus(shader);
     return shader;
@@ -264,35 +267,25 @@ int main( void )
     ///////////////////////
     GLuint vao_branch;
     GLuint vao_leaves;
+    GLuint vao_ground;
     glGenVertexArrays(1, &vao_branch);
     glGenVertexArrays(1, &vao_leaves);
+    glGenVertexArrays(1, &vao_ground);
     //generate vertex buffers
     GLuint vbo_branch;
     GLuint vbo_leaves;
+    GLuint vbo_ground;
     glGenBuffers(1, &vbo_branch);
     glGenBuffers(1, &vbo_leaves);
+    glGenBuffers(1, &vbo_ground);
 
     ///////////////////////////////
     //load all shaders           //
     ///////////////////////////////
-    std::ifstream in("shader.vert");
-    std::string contents((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
-    const char* vertSource = contents.c_str();
-    //Example: compile a shader source file for vertex shading
-    GLuint vertexShader = createShader(GL_VERTEX_SHADER, vertSource);
-
-    std::ifstream in2("shader.frag");
-    std::string contents2((std::istreambuf_iterator<char>(in2)), std::istreambuf_iterator<char>());
-    const char* fragSource = contents2.c_str();
-    GLuint fragmentShader = createShader(GL_FRAGMENT_SHADER, fragSource);
-
-    //load geomerty shader
-    // std::ifstream in3("shader.geom");
-    // std::string contents3((std::istreambuf_iterator<char>(in3)), std::istreambuf_iterator<char>());
-    // const char* geomSource = contents3.c_str();
-    // //Example: compile a shader source file for vertex shading
-    // GLuint geomShader = createShader(GL_GEOMETRY_SHADER, geomSource);
-
+    GLuint vertexShader = createShader(GL_VERTEX_SHADER, "shader.vert");
+    // GLuint geomShader = createShader(GL_GEOMETRY_SHADER, "shader.geom");
+    GLuint fragmentShader = createShader(GL_FRAGMENT_SHADER, "shader.frag");
+    
     //TODO: link shaders into a program
     GLuint shaderProgram = glCreateProgram();
     glAttachShader(shaderProgram, vertexShader);
@@ -362,6 +355,11 @@ int main( void )
 
     glVertexAttribPointer(textureAttrib, 2, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(9 * sizeof(float)));
     glEnableVertexAttribArray(textureAttrib);
+
+    //////////////////////////////////
+    //Set up things for the ground  //
+    //////////////////////////////////   
+
 
 
     //Load texture
