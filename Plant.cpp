@@ -122,7 +122,6 @@ void Plant::fillSkeleton(std::vector< std::vector<Vertex*> >& skeleton){
 	//erase the entire vector
 	skeleton.clear();//Now it's useless to earase the skeleton becaus the vertices already created don't change
 
-
 	std::cout << "number branch " << v_branch.size() << std::endl;
 	//And fill it again
 	//fill each branch
