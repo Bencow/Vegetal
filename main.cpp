@@ -33,6 +33,7 @@
 #include "Data.hpp"
 
 #define speedCamera 0.1f
+#define PRIMITIVE 1
 
 
 //just to test quickly
@@ -176,8 +177,51 @@ void manage_keyboadr_events(std::vector<GLfloat> &vertices, Plant& p)
   }
 }
 
+void printSkeleton(std::vector< std::vector<Vertex*> >& skeleton)
+{
+    std::cout << "print skeleton" << std::endl;
+    for(uint i = 0 ; i < skeleton.size() ; i++)
+    {
+        for(uint j = 0 ; j < skeleton[i].size() ; j++)
+        {
+            std::cout << *skeleton[i][j];
+        }
+        std::cout << std::endl;
+    }
+}
 
-
+void addVolume(std::vector<GLfloat> &vertices, std::vector< std::vector<Vertex*> >& skeleton, int type_primitive)
+{
+    if(type_primitive == 0)//Simple vertex
+    {
+        //fill the vector vertices with all the points contained in the skeleton
+        //For all the branches
+        for(uint i = 0 ; i < skeleton.size() ; i++)
+        {
+            //for all the vertices in the branch n°i
+            for(uint j = 0 ; j < skeleton[i].size() ; j++)
+            {
+                //copy all the floats of the vertex in the array vertices
+                skeleton[i][j]->fillVectorVertices(vertices);
+            }
+        }
+    }
+    if(type_primitive == 1)//line between the current vertex and the next one
+    {
+        //for all branches
+        for(uint i = 0 ; i < skeleton.size() ; i++)
+        {
+            //for all vertices in branch i (except the last one)
+            for(uint j = 0 ; j < skeleton[i].size()-1 ; ++j)
+            {
+                //copy the current vertex and the next one to draw a line between both
+                skeleton[i][j]->fillVectorVertices(vertices);
+                skeleton[i][j+1]->fillVectorVertices(vertices);
+            }
+        }
+    }
+    std::cout << "END add volume" << std::endl;
+}
 
 
 
@@ -251,9 +295,35 @@ int main( void )
     newPlant.update();
     // std::cout << newPlant << "\n\nNumber unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
     
+    //Skeleton is an array of array
+    //first dimension of the array is the branch
+    //second is the vertex
+    std::vector< std::vector<Vertex*> > skeleton;
+    newPlant.fillSkeleton(skeleton);
+
+    std::cout << "number branch " << newPlant.getNumberBranch() << std::endl;
+    std::cout << "number element " << newPlant.getNumberElementPlant() << std::endl;
+    //std::cout << newPlant << "Number unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
+
+
 
     std::vector<GLfloat> vertices;
-    newPlant.fillVectorVertices(vertices);
+    addVolume(vertices, skeleton, PRIMITIVE);
+
+
+    printSkeleton(skeleton);
+
+    // //print vertices
+    // for(uint i = 0 ; i  < vertices.size() ; ++i)
+    // {
+    //   if((i % 11) == 0)
+    //      std::cout << std::endl;
+    //   std::cout << vertices[i] << " ";
+      
+    // }
+
+
+
 
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -359,7 +429,6 @@ int main( void )
     glUniformMatrix4fv(uniProj, 1, GL_FALSE, glm::value_ptr(proj));
 
 
-
     //Main Loop
     //clock_t start = std::clock();
     clock_t start = std::clock();
@@ -369,7 +438,6 @@ int main( void )
         double frame_time = (double) (clock()-start) / double(CLOCKS_PER_SEC);
         float period = 5; //seconds
 
-
         //==================================
         //          Update tree
         //==================================
@@ -378,21 +446,26 @@ int main( void )
         if(go_update)
         {
           newPlant.update();
-          newPlant.fillVectorVertices(vertices);
+          newPlant.fillSkeleton(skeleton);
+          addVolume(vertices, skeleton, PRIMITIVE);
           glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
 
           std::cout << "number branch " << newPlant.getNumberBranch() << std::endl;
+          std::cout << "number element " << newPlant.getNumberElementPlant() << std::endl;
           //std::cout << newPlant << "Number unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
-          /*
-          for(uint i = 0 ; i  < vertices.size() ; ++i)
-          {
-            if((i % 11) == 0)
-               std::cout << std::endl;
-            std::cout << vertices[i] << " ";
 
-          }
-          std::cout << std::endl;
-          */
+          
+          printSkeleton(skeleton);
+
+          // //print vertices
+          // for(uint i = 0 ; i  < vertices.size() ; ++i)
+          // {
+          //   if((i % 11) == 0)
+          //      std::cout << std::endl;
+          //   std::cout << std::setw(12) << vertices[i] << " ";
+            
+          // }
+
           go_update = false;
         }
 
@@ -446,8 +519,12 @@ int main( void )
         //Param : 1 type of primitive
         //        2 offset (how many vertices to skip)
         //        3 number of VERTICES not primitives
-        glDrawArrays(GL_POINTS, 0, newPlant.getNumberElementPlant());
-        // glDrawArrays(GL_LINES, 0, newPlant.getNumberElementPlant() * 2);
+
+        if(PRIMITIVE == 0)
+            glDrawArrays(GL_POINTS, 0, newPlant.getNumberElementPlant());
+        if(PRIMITIVE == 1)
+            glDrawArrays(GL_LINES, 0, newPlant.getNumberElementPlant() * 2);
+
 
         //Swap buffers
         glfwSwapBuffers(window);
@@ -471,31 +548,5 @@ int main( void )
     glfwTerminate();
 
     exit(EXIT_SUCCESS);
-    return 0;
-}
-
-int main_()
-{
-    srand(time(NULL));
-    //test maths functions :
-    Vect v(0.025f, 0.025f, 0.5f);
-    normalize(v);
-    for(int i = 0 ; i < 10000 ; i++)
-    {
-        v = findRandOrthogonal(v);
-        normalize(v);
-        std::cout << ".";
-    }
-
-    
-    /*
-    int var1 = -35;
-    int var2 = 1;
-
-    std::cout << var1 << var2 << std::endl; 
-    std::cout << var2 << var1 << std::endl; 
-    std::cout << var1 << std::setw(3) << var2 << std::endl; 
-    std::cout << var1 << std::setw(3) << var2 << std::endl; 
-    */
     return 0;
 }
