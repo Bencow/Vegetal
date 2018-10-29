@@ -52,7 +52,7 @@ class Plant {
 
     int getNumberUniqueVertexPlant();
     
-    uint getNumberLeaves();
+    int getNumberLeaves();
 
 
     void fillVectorVertices(std::vector<GLfloat>& vertices);
