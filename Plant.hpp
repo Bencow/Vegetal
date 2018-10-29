@@ -63,6 +63,8 @@ class Plant {
     void fillSkeleton(std::vector< std::vector<Vertex*> >& skeleton);
     void add_leaves(std::vector<Vertex*>& leaves_skeleton);
 
+	void reset(t_data newData, Vect vecDepart);
+
 
 
 };

@@ -34,6 +34,18 @@ Plant::Plant(Vertex* anchor, t_data dataDepart, Vect vecDepart) : m_anchor(ancho
 
 }
 
+void Plant::reset(t_data newData, Vect vecDepart) {
+	v_branch.clear();
+	v_leaves.clear();
+
+	m_count = 0;
+	m_turnUpdate = 0;
+
+	v_branch.push_back(new Branch(m_anchor, newData, vecDepart, &m_count));
+
+}
+
+
 std::ostream& operator <<(std::ostream& out, Plant& myPlant){
 
   out << "Anchor : " << *myPlant.getAnchor();
@@ -74,7 +86,6 @@ void Plant::update(){
 	if(m_count < 4)
 	{
 		m_count++;
-		std::cout << "count=" << m_count << std::endl;
 	}
 	//test
 	std::cout << "Update Plant Done\n\n";

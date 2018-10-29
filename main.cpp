@@ -50,6 +50,7 @@ bool go_update = false;
 bool go_update_leaves = false;
 bool go_update_graphic = false;
 bool go_wind = false;
+bool go_reset = false;
 
 //Camera gesture
 float camera_x = 5.0f;
@@ -89,6 +90,10 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
   if(key == GLFW_KEY_L && action == GLFW_PRESS)
   {
     go_update_leaves = true;
+  }
+  if (key == GLFW_KEY_ENTER && action == GLFW_PRESS)
+  {
+	  go_reset = true;
   }
   else if (key == GLFW_KEY_V && action == GLFW_PRESS)
   {
@@ -640,6 +645,14 @@ int main( void )
 
         //update tree
         //if SPACE is pressed go_update = true
+		if (go_reset) {
+			readParameter(dataDepart);
+			newPlant.reset(dataDepart, vDepart);
+
+
+			go_update_graphic = true;
+			go_reset = false;
+		}
         if(go_update)
         {
           newPlant.update();
@@ -650,6 +663,8 @@ int main( void )
           //copy the data to it
           glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices_branch.size(), vertices_branch.data(), GL_STATIC_DRAW);
           go_update = false;
+
+		  printSkeleton(skeleton_branch);
         }
         //update leaves
         if(go_update_leaves)
@@ -668,6 +683,7 @@ int main( void )
 			glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices_branch.size(), vertices_branch.data(), GL_STATIC_DRAW);
 			go_update_graphic = false;
 		}
+		
 
         //draw leaves
         glBindVertexArray(vao_leaves);
