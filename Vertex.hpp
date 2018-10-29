@@ -39,12 +39,12 @@ class Vertex {
     float m_tx;
     float m_ty;
 
-    double m_born;
+    int m_born;
 
   public:
     //Constructor
     Vertex();
-    Vertex(float x, float y, float z);
+    Vertex(float x, float y, float z, int age = 0);
     //Destructor
     ~Vertex();
 
@@ -83,8 +83,8 @@ class Vertex {
     float getTY()const {return m_ty;}
     void setTY(float value){m_ty = value;}
 
-    double getBorn()const {return m_born;}
-    void setBorn(double value){m_born = value;}
+    int getBorn()const {return m_born;}
+    void setBorn(int value){m_born = value;}
 
     ///Members
     double getAge();

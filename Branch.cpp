@@ -47,7 +47,7 @@ std::ostream& operator <<(std::ostream& out, Branch& myBranch){
   return out;
 }
 
-Branch* Branch::update()
+Branch* Branch::update(int updateTurn)
 {
 
   if((int)v_vertices.size() > m_data.sizeMaxBranch)
@@ -94,13 +94,13 @@ Branch* Branch::update()
   }
   //the current branch create a new vertex
 
-  createNewVertex();
+	createNewVertex(updateTurn);
 
 
    return newBranch;
 }
 
-void Branch::createNewVertex()
+void Branch::createNewVertex(int updateTurn)
 {
   Vertex lastVertexBranch = v_vertices.back();
   //Pi + (Vi * L)
@@ -109,7 +109,7 @@ void Branch::createNewVertex()
   Vertex newVertex(lastVertexBranch.getX() + (m_vecDirection.getX() * m_data.sizeNewVertices),
              lastVertexBranch.getY() + (m_vecDirection.getY() * m_data.sizeNewVertices),
              lastVertexBranch.getZ() + (m_vecDirection.getZ() * m_data.sizeNewVertices));
-  newVertex.setBorn(0.0);
+  newVertex.setBorn(updateTurn);
   v_vertices.push_back(newVertex);
 }
 

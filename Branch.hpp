@@ -57,8 +57,8 @@ class Branch {
 
     void addVertex(const Vertex& newOne);
 
-    Branch* update();
-    void createNewVertex();
+    Branch* update(int updateTurn);
+    void createNewVertex(int updateTurn);
 
 
     int getNumberElementBranch();
