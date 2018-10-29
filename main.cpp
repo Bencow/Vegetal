@@ -249,16 +249,16 @@ void add_volume_branch(std::vector<GLfloat> &vertices, std::vector< std::vector<
 
 				Vect v = crossProduct(w, u);
 				
-				for (float i = 0.0f; i < 360.0f; i += 1.0f) {
+				for (float k = 0.0f; k < 360.0f; k += 1.0f) {
 
-					float size = (turnUpdate - v1->getBorn()) * 0.05f ;
+					float size = (turnUpdate - v1->getBorn()) * 0.03f ;
 
 					Vertex p1;
 					Vertex p2;
 			
-					p1.setX(v1->getX() + ((cos(i) * u.getX() + sin(i)* v.getX())* size));
-					p1.setY(v1->getY() + ((cos(i) * u.getY() + sin(i)* v.getY())* size));
-					p1.setZ(v1->getZ() + ((cos(i) * u.getZ() + sin(i)* v.getZ())* size));
+					p1.setX(v1->getX() + ((cos(k) * u.getX() + sin(k)* v.getX())* size));
+					p1.setY(v1->getY() + ((cos(k) * u.getY() + sin(k)* v.getY())* size));
+					p1.setZ(v1->getZ() + ((cos(k) * u.getZ() + sin(k)* v.getZ())* size));
 
 					
 					p2.setX(p1.getX() + w.getX());
@@ -267,7 +267,13 @@ void add_volume_branch(std::vector<GLfloat> &vertices, std::vector< std::vector<
 					
 					//v1->fillVectorVertices(vertices);
 					p1.fillVectorVertices(vertices);
-					p2.fillVectorVertices(vertices);
+
+					if (j == skeleton[i].size() - 2) {
+						v2->fillVectorVertices(vertices);
+					}
+					else {
+						p2.fillVectorVertices(vertices);
+					}
 
 					//v2->fillVectorVertices(vertices);
 				}
@@ -347,13 +353,13 @@ int main( void )
     GLfloat vertices_ground[] =
     {
         //Pos                  colour               normal                tex
-         1.0f,  1.0f, 0.0f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
-        -1.0f,  1.0f, 0.0f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
-        -1.0f, -1.0f, 0.0f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+         100.0f,  100.0f, 0.0f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+        -100.0f,  100.0f, 0.0f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+        -100.0f, -100.0f, 0.0f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
 
-         1.0f,  1.0f, 0.0f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
-         1.0f, -1.0f, 0.0f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
-        -1.0f, -1.0f, 0.0f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+         100.0f,  100.0f, 0.0f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+         100.0f, -100.0f, 0.0f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+        -100.0f, -100.0f, 0.0f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
         
     };
 
