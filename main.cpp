@@ -40,6 +40,7 @@
 bool go_update = false;
 bool go_update_leaves = false;
 bool go_update_graphic = false;
+bool go_wind = false;
 
 //Camera gesture
 float camera_x = 5.0f;
@@ -79,6 +80,15 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
   if(key == GLFW_KEY_L && action == GLFW_PRESS)
   {
     go_update_leaves = true;
+  }
+  else if (key == GLFW_KEY_V && action == GLFW_PRESS)
+  {
+	  if (go_wind) {
+		  go_wind = false;
+	  }
+	  else {
+		  go_wind = true;
+	  }
   }
   else if(key == GLFW_KEY_A && (action == GLFW_PRESS || action == GLFW_REPEAT)){
 	  camera_angle_rotation -= speedRotation;
@@ -186,7 +196,7 @@ void printSkeleton(std::vector< std::vector<Vertex*> >& skeleton)
     }
 }
 
-void add_volume_branch(std::vector<GLfloat> &vertices, std::vector< std::vector<Vertex*> >& skeleton, int type_primitive, int turnUpdate)
+void add_volume_branch(std::vector<GLfloat> &vertices, std::vector< std::vector<Vertex*> >& skeleton, int type_primitive, int turnUpdate, Vect myWind)
 {
 
 	vertices.clear();
@@ -408,7 +418,7 @@ int main( void )
     //////////////////////////////////
     //Set up things for the branches//
     //////////////////////////////////
-    add_volume_branch(vertices_branch, skeleton_branch, PRIMITIVE, newPlant.getTurnUpdate());
+    add_volume_branch(vertices_branch, skeleton_branch, PRIMITIVE, newPlant.getTurnUpdate(), Vect(0.0f, 0.0f, 0.0f));
     //the vao will store the vbo with it and every time you bind it and call 
     //glDrawArrays, it will use the vbo associated with the bound vao
     glBindVertexArray(vao_branch);//use the vao_branch as active vao
@@ -482,6 +492,7 @@ int main( void )
     GLint uniProj = glGetUniformLocation(shaderProgram, "proj");
     glUniformMatrix4fv(uniProj, 1, GL_FALSE, glm::value_ptr(proj));
 
+	Vect myWind(0.0f, 0.0f, 0.0f);
 
     //Main Loop
     //clock_t start = std::clock();
@@ -547,6 +558,16 @@ int main( void )
         //draw background
         //...
 
+		if (go_wind){
+			//variation of wind
+
+			go_update_graphic = true;
+		}
+		else {
+			myWind.setX(0.0f);
+			myWind.setY(0.0f);
+			myWind.setZ(0.0f);
+		}
 
         //update tree
         //if SPACE is pressed go_update = true
@@ -554,7 +575,7 @@ int main( void )
         {
           newPlant.update();
           newPlant.fillSkeleton(skeleton_branch);
-          add_volume_branch(vertices_branch, skeleton_branch, PRIMITIVE, newPlant.getTurnUpdate());
+          add_volume_branch(vertices_branch, skeleton_branch, PRIMITIVE, newPlant.getTurnUpdate(), myWind);
           //make vbo_branch the active array buffer
           glBindBuffer(GL_ARRAY_BUFFER, vbo_branch);
           //copy the data to it
@@ -572,7 +593,7 @@ int main( void )
         }
 		if(go_update_graphic) {
 			newPlant.fillSkeleton(skeleton_branch);
-			add_volume_branch(vertices_branch, skeleton_branch, PRIMITIVE, newPlant.getTurnUpdate());
+			add_volume_branch(vertices_branch, skeleton_branch, PRIMITIVE, newPlant.getTurnUpdate(), myWind);
 			glBindBuffer(GL_ARRAY_BUFFER, vbo_branch);
 			//copy the data to it
 			glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices_branch.size(), vertices_branch.data(), GL_STATIC_DRAW);
