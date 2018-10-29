@@ -86,7 +86,7 @@ Branch* Branch::update(int updateTurn)
 
 		  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		  //Create a new branch with the last node of the previous branch as anchor
-		  newBranch = new Branch(&v_vertices.back(), m_data , orthogonal, m_count);
+		  newBranch = new Branch(&v_vertices[v_vertices.size() - 1], m_data , orthogonal, m_count);
 		  //newBranch->createNewVertex();
 		  //the current branch create a new vertex
   }
