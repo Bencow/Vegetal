@@ -41,8 +41,6 @@
 #define LINES 1
 #define TRIANGLES 2
 
-
-#define PRIMITIVE 1
 #define PRIMITIVE_LEAVES 0
 
 
@@ -232,10 +230,10 @@ void add_volume_branch(std::vector<GLfloat> &vertices, std::vector< std::vector<
 	if (type_primitive == 2) //Cylinder
 	{
 		//for all branches
-		for (int i = 0; i < skeleton.size(); i++)
+		for (int i = 0; i < (int)skeleton.size(); i++)
 		{
 			//for all vertices in branch i (except the last one)
-			for (int j = 0; j < skeleton[i].size() - 1; ++j)
+			for (int j = 0; j < (int)skeleton[i].size() - 1; ++j)
 			{
 
 				Vertex* v1 = skeleton[i][j];
@@ -278,7 +276,7 @@ void add_volume_branch(std::vector<GLfloat> &vertices, std::vector< std::vector<
 					//v1->fillVectorVertices(vertices);
 					p1.fillVectorVertices(vertices);
 
-					if (j == skeleton[i].size() - 2) {
+					if (j == (int)skeleton[i].size() - 2) {
 						v2->fillVectorVertices(vertices);
 					}
 					else {
