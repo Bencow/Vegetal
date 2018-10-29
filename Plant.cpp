@@ -144,7 +144,7 @@ void Plant::add_leaves(std::vector<Vertex*>& leaves_skeleton)
 	}
 }
 
-uint Plant::getNumberLeaves()
+int Plant::getNumberLeaves()
 {
 	return v_leaves.size();
 }

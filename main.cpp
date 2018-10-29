@@ -118,7 +118,6 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 	  if (PRIMITIVE > 2) {
 		  PRIMITIVE = 0;
 	  }
-
 	  go_update_graphic = true;
   }
 }
@@ -263,9 +262,6 @@ void add_volume_branch(std::vector<GLfloat> &vertices, std::vector< std::vector<
 					p1.fillVectorVertices(vertices);
 					v2->fillVectorVertices(vertices);
 				}
-				//copy the current vertex and the next one to draw a line between both
-				//v1->fillVectorVertices(vertices);
-				//v2->fillVectorVertices(vertices);
 			}
 		}
 	}
@@ -486,38 +482,7 @@ int main( void )
         //==================================
 
         //if SPACE is pressed go_update = true
-        if(go_update)
-        {
-          newPlant.update();
-          newPlant.fillSkeleton(skeleton);
-          addVolume(vertices, skeleton, PRIMITIVE);
-          glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
-
-          //std::cout << "number branch " << newPlant.getNumberBranch() << std::endl;
-          //std::cout << "number element " << newPlant.getNumberElementPlant() << std::endl;
-          //std::cout << newPlant << "Number unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
-
-
-          //printSkeleton(skeleton);
-
-          // //print vertices
-          // for(uint i = 0 ; i  < vertices.size() ; ++i)
-          // {
-          //   if((i % 11) == 0)
-          //      std::cout << std::endl;
-          //   std::cout << std::setw(12) << vertices[i] << " ";
-
-          // }
-
-          go_update = false;
-        }
-		else if (go_update_graphic) {
-			newPlant.fillSkeleton(skeleton);
-			addVolume(vertices, skeleton, PRIMITIVE);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
-
-			go_update_graphic = false;
-		}
+		
 
         //==================================
         //       TODO: 3D Transforms
@@ -590,6 +555,14 @@ int main( void )
             glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices_leaves.size(), vertices_leaves.data(), GL_STATIC_DRAW);
             go_update_leaves = false;
         }
+		if(go_update_graphic) {
+			newPlant.fillSkeleton(skeleton_branch);
+			add_volume_branch(vertices_branch, skeleton_branch, PRIMITIVE);
+			glBindBuffer(GL_ARRAY_BUFFER, vbo_branch);
+			//copy the data to it
+			glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices_branch.size(), vertices_branch.data(), GL_STATIC_DRAW);
+			go_update_graphic = false;
+		}
 
         //draw leaves
         glBindVertexArray(vao_leaves);
@@ -606,8 +579,8 @@ int main( void )
             glDrawArrays(GL_POINTS, 0, newPlant.getNumberElementPlant());
         if(PRIMITIVE == 1)
             glDrawArrays(GL_LINES, 0, newPlant.getNumberElementPlant() * 2);
-      if (PRIMITIVE == 2)
-			      glDrawArrays(GL_LINES, 0, newPlant.getNumberElementPlant() * 2 * 360);
+		if (PRIMITIVE == 2)
+			glDrawArrays(GL_LINES, 0, newPlant.getNumberElementPlant() * 2 * 360);
 
        //draw ground
        glBindVertexArray(vao_ground);
