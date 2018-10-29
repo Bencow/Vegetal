@@ -34,11 +34,11 @@
 
 #define speedCamera 1.0f
 #define speedRotation 10.0f
-#define PRIMITIVE 2
 
 
 //just to test quickly
 bool go_update = false;
+bool go_update_graphic = false;
 
 //Camera gesture
 float camera_x = 5.0f;
@@ -48,6 +48,10 @@ float camera_target_x = 0.0f;
 float camera_target_y = 0.0f;
 float camera_target_z = 1.0f;
 float camera_angle_rotation = 0;
+
+
+
+int PRIMITIVE = 0;
 
 //Define an error callback
 static void error_callback(int error, const char* description)
@@ -105,6 +109,15 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     camera_target_z -= speedCamera;
   }
 
+  else if (key == GLFW_KEY_B && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+	  PRIMITIVE++;
+	  if (PRIMITIVE > 2) {
+		  PRIMITIVE = 0;
+	  }
+
+	  go_update_graphic = true;
+  }
+
 }
 
 bool getShaderCompileStatus(GLuint shader){
@@ -147,6 +160,9 @@ void printSkeleton(std::vector< std::vector<Vertex*> >& skeleton)
 
 void addVolume(std::vector<GLfloat> &vertices, std::vector< std::vector<Vertex*> >& skeleton, int type_primitive)
 {
+
+	vertices.clear();
+
     if(type_primitive == 0)//Simple vertex
     {
         //fill the vector vertices with all the points contained in the skeleton
@@ -203,6 +219,7 @@ void addVolume(std::vector<GLfloat> &vertices, std::vector< std::vector<Vertex*>
 				Vertex p1;
 				Vertex p2;
 
+				
 				for (int i = 0; i < 360; i++) {
 			
 					p1.setX(v1->getX() + (cos(i) * u.getX() + sin(i)* v.getX())* 0.2f); //1.0f size to change after
@@ -218,8 +235,8 @@ void addVolume(std::vector<GLfloat> &vertices, std::vector< std::vector<Vertex*>
 					v2->fillVectorVertices(vertices);
 				}
 				//copy the current vertex and the next one to draw a line between both
-				//skeleton[i][j]->fillVectorVertices(vertices);
-				//skeleton[i][j + 1]->fillVectorVertices(vertices);
+				//v1->fillVectorVertices(vertices);
+				//v2->fillVectorVertices(vertices);
 			}
 		}
 	}
@@ -471,6 +488,13 @@ int main( void )
 
           go_update = false;
         }
+		else if (go_update_graphic) {
+			newPlant.fillSkeleton(skeleton);
+			addVolume(vertices, skeleton, PRIMITIVE);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
+
+			go_update_graphic = false;
+		}
 
         //==================================
         //       TODO: 3D Transforms
