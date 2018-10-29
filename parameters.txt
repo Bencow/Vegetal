@@ -4,6 +4,6 @@ varX= 1.0
 varY= 1.0
 varZ= 0.1
 sizeMaxBranch= 10
-frequencyNewBranch= 20
+frequencyNewBranch= 25
 numberBranchCreat= 1
 end

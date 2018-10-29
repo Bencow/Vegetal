@@ -303,7 +303,7 @@ void add_volume_branch(std::vector<GLfloat> &vertices, std::vector< std::vector<
 				
 				for (float k = 0.0f; k < 360.0f; k += 1.0f) {
 
-					float size = (turnUpdate - v1->getBorn()) * 0.03f ;
+					float size = (turnUpdate - v1->getBorn()) * 0.01f ;
 
 					Vertex p1;
 					Vertex p2;
