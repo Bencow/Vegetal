@@ -38,6 +38,7 @@
 
 //just to test quickly
 bool go_update = false;
+bool go_update_leaves = false;
 bool go_update_graphic = false;
 
 //Camera gesture
@@ -75,6 +76,10 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
   {
     go_update = true;
   }
+  if(key == GLFW_KEY_L && action == GLFW_PRESS)
+  {
+    go_update_leaves = true;
+  }
   else if(key == GLFW_KEY_A && (action == GLFW_PRESS || action == GLFW_REPEAT)){
 	  camera_angle_rotation -= speedRotation;
 	  if (camera_angle_rotation < 0) {
@@ -108,7 +113,6 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
   else if(key == GLFW_KEY_DOWN && (action == GLFW_PRESS || action == GLFW_REPEAT)){
     camera_target_z -= speedCamera;
   }
-
   else if (key == GLFW_KEY_B && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
 	  PRIMITIVE++;
 	  if (PRIMITIVE > 2) {
@@ -117,7 +121,6 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 
 	  go_update_graphic = true;
   }
-
 }
 
 bool getShaderCompileStatus(GLuint shader){
@@ -135,22 +138,48 @@ bool getShaderCompileStatus(GLuint shader){
     }
 }
 
-GLuint createShader(GLenum type, const GLchar* src)
+
+GLuint createShader(GLenum type, std::string shader_name) 
 {
+    std::ifstream in(shader_name);
+    std::string contents((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
+    const char* source = contents.c_str();
     GLuint shader = glCreateShader(type);
-    glShaderSource(shader, 1, &src, nullptr);
+    glShaderSource(shader, 1, &source, nullptr);
     glCompileShader(shader);
     getShaderCompileStatus(shader);
     return shader;
+}
+ 
+void setShaderAttributs(GLint posAttrib, GLint colourAttrib, GLint normalAttrib, GLint textureAttrib)
+{
+    //TODO: link vertex data to shader
+    //Param : 1 input
+    //        2 nbr of value for that input
+    //        3 type of component
+    //        4 do the components have to be normalized (only the normal !)
+    //        5 number of bit for the other components
+    //        6 offset
+    glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 11*sizeof(float), 0);
+    glEnableVertexAttribArray(posAttrib);
+
+    glVertexAttribPointer(colourAttrib, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(colourAttrib);
+
+    glVertexAttribPointer(normalAttrib, 3, GL_FLOAT, GL_TRUE, 11 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(normalAttrib);
+
+    glVertexAttribPointer(textureAttrib, 2, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(9 * sizeof(float)));
+    glEnableVertexAttribArray(textureAttrib);
 }
 
 
 void printSkeleton(std::vector< std::vector<Vertex*> >& skeleton)
 {
     std::cout << "print skeleton" << std::endl;
-    for(int i = 0 ; i < skeleton.size() ; i++)
+    for(int i = 0 ; i < (int)skeleton.size() ; i++)
     {
-        for(int j = 0 ; j < skeleton[i].size() ; j++)
+        for(int j = 0 ; j < (int)skeleton[i].size() ; j++)
         {
             std::cout << *skeleton[i][j];
         }
@@ -158,7 +187,7 @@ void printSkeleton(std::vector< std::vector<Vertex*> >& skeleton)
     }
 }
 
-void addVolume(std::vector<GLfloat> &vertices, std::vector< std::vector<Vertex*> >& skeleton, int type_primitive)
+void add_volume_branch(std::vector<GLfloat> &vertices, std::vector< std::vector<Vertex*> >& skeleton, int type_primitive)
 {
 
 	vertices.clear();
@@ -167,10 +196,10 @@ void addVolume(std::vector<GLfloat> &vertices, std::vector< std::vector<Vertex*>
     {
         //fill the vector vertices with all the points contained in the skeleton
         //For all the branches
-        for(int i = 0 ; i < skeleton.size() ; i++)
+        for(int i = 0 ; i < (int)skeleton.size() ; i++)
         {
             //for all the vertices in the branch n°i
-            for(int j = 0 ; j < skeleton[i].size() ; j++)
+            for(int j = 0 ; j < (int)skeleton[i].size() ; j++)
             {
                 //copy all the floats of the vertex in the array vertices
                 skeleton[i][j]->fillVectorVertices(vertices);
@@ -180,10 +209,10 @@ void addVolume(std::vector<GLfloat> &vertices, std::vector< std::vector<Vertex*>
     if(type_primitive == 1)//line between the current vertex and the next one
     {
         //for all branches
-        for(int i = 0 ; i < skeleton.size() ; i++)
+        for(int i = 0 ; i < (int)skeleton.size() ; i++)
         {
             //for all vertices in branch i (except the last one)
-            for(int j = 0 ; j < skeleton[i].size()-1 ; ++j)
+            for(int j = 0 ; j < (int)skeleton[i].size()-1 ; ++j)
             {
                 //copy the current vertex and the next one to draw a line between both
                 skeleton[i][j]->fillVectorVertices(vertices);
@@ -244,13 +273,21 @@ void addVolume(std::vector<GLfloat> &vertices, std::vector< std::vector<Vertex*>
     std::cout << "END add volume" << std::endl;
 }
 
-
+void add_volume_leaves(std::vector<GLfloat>& leaves, std::vector<Vertex*> skeleton_leaves, int primitive)
+{
+    if(true)//add the type of primitive after
+    {
+        for(int i = 0 ; i < (int)skeleton_leaves.size() ; ++i)
+        {
+            //copy all the floats of the vertex in the array vertices
+            skeleton_leaves[i]->fillVectorVertices(leaves);
+        }
+    }
+}
 
 //////////////////////////////////////
 //             MAIN                 //
 //////////////////////////////////////
-
-
 
 int main( void )
 {
@@ -285,94 +322,64 @@ int main( void )
         fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
         return -1;
     }
-
-    //TODO: create Vertex array object
-    GLuint vao;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-
-    // Example: generate vertex buffers
-    GLuint vbo;
-    glGenBuffers(1, &vbo);
-
     ////////////////////////////////////
-    //       TODO: load vertices      //
+    //       Load vertices            //
     ////////////////////////////////////
-    std::cout << "Hello world\n\n";
 
+    //create a plant
     Vect vDepart(0.0f, 0.0f, 1.0f);
-
     Vertex pointDepart(0.0f, 0.0f, 0.0f);
     t_data dataDepart;
 
-	readParameter(dataDepart);
+  	readParameter(dataDepart);
 
     Plant newPlant(&pointDepart, dataDepart, vDepart);
 
-    //display our plant member variables
+    std::vector< std::vector<Vertex*> > skeleton_branch;
+    std::vector<Vertex*> skeleton_leaves;
+    std::vector<GLfloat> vertices_branch;
+    std::vector<GLfloat> vertices_leaves;
+    GLfloat vertices_ground[] =
+    {
+        //Pos                  colour               normal                tex
+         1.0f,  1.0f, -0.6f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+        -1.0f,  1.0f, -0.6f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+        -1.0f, -1.0f, -0.6f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
 
+         1.0f,  1.0f, -0.6f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+         1.0f, -1.0f, -0.6f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+        -1.0f, -1.0f, -0.6f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+        
+    };
 
+    //update the plant once
     newPlant.update();
-    // std::cout << newPlant << "\n\nNumber unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
+    newPlant.fillSkeleton(skeleton_branch);
 
-    //Skeleton is an array of array
-    //first dimension of the array is the branch
-    //second is the vertex
-    std::vector< std::vector<Vertex*> > skeleton;
-    newPlant.fillSkeleton(skeleton);
+    ///////////////////////
+    //create buffers     //
+    ///////////////////////
+    GLuint vao_branch;
+    GLuint vao_leaves;
+    GLuint vao_ground;
+    glGenVertexArrays(1, &vao_branch);
+    glGenVertexArrays(1, &vao_leaves);
+    glGenVertexArrays(1, &vao_ground);
+    //generate vertex buffers
+    GLuint vbo_branch;
+    GLuint vbo_leaves;
+    GLuint vbo_ground;
+    glGenBuffers(1, &vbo_branch);
+    glGenBuffers(1, &vbo_leaves);
+    glGenBuffers(1, &vbo_ground);
 
-    std::cout << "number branch " << newPlant.getNumberBranch() << std::endl;
-    std::cout << "number element " << newPlant.getNumberElementPlant() << std::endl;
-    //std::cout << newPlant << "Number unique vertex : " << newPlant.getNumberUniqueVertexPlant() << "\n";
-
-
-
-    std::vector<GLfloat> vertices;
-    addVolume(vertices, skeleton, PRIMITIVE);
-
-
-    printSkeleton(skeleton);
-
-    // //print vertices
-    // for(uint i = 0 ; i  < vertices.size() ; ++i)
-    // {
-    //   if((i % 11) == 0)
-    //      std::cout << std::endl;
-    //   std::cout << vertices[i] << " ";
-
-    // }
-
-
-
-
-
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    //Note : the size total of the array is the size of a GLfloat * number of element in the vector (i.e. vertices.size() )
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
-
-    //TODO: element buffer (make sure GLuint!!!!)
-
-    //load shader source file
-    std::ifstream in("shader.vert");
-    std::string contents((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
-    const char* vertSource = contents.c_str();
-    //Example: compile a shader source file for vertex shading
-    GLuint vertexShader = createShader(GL_VERTEX_SHADER, vertSource);
-
-    //load fragment shader
-    std::ifstream in2("shader.frag");
-    std::string contents2((std::istreambuf_iterator<char>(in2)), std::istreambuf_iterator<char>());
-    const char* fragSource = contents2.c_str();
-    GLuint fragmentShader = createShader(GL_FRAGMENT_SHADER, fragSource);
-
-    //load geomerty shader
-    // std::ifstream in3("shader.geom");
-    // std::string contents3((std::istreambuf_iterator<char>(in3)), std::istreambuf_iterator<char>());
-    // const char* geomSource = contents3.c_str();
-    // //Example: compile a shader source file for vertex shading
-    // GLuint geomShader = createShader(GL_GEOMETRY_SHADER, geomSource);
-
-
+    ///////////////////////////////
+    //load all shaders           //
+    ///////////////////////////////
+    GLuint vertexShader = createShader(GL_VERTEX_SHADER, "shader.vert");
+    //GLuint geomShader = createShader(GL_GEOMETRY_SHADER, "shader.geom");
+    GLuint fragmentShader = createShader(GL_FRAGMENT_SHADER, "shader.frag");
+    
     //TODO: link shaders into a program
     GLuint shaderProgram = glCreateProgram();
     glAttachShader(shaderProgram, vertexShader);
@@ -382,29 +389,45 @@ int main( void )
     glLinkProgram(shaderProgram);
     glUseProgram(shaderProgram);
 
-
-    //TODO: link vertex data to shader
-    //Param : 1 input
-    //        2 nbr of value for that input
-    //        3 type of component
-    //        4 do the components have to be normalized (only the normal !)
-    //        5 number of bit for the other components
-    //        6 offset
     GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
-    glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 11*sizeof(float), 0);
-    glEnableVertexAttribArray(posAttrib);
-
     GLint colourAttrib = glGetAttribLocation(shaderProgram, "colour");
-    glVertexAttribPointer(colourAttrib, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(colourAttrib);
-
     GLint normalAttrib = glGetAttribLocation(shaderProgram, "normal");
-    glVertexAttribPointer(normalAttrib, 3, GL_FLOAT, GL_TRUE, 11 * sizeof(float), (void*)(6 * sizeof(float)));
-    glEnableVertexAttribArray(normalAttrib);
-
     GLint textureAttrib = glGetAttribLocation(shaderProgram, "texcoord");
-    glVertexAttribPointer(textureAttrib, 2, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(9 * sizeof(float)));
-    glEnableVertexAttribArray(textureAttrib);
+
+    //////////////////////////////////
+    //Set up things for the branches//
+    //////////////////////////////////
+    add_volume_branch(vertices_branch, skeleton_branch, PRIMITIVE);
+    //the vao will store the vbo with it and every time you bind it and call 
+    //glDrawArrays, it will use the vbo associated with the bound vao
+    glBindVertexArray(vao_branch);//use the vao_branch as active vao
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_branch);//make vbo_leaves the active array buffer
+    //Note : the size total of the array is the size of a GLfloat * number of element in the vector (i.e. vertices.size() )
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices_branch.size(), vertices_branch.data(), GL_STATIC_DRAW);
+    setShaderAttributs(posAttrib, colourAttrib, normalAttrib, textureAttrib);
+
+
+    //////////////////////////////////
+    //Set up things for the leaves  //
+    //////////////////////////////////    
+    add_volume_leaves(vertices_leaves, skeleton_leaves, 0);
+    glBindVertexArray(vao_leaves);//use the vao_branch as active vao
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_leaves);//make vbo_leaves the active array buffer
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices_leaves.size(), vertices_leaves.data(), GL_STATIC_DRAW);
+    setShaderAttributs(posAttrib, colourAttrib, normalAttrib, textureAttrib);
+
+    
+    //////////////////////////////////
+    //Set up things for the ground  //
+    //////////////////////////////////   
+    glBindVertexArray(vao_ground);//use the vao_branch as active vao
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_ground);//make vbo_leaves the active array buffer
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_ground), vertices_ground, GL_STATIC_DRAW);
+    setShaderAttributs(posAttrib, colourAttrib, normalAttrib, textureAttrib);
+
+
+
+
 
     //Load texture
     GLuint tex;
@@ -541,8 +564,40 @@ int main( void )
         //Clear color buffer
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        //at the beginning, draw a simple line
-        //number of edge to draw is equal to the number of vertices + 1 because there is no loop in this tree
+        //draw background
+        //...
+
+
+        //update tree
+        //if SPACE is pressed go_update = true
+        if(go_update)
+        {
+          newPlant.update();
+          newPlant.fillSkeleton(skeleton_branch);
+          add_volume_branch(vertices_branch, skeleton_branch, PRIMITIVE);
+          //make vbo_branch the active array buffer
+          glBindBuffer(GL_ARRAY_BUFFER, vbo_branch);
+          //copy the data to it
+          glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices_branch.size(), vertices_branch.data(), GL_STATIC_DRAW);
+          go_update = false;
+        }
+        //update leaves
+        if(go_update_leaves)
+        {
+            newPlant.add_leaves(skeleton_leaves);
+            add_volume_leaves(vertices_leaves, skeleton_leaves, 0);
+            glBindBuffer(GL_ARRAY_BUFFER, vbo_leaves);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices_leaves.size(), vertices_leaves.data(), GL_STATIC_DRAW);
+            go_update_leaves = false;
+        }
+
+        //draw leaves
+        glBindVertexArray(vao_leaves);
+        glDrawArrays(GL_POINTS, 0, newPlant.getNumberLeaves()); 
+
+        //Draw branch
+        glBindVertexArray(vao_branch);
+        //draw the active array buffer
         //Param : 1 type of primitive
         //        2 offset (how many vertices to skip)
         //        3 number of VERTICES not primitives
@@ -551,9 +606,12 @@ int main( void )
             glDrawArrays(GL_POINTS, 0, newPlant.getNumberElementPlant());
         if(PRIMITIVE == 1)
             glDrawArrays(GL_LINES, 0, newPlant.getNumberElementPlant() * 2);
-		if (PRIMITIVE == 2)
-			glDrawArrays(GL_LINES, 0, newPlant.getNumberElementPlant() * 2 * 360);
+      if (PRIMITIVE == 2)
+			      glDrawArrays(GL_LINES, 0, newPlant.getNumberElementPlant() * 2 * 360);
 
+       //draw ground
+       glBindVertexArray(vao_ground);
+       glDrawArrays(GL_TRIANGLES, 0, 6); 
 
         //Swap buffers
         glfwSwapBuffers(window);
@@ -568,8 +626,10 @@ int main( void )
     glDeleteShader(fragmentShader);
     //glDeleteShader(geomShader);
     glDeleteShader(vertexShader);
-    glDeleteBuffers(1, &vbo);
-    glDeleteVertexArrays(1, &vao);
+    glDeleteBuffers(1, &vbo_branch);
+    glDeleteBuffers(1, &vbo_leaves);
+    glDeleteVertexArrays(1, &vao_branch);
+    glDeleteVertexArrays(1, &vao_leaves);
 
     //Close OpenGL window and terminate GLFW
     glfwDestroyWindow(window);

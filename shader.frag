@@ -63,5 +63,5 @@ void main()
 
 	//for this project, we will only use for the moment, we don't need texture
     //outColor = diffuse + specular + ambient;
-    outColor = vec4(1.0, 1.0, 1.0, 1.0);
+    outColor = vec4(Colour, 1.0);
 }

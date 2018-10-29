@@ -74,7 +74,7 @@ Branch* Branch::update()
   //if we decide to create a new branch
   //find a realistic condition !
   //Warning, in x % y, if y < 0 => crash !
-  if(rand()%100 <= m_data.frequencyNewBranch && v_vertices.size() < m_data.sizeMaxBranch)
+  if(rand()%100 <= m_data.frequencyNewBranch && (int)v_vertices.size() < m_data.sizeMaxBranch)
   {
 		  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		  //Find a vector orthogonal to the previous direction vector
@@ -136,7 +136,7 @@ int Branch::fillGfloatArray(GLfloat* arrayGfloat, int offset){
 
 void Branch::fillVectorVertices(std::vector<GLfloat>& vertices)
 {
-	for(int i = 0 ; i < v_vertices.size() - 1 ; ++i)
+	for(int i = 0 ; i < (int)v_vertices.size() - 1 ; ++i)
 	{
 		//each turn of this loop will add two vertex to the vector -> draw one line
 		//all vertex will be stored two times -> better implementation with the element buffer for further version...
@@ -144,15 +144,14 @@ void Branch::fillVectorVertices(std::vector<GLfloat>& vertices)
 
     //Now i put only once each vertex -> display only the vertices (not the edges!)
 		v_vertices[i].fillVectorVertices(vertices);
-		v_vertices[i+1].fillVectorVertices(vertices);
-	}
+  }
 }
 
 std::vector<Vertex*> Branch::fillSkeleton()
 {
   std::vector<Vertex*> vertices;
 
-  for(int i = 0 ; i < v_vertices.size() ; ++i)
+  for(int i = 0 ; i < (int)v_vertices.size() ; ++i)
   {
     //Now i put only once each vertex
     //v_vertices[i].fillVectorVertices(vertices);
@@ -161,3 +160,19 @@ std::vector<Vertex*> Branch::fillSkeleton()
   //Note : we return the vector of vertex because, skeleton is a 2D array !
   return vertices;
 }
+
+
+//first option one leave without any direction and located only at the end of a branch
+Vertex Branch::get_leaves_position()
+{
+  Vertex leaf = v_vertices[v_vertices.size() -1];
+
+  //change the color of the vertex to see that it's a leaf and note a simple branch
+  leaf.setR(1);
+  leaf.setG(0);
+  leaf.setB(0);
+
+
+  return leaf;//return a pointer to the last element of the branch
+}
+
