@@ -85,6 +85,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
   {
 	  if (go_wind) {
 		  go_wind = false;
+		  go_update_graphic = true;
 	  }
 	  else {
 		  go_wind = true;
@@ -210,8 +211,14 @@ void add_volume_branch(std::vector<GLfloat> &vertices, std::vector< std::vector<
             //for all the vertices in the branch n°i
             for(int j = 0 ; j < (int)skeleton[i].size() ; j++)
             {
+
+				float variation = skeleton[i][j]->getBorn() * 0.1f; //value to change
+
+				Vertex myValu(skeleton[i][j]->getX() + (myWind.getX() * variation), skeleton[i][j]->getY() + (myWind.getY() * variation), skeleton[i][j]->getZ() + (myWind.getZ() * variation), skeleton[i][j]->getBorn());
+
+				myValu.fillVectorVertices(vertices);
                 //copy all the floats of the vertex in the array vertices
-                skeleton[i][j]->fillVectorVertices(vertices);
+                //skeleton[i][j]->fillVectorVertices(vertices);
             }
         }
     }
@@ -223,6 +230,22 @@ void add_volume_branch(std::vector<GLfloat> &vertices, std::vector< std::vector<
             //for all vertices in branch i (except the last one)
             for(int j = 0 ; j < (int)skeleton[i].size()-1 ; ++j)
             {
+
+				float variation = skeleton[i][j+1]->getBorn() * 0.001f; //value to change
+
+				/*
+				Vertex myValu(skeleton[i][j]->getX() + (myWind.getX() * variation), skeleton[i][j]->getY() + (myWind.getY() * variation), skeleton[i][j]->getZ() + (myWind.getZ() * variation), skeleton[i][j]->getBorn());
+
+				myValu.fillVectorVertices(vertices);
+
+				Vertex myValu2(skeleton[i][j+1]->getX() + (myWind.getX() * variation), skeleton[i][j+1]->getY() + (myWind.getY() * variation), skeleton[i][j+1]->getZ() + (myWind.getZ() * variation), skeleton[i][j+1]->getBorn());
+
+				myValu2.fillVectorVertices(vertices);
+				*/
+				skeleton[i][j + 1]->setX(skeleton[i][j + 1]->getX() + (myWind.getX() * variation));
+				skeleton[i][j + 1]->setY(skeleton[i][j + 1]->getY() + (myWind.getY() * variation));
+				skeleton[i][j + 1]->setZ(skeleton[i][j + 1]->getZ() + (myWind.getZ() * variation));
+
                 //copy the current vertex and the next one to draw a line between both
                 skeleton[i][j]->fillVectorVertices(vertices);
                 skeleton[i][j+1]->fillVectorVertices(vertices);
@@ -237,6 +260,12 @@ void add_volume_branch(std::vector<GLfloat> &vertices, std::vector< std::vector<
 			//for all vertices in branch i (except the last one)
 			for (int j = 0; j < skeleton[i].size() - 1; ++j)
 			{
+
+				float variation = skeleton[i][j + 1]->getBorn() * 0.001f; //value to change
+
+				skeleton[i][j + 1]->setX(skeleton[i][j + 1]->getX() + (myWind.getX() * variation));
+				skeleton[i][j + 1]->setY(skeleton[i][j + 1]->getY() + (myWind.getY() * variation));
+				skeleton[i][j + 1]->setZ(skeleton[i][j + 1]->getZ() + (myWind.getZ() * variation));
 
 				Vertex* v1 = skeleton[i][j];
 				Vertex* v2 = skeleton[i][j + 1];
@@ -290,8 +319,6 @@ void add_volume_branch(std::vector<GLfloat> &vertices, std::vector< std::vector<
 			}
 		}
 	}
-	
-    std::cout << "END add volume" << std::endl;
 }
 
 void add_volume_leaves(std::vector<GLfloat>& leaves, std::vector<Vertex*> skeleton_leaves, int primitive)
@@ -493,15 +520,18 @@ int main( void )
     glUniformMatrix4fv(uniProj, 1, GL_FALSE, glm::value_ptr(proj));
 
 	Vect myWind(0.0f, 0.0f, 0.0f);
+	int valueWind = 0;
 
     //Main Loop
     //clock_t start = std::clock();
     clock_t start = std::clock();
     go_update = false;
+	double frame_periode = 0;
+
     do
     {
         double frame_time = (double) (clock()-start) / double(CLOCKS_PER_SEC);
-        float period = 5; //seconds
+		float period = 5;
 
         //==================================
         //          Update tree
@@ -559,7 +589,16 @@ int main( void )
         //...
 
 		if (go_wind){
-			//variation of wind
+			
+			if (frame_time - frame_periode > 0.15f){
+				frame_periode = frame_time;
+				valueWind++;
+				if (valueWind > 360) {
+					valueWind = 0;
+				}
+			}
+
+			myWind.setX(cos(valueWind));
 
 			go_update_graphic = true;
 		}
