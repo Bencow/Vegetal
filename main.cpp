@@ -232,35 +232,42 @@ void add_volume_branch(std::vector<GLfloat> &vertices, std::vector< std::vector<
 				Vertex* v2 = skeleton[i][j + 1];
 				
 				Vect w(v2->getX() - v1->getX(), v2->getY() - v1->getY(), v2->getZ() - v1->getZ());
+				glm::vec3 myVec(w.getX(), w.getY(), w.getZ());
+				myVec = glm::normalize(myVec);
+				w.setX(myVec.x);
+				w.setY(myVec.y);
+				w.setZ(myVec.z);
+
+
 				Vect u= giveOrthoVec(w);
 
-				glm::vec3 myVec(u.getX(), u.getY(), u.getZ());
-				myVec = glm::normalize(myVec);
-
-				u.setX(myVec.x);
-				u.setY(myVec.y);
-				u.setZ(myVec.z);
+				glm::vec3 myVec2(u.getX(), u.getY(), u.getZ());
+				myVec2 = glm::normalize(myVec2);
+				u.setX(myVec2.x);
+				u.setY(myVec2.y);
+				u.setZ(myVec2.z);
 
 				Vect v = crossProduct(w, u);
-
-
-				Vertex p1;
-				Vertex p2;
-
 				
-				for (int i = 0; i < 360; i++) {
-			
-					p1.setX(v1->getX() + (cos(i) * u.getX() + sin(i)* v.getX())* 0.2f); //1.0f size to change after
-					p1.setY(v1->getX() + (cos(i) * u.getY() + sin(i)* v.getY())* 0.2f);
-					p1.setZ(v1->getZ() + (cos(i) * u.getZ() + sin(i)* v.getZ())* 0.2f);
+				for (float i = 0.0f; i < 360.0f; i += 0.5f) {
 
-					/*
+					Vertex p1;
+					Vertex p2;
+			
+					p1.setX(v1->getX() + ((cos(i) * u.getX() + sin(i)* v.getX())* 0.2f)); //1.0f size to change after
+					p1.setY(v1->getY() + ((cos(i) * u.getY() + sin(i)* v.getY())* 0.2f));
+					p1.setZ(v1->getZ() + ((cos(i) * u.getZ() + sin(i)* v.getZ())* 0.2f));
+
+					
 					p2.setX(p1.getX() + w.getX());
 					p2.setY(p1.getY() + w.getY());
 					p2.setZ(p1.getZ() + w.getZ());
-					*/
+					
+					//v1->fillVectorVertices(vertices);
 					p1.fillVectorVertices(vertices);
-					v2->fillVectorVertices(vertices);
+					p2.fillVectorVertices(vertices);
+
+					//v2->fillVectorVertices(vertices);
 				}
 			}
 		}
@@ -338,13 +345,13 @@ int main( void )
     GLfloat vertices_ground[] =
     {
         //Pos                  colour               normal                tex
-         1.0f,  1.0f, -0.6f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
-        -1.0f,  1.0f, -0.6f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
-        -1.0f, -1.0f, -0.6f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+         1.0f,  1.0f, 0.0f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+        -1.0f,  1.0f, 0.0f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+        -1.0f, -1.0f, 0.0f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
 
-         1.0f,  1.0f, -0.6f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
-         1.0f, -1.0f, -0.6f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
-        -1.0f, -1.0f, -0.6f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+         1.0f,  1.0f, 0.0f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+         1.0f, -1.0f, 0.0f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+        -1.0f, -1.0f, 0.0f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
         
     };
 
@@ -576,11 +583,11 @@ int main( void )
         //        3 number of VERTICES not primitives
 
         if(PRIMITIVE == 0)
-            glDrawArrays(GL_POINTS, 0, newPlant.getNumberElementPlant());
+            glDrawArrays(GL_POINTS, 0, vertices_branch.size() / 11);
         if(PRIMITIVE == 1)
-            glDrawArrays(GL_LINES, 0, newPlant.getNumberElementPlant() * 2);
+            glDrawArrays(GL_LINES, 0, vertices_branch.size() / 11);
 		if (PRIMITIVE == 2)
-			glDrawArrays(GL_LINES, 0, newPlant.getNumberElementPlant() * 2 * 360);
+			glDrawArrays(GL_LINES, 0, vertices_branch.size() / 11);
 
        //draw ground
        glBindVertexArray(vao_ground);
