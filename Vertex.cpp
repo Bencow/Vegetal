@@ -15,7 +15,8 @@ Vertex::Vertex() :
 	m_nx(0.0f), m_ny(0.0f), m_nz(1.0f),
 	m_tx(0.0f), m_ty(0.0f)
 {}
-Vertex::Vertex(float x, float y, float z) :
+Vertex::Vertex(float x, float y, float z, int age):
+	m_born(age),
     m_x(x), m_y(y), m_z(z),
     m_r(1.0f), m_g(1.0f), m_b(1.0f),
     m_nx(0.0f), m_ny(0.0f), m_nz(1.0f),
