@@ -36,6 +36,7 @@
 #define speedRotation 10.0f
 
 
+
 #define POINTS 0
 #define LINES 1
 #define TRIANGLES 2
@@ -45,9 +46,11 @@
 #define PRIMITIVE_LEAVES 0
 
 
+
 //just to test quickly
 bool go_update = false;
 bool go_update_leaves = false;
+bool go_update_graphic = false;
 
 //Camera gesture
 float camera_x = 5.0f;
@@ -57,6 +60,10 @@ float camera_target_x = 0.0f;
 float camera_target_y = 0.0f;
 float camera_target_z = 1.0f;
 float camera_angle_rotation = 0;
+
+
+
+int PRIMITIVE = 0;
 
 //Define an error callback
 static void error_callback(int error, const char* description)
@@ -84,14 +91,13 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
   {
     go_update_leaves = true;
   }
-
-  else if(key == GLFW_KEY_A && action == GLFW_PRESS){
+  else if(key == GLFW_KEY_A && (action == GLFW_PRESS || action == GLFW_REPEAT)){
 	  camera_angle_rotation -= speedRotation;
 	  if (camera_angle_rotation < 0) {
 		  camera_angle_rotation = 360;
 	  }
   }
-  else if(key == GLFW_KEY_W && action == GLFW_PRESS){	
+  else if(key == GLFW_KEY_W && (action == GLFW_PRESS || action == GLFW_REPEAT)){
 	glm::vec3 myVecDirct(camera_x - camera_target_x, camera_y - camera_target_y, camera_z - camera_target_z);
 	myVecDirct = glm::normalize(myVecDirct);
 	camera_x -= myVecDirct.x * speedCamera;
@@ -99,37 +105,31 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 	camera_z -= myVecDirct.z * speedCamera;
 
   }
-  else if(key == GLFW_KEY_S && action == GLFW_PRESS){
+  else if(key == GLFW_KEY_S && (action == GLFW_PRESS || action == GLFW_REPEAT)){
 	  glm::vec3 myVecDirct(camera_x - camera_target_x, camera_y - camera_target_y, camera_z - camera_target_z);
 	  myVecDirct = glm::normalize(myVecDirct);
 	  camera_x += myVecDirct.x * speedCamera;
 	  camera_y += myVecDirct.y * speedCamera;
 	  camera_z += myVecDirct.z * speedCamera;
   }
-  else if(key == GLFW_KEY_D && action == GLFW_PRESS){
+  else if(key == GLFW_KEY_D && (action == GLFW_PRESS || action == GLFW_REPEAT)){
 	  camera_angle_rotation+= speedRotation;
 	  if (camera_angle_rotation > 360) {
 		  camera_angle_rotation = 0;
 	  }
   }
-
-  else if(key == GLFW_KEY_R && action == GLFW_PRESS){
-    camera_target_x += speedCamera;
-  }
-  else if(key == GLFW_KEY_F && action == GLFW_PRESS){
-    camera_target_x -= speedCamera;
-  }
-  else if(key == GLFW_KEY_T && action == GLFW_PRESS){
-    camera_target_y += speedCamera;
-  }
-  else if(key == GLFW_KEY_G && action == GLFW_PRESS){
-    camera_target_y -= speedCamera;
-  }
-  else if(key == GLFW_KEY_UP && action == GLFW_PRESS){
+  else if(key == GLFW_KEY_UP && (action == GLFW_PRESS || action == GLFW_REPEAT)){
     camera_target_z += speedCamera;
   }
-  else if(key == GLFW_KEY_DOWN && action == GLFW_PRESS){
+  else if(key == GLFW_KEY_DOWN && (action == GLFW_PRESS || action == GLFW_REPEAT)){
     camera_target_z -= speedCamera;
+  }
+  else if (key == GLFW_KEY_B && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+	  PRIMITIVE++;
+	  if (PRIMITIVE > 2) {
+		  PRIMITIVE = 0;
+	  }
+	  go_update_graphic = true;
   }
 }
 
@@ -197,9 +197,11 @@ void printSkeleton(std::vector< std::vector<Vertex*> >& skeleton)
     }
 }
 
-void add_volume_branch(std::vector<GLfloat> &vertices, std::vector< std::vector<Vertex*> >& skeleton, int type_primitive)
+void add_volume_branch(std::vector<GLfloat> &vertices, std::vector< std::vector<Vertex*> >& skeleton, int type_primitive, int turnUpdate)
 {
-    if(type_primitive == POINTS)//Simple vertex
+	vertices.clear();
+
+    if(type_primitive == 0)//Simple vertex
     {
         //fill the vector vertices with all the points contained in the skeleton
         //For all the branches
@@ -227,6 +229,68 @@ void add_volume_branch(std::vector<GLfloat> &vertices, std::vector< std::vector<
             }
         }
     }
+	if (type_primitive == 2) //Cylinder
+	{
+		//for all branches
+		for (int i = 0; i < skeleton.size(); i++)
+		{
+			//for all vertices in branch i (except the last one)
+			for (int j = 0; j < skeleton[i].size() - 1; ++j)
+			{
+
+				Vertex* v1 = skeleton[i][j];
+				Vertex* v2 = skeleton[i][j + 1];
+				
+				Vect w(v2->getX() - v1->getX(), v2->getY() - v1->getY(), v2->getZ() - v1->getZ());
+				glm::vec3 myVec(w.getX(), w.getY(), w.getZ());
+				myVec = glm::normalize(myVec);
+				w.setX(myVec.x);
+				w.setY(myVec.y);
+				w.setZ(myVec.z);
+
+
+				Vect u= giveOrthoVec(w);
+
+				glm::vec3 myVec2(u.getX(), u.getY(), u.getZ());
+				myVec2 = glm::normalize(myVec2);
+				u.setX(myVec2.x);
+				u.setY(myVec2.y);
+				u.setZ(myVec2.z);
+
+				Vect v = crossProduct(w, u);
+				
+				for (float k = 0.0f; k < 360.0f; k += 1.0f) {
+
+					float size = (turnUpdate - v1->getBorn()) * 0.03f ;
+
+					Vertex p1;
+					Vertex p2;
+			
+					p1.setX(v1->getX() + ((cos(k) * u.getX() + sin(k)* v.getX())* size));
+					p1.setY(v1->getY() + ((cos(k) * u.getY() + sin(k)* v.getY())* size));
+					p1.setZ(v1->getZ() + ((cos(k) * u.getZ() + sin(k)* v.getZ())* size));
+
+					
+					p2.setX(p1.getX() + w.getX());
+					p2.setY(p1.getY() + w.getY());
+					p2.setZ(p1.getZ() + w.getZ());
+					
+					//v1->fillVectorVertices(vertices);
+					p1.fillVectorVertices(vertices);
+
+					if (j == skeleton[i].size() - 2) {
+						v2->fillVectorVertices(vertices);
+					}
+					else {
+						p2.fillVectorVertices(vertices);
+					}
+
+					//v2->fillVectorVertices(vertices);
+				}
+			}
+		}
+	}
+	
     std::cout << "END add volume" << std::endl;
 }
 
@@ -322,13 +386,13 @@ int main( void )
     GLfloat vertices_ground[] =
     {
         //Pos                  colour               normal                tex
-         1.0f,  1.0f, -0.6f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
-        -1.0f,  1.0f, -0.6f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
-        -1.0f, -1.0f, -0.6f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+         100.0f,  100.0f, 0.0f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+        -100.0f,  100.0f, 0.0f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+        -100.0f, -100.0f, 0.0f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
 
-         1.0f,  1.0f, -0.6f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
-         1.0f, -1.0f, -0.6f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
-        -1.0f, -1.0f, -0.6f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+         100.0f,  100.0f, 0.0f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+         100.0f, -100.0f, 0.0f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
+        -100.0f, -100.0f, 0.0f,   0.0f, 1.0f, 0.0f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
         
     };
 
@@ -377,7 +441,7 @@ int main( void )
     //////////////////////////////////
     //Set up things for the branches//
     //////////////////////////////////
-    add_volume_branch(vertices_branch, skeleton_branch, PRIMITIVE);
+    add_volume_branch(vertices_branch, skeleton_branch, PRIMITIVE, newPlant.getTurnUpdate());
     //the vao will store the vbo with it and every time you bind it and call 
     //glDrawArrays, it will use the vbo associated with the bound vao
     glBindVertexArray(vao_branch);//use the vao_branch as active vao
@@ -461,6 +525,13 @@ int main( void )
         float period = 5; //seconds
 
         //==================================
+        //          Update tree
+        //==================================
+
+        //if SPACE is pressed go_update = true
+		
+
+        //==================================
         //       TODO: 3D Transforms
         //==================================
         glm::mat4 model = glm::mat4(1.0f);
@@ -515,7 +586,7 @@ int main( void )
         {
           newPlant.update();
           newPlant.fillSkeleton(skeleton_branch);
-          add_volume_branch(vertices_branch, skeleton_branch, PRIMITIVE);
+          add_volume_branch(vertices_branch, skeleton_branch, PRIMITIVE, newPlant.getTurnUpdate());
           //make vbo_branch the active array buffer
           glBindBuffer(GL_ARRAY_BUFFER, vbo_branch);
           //copy the data to it
@@ -531,6 +602,14 @@ int main( void )
             glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices_leaves.size(), vertices_leaves.data(), GL_STATIC_DRAW);
             go_update_leaves = false;
         }
+		if(go_update_graphic) {
+			newPlant.fillSkeleton(skeleton_branch);
+			add_volume_branch(vertices_branch, skeleton_branch, PRIMITIVE, newPlant.getTurnUpdate());
+			glBindBuffer(GL_ARRAY_BUFFER, vbo_branch);
+			//copy the data to it
+			glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices_branch.size(), vertices_branch.data(), GL_STATIC_DRAW);
+			go_update_graphic = false;
+		}
 
         //draw leaves
         glBindVertexArray(vao_leaves);
@@ -548,17 +627,15 @@ int main( void )
         //        3 number of VERTICES not primitives
 
         if(PRIMITIVE == 0)
-            glDrawArrays(GL_POINTS, 0, newPlant.getNumberElementPlant());
+            glDrawArrays(GL_POINTS, 0, vertices_branch.size() / 11);
         if(PRIMITIVE == 1)
-            glDrawArrays(GL_LINES, 0, newPlant.getNumberElementPlant() * 2);
-        
+            glDrawArrays(GL_LINES, 0, vertices_branch.size() / 11);
+		if (PRIMITIVE == 2)
+			glDrawArrays(GL_LINES, 0, vertices_branch.size() / 11);
 
-        //draw ground
-        glBindVertexArray(vao_ground);
-        glDrawArrays(GL_TRIANGLES, 0, 6); 
-
-
-
+       //draw ground
+       glBindVertexArray(vao_ground);
+       glDrawArrays(GL_TRIANGLES, 0, 6); 
 
         //Swap buffers
         glfwSwapBuffers(window);
