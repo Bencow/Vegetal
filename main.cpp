@@ -42,7 +42,7 @@
 
 
 #define PRIMITIVE 1
-#define PRIMITIVE_LEAVES 2
+#define PRIMITIVE_LEAVES 0
 
 
 //just to test quickly
