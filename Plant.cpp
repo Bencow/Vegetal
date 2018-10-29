@@ -25,12 +25,13 @@ Plant::Plant(Vertex* anchor): m_anchor(anchor)
 	*/
 }
 
-Plant::Plant(Vertex* anchor, t_data dataDepart, Vect vecDepart): m_anchor(anchor), m_count(0)
+Plant::Plant(Vertex* anchor, t_data dataDepart, Vect vecDepart) : m_anchor(anchor), m_count(0), m_turnUpdate(0)
 {
 	//initaialize the anchor of the tree
 	m_anchor = anchor;
 	//create a first branch
 	v_branch.push_back(new Branch(anchor, dataDepart, vecDepart, &m_count));
+
 }
 
 std::ostream& operator <<(std::ostream& out, Plant& myPlant){
@@ -50,6 +51,8 @@ std::ostream& operator <<(std::ostream& out, Plant& myPlant){
 
 void Plant::update(){
 
+	m_turnUpdate++;
+
 	Branch* newBranch;
 	//For all the branches in the tree
 	std::cout << v_branch.size() << std::endl;
@@ -59,7 +62,7 @@ void Plant::update(){
 	for(int i = 0; i < (int)size_now ; i++)
 	{
 		//update this branch
-		newBranch = v_branch[i]->update();
+		newBranch = v_branch[i]->update(m_turnUpdate);
 		//And if this branch create a new one
 		if(newBranch != NULL)
 		{

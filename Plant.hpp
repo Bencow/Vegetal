@@ -30,6 +30,8 @@ class Plant {
     std::vector<Vertex> v_leaves;
     int m_count;
 
+	int m_turnUpdate;
+
   public:
     Plant();
     Plant(Vertex* anchor);
@@ -53,6 +55,8 @@ class Plant {
     int getNumberUniqueVertexPlant();
     
     int getNumberLeaves();
+
+	int getTurnUpdate() const { return m_turnUpdate;}
 
 
     void fillVectorVertices(std::vector<GLfloat>& vertices);

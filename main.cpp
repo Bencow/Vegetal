@@ -186,7 +186,7 @@ void printSkeleton(std::vector< std::vector<Vertex*> >& skeleton)
     }
 }
 
-void add_volume_branch(std::vector<GLfloat> &vertices, std::vector< std::vector<Vertex*> >& skeleton, int type_primitive)
+void add_volume_branch(std::vector<GLfloat> &vertices, std::vector< std::vector<Vertex*> >& skeleton, int type_primitive, int turnUpdate)
 {
 
 	vertices.clear();
@@ -249,14 +249,16 @@ void add_volume_branch(std::vector<GLfloat> &vertices, std::vector< std::vector<
 
 				Vect v = crossProduct(w, u);
 				
-				for (float i = 0.0f; i < 360.0f; i += 0.5f) {
+				for (float i = 0.0f; i < 360.0f; i += 1.0f) {
+
+					float size = (turnUpdate - v1->getBorn()) * 0.05f ;
 
 					Vertex p1;
 					Vertex p2;
 			
-					p1.setX(v1->getX() + ((cos(i) * u.getX() + sin(i)* v.getX())* 0.2f)); //1.0f size to change after
-					p1.setY(v1->getY() + ((cos(i) * u.getY() + sin(i)* v.getY())* 0.2f));
-					p1.setZ(v1->getZ() + ((cos(i) * u.getZ() + sin(i)* v.getZ())* 0.2f));
+					p1.setX(v1->getX() + ((cos(i) * u.getX() + sin(i)* v.getX())* size));
+					p1.setY(v1->getY() + ((cos(i) * u.getY() + sin(i)* v.getY())* size));
+					p1.setZ(v1->getZ() + ((cos(i) * u.getZ() + sin(i)* v.getZ())* size));
 
 					
 					p2.setX(p1.getX() + w.getX());
@@ -400,7 +402,7 @@ int main( void )
     //////////////////////////////////
     //Set up things for the branches//
     //////////////////////////////////
-    add_volume_branch(vertices_branch, skeleton_branch, PRIMITIVE);
+    add_volume_branch(vertices_branch, skeleton_branch, PRIMITIVE, newPlant.getTurnUpdate());
     //the vao will store the vbo with it and every time you bind it and call 
     //glDrawArrays, it will use the vbo associated with the bound vao
     glBindVertexArray(vao_branch);//use the vao_branch as active vao
@@ -546,7 +548,7 @@ int main( void )
         {
           newPlant.update();
           newPlant.fillSkeleton(skeleton_branch);
-          add_volume_branch(vertices_branch, skeleton_branch, PRIMITIVE);
+          add_volume_branch(vertices_branch, skeleton_branch, PRIMITIVE, newPlant.getTurnUpdate());
           //make vbo_branch the active array buffer
           glBindBuffer(GL_ARRAY_BUFFER, vbo_branch);
           //copy the data to it
@@ -564,7 +566,7 @@ int main( void )
         }
 		if(go_update_graphic) {
 			newPlant.fillSkeleton(skeleton_branch);
-			add_volume_branch(vertices_branch, skeleton_branch, PRIMITIVE);
+			add_volume_branch(vertices_branch, skeleton_branch, PRIMITIVE, newPlant.getTurnUpdate());
 			glBindBuffer(GL_ARRAY_BUFFER, vbo_branch);
 			//copy the data to it
 			glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices_branch.size(), vertices_branch.data(), GL_STATIC_DRAW);
