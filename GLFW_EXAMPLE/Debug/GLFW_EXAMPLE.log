@@ -1,0 +1,4 @@
+﻿  Branch.cpp
+Branch.obj : warning LNK4075: ' /EDITANDCONTINUE' ignoré à cause de la spécification '/INCREMENTAL:NO'
+LINK : warning LNK4098: conflit entre la bibliothèque par défaut 'MSVCRT' et les autres bibliothèques ; utilisez /NODEFAULTLIB:library
+  GLFW_EXAMPLE.vcxproj -> E:\Work\Comp3380\project\Lab4_Code_PFLighting\Vegetal\Debug\GLFW_EXAMPLE.exe
